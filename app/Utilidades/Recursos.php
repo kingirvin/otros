@@ -176,8 +176,8 @@ class Recursos
      * OBTENER DATOS DE PAGINAS Y MINITURAS
      */
     public function datos_firma($archivo)
-    {
-        Ghostscript::setGsPath("C:\Program Files\gs\gs9.56.1\bin\gswin64c.exe");
+    { 
+        Ghostscript::setGsPath(config('app.ghostscript_path'));
         $gs = new Ghostscript();
 
         $ruta = Storage::disk($this->disco)->path($archivo->ruta);

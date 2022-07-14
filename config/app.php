@@ -23,7 +23,7 @@ return [
     'recaptcha_public' => env('RECAPTCHA_PUBLIC_KEY','6LfjLl4gAAAAAIX8pPdp5yET1vySl1Y443h8EWLf'),
     'reniec_id' => env('RENIEC_CLIENT_ID','ZIzAvpCQernywPNktelaHQH0yi0'),
     'reniec_secret' => env('RENIEC_CLIENT_SECRET','B6jWcQmOjJkD94A-EgTl'),
-    'ghostscript_path' => env('RECAPTCHA_PUBLIC_KEY','C:\Program Files\gs\gs9.56.1\bin\gswin64c.exe'),
+    'ghostscript_path' => env('GHOSTSCRIPT_PATH','C:\\Program Files\\gs\\gs9.56.1\\bin\\gswin64c.exe'),
 
 
 
