@@ -1,0 +1,106 @@
+.s_box
+{    
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.s_box hr
+{
+    background-color:#b7b7b7;
+    opacity: .5;
+}
+
+.s_box_id
+{
+    position: absolute;
+    font-size: .625rem;
+    font-weight: 500;
+    left: 5px;
+    bottom: 5px;
+    line-height: 1;
+}
+
+#s_helper
+{
+    width: 100%;
+    overflow: auto;
+    padding: 1rem 0;
+    background: #f0f2f6;
+}
+
+#s_helper.to_print
+{
+    overflow: visible;
+}
+
+.paso
+{
+    display: inline-block;
+    vertical-align: top;
+    background: #f0f2f6;
+}
+
+.siguientes
+{
+    white-space: nowrap;
+}
+
+.primero
+{
+    margin: 0 1rem;
+}
+
+.t_dependencia
+{    
+    display: block;
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5rem;  
+    color: rgb(35, 46, 60);  
+}
+
+.cv_linea
+{
+    width: 50%;
+    height: 1rem;
+    border-right: 1px dashed #8c8c8c;
+}
+
+.paso.derecha::before
+{
+    content: '';
+    display: block;
+    width: 50%;
+    height: 1px;
+    border-top: 1px dashed #8c8c8c;
+    float: left;
+}
+
+.paso.centro::before
+{
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1px;
+    border-top: 1px dashed #8c8c8c;
+    float: right;
+}
+
+
+.paso.izquierda::before
+{
+    content: '';
+    display: block;
+    width: 50%;
+    height: 1px;
+    border-top: 1px dashed #8c8c8c;
+    float: right;
+}
+
+@media print {    
+    .card-body {
+        padding: 1rem;
+    }
+}

@@ -1,0 +1,27 @@
+#fx_contenedor{    
+    display: inline-block;
+    padding: 1rem;
+}
+
+#fx_hoja{
+    background: #fff;    
+    display: inline-block;
+    background-repeat: no-repeat;    
+    background-size: cover;
+    position: relative;
+}
+
+#fx_firma{
+    position: absolute;
+    background: #001ffbd9;
+    cursor: pointer;
+}
+
+#body_hoja{
+    background: #57565a;
+}
+
+
+#body_hoja::-webkit-scrollbar-track {
+    background: #899de9;    
+}

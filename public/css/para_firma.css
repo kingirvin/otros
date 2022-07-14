@@ -1,0 +1,16 @@
+.f_documento
+{
+    margin-left: auto;
+    margin-right: auto;
+    width: 147px;
+    height: 208px;
+    background: #fff;
+    border: 1px solid #ababab;
+    padding: 1rem;
+    /* 297*0.7=207.9 */
+    /* 210*2=147  */
+}
+
+.f_documento .form-check-input {
+    border: 1px solid #ababab;
+}
