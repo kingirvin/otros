@@ -34,6 +34,8 @@ class TramiteController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'o_dependencia_id' => 'required',
+            'o_empleado_id' => 'required',
+            'o_persona_id' => 'required',
             'destinos' => 'required',
             'documento_tipo_id' => 'required', 
             'numero' => 'required', 
@@ -72,7 +74,7 @@ class TramiteController extends Controller
 
             $tramite->codigo = $recursos->codigo_alpha($tramite->id);
             $tramite->save();
-
+                    
             $ultimo_emitido = Documento::where('dependencia_id', $request->o_dependencia_id)
                                 ->where('year', $ahora->year)
                                 ->orderBy('o_numero', 'desc')
@@ -83,6 +85,8 @@ class TramiteController extends Controller
             $documento->year = $ahora->year;
             $documento->tramite_id = $tramite->id;
             $documento->dependencia_id = $request->o_dependencia_id;
+            $documento->empleado_id = $request->o_empleado_id;
+            $documento->persona_id = $request->o_persona_id;
             $documento->o_numero = ($ultimo_emitido ? $ultimo_emitido->o_numero + 1 : 1);
             $documento->documento_tipo_id = $request->documento_tipo_id;
             $documento->numero = $request->numero;
@@ -112,7 +116,7 @@ class TramiteController extends Controller
                     }
                 }
             }
-
+    
             //MOVIMIENTOS            
             foreach ($request->destinos as $destino) {
                 $movimiento = new Movimiento;
@@ -124,25 +128,31 @@ class TramiteController extends Controller
                 //quien envia
                 $movimiento->o_tipo = 0;//0:interno
                 $movimiento->o_dependencia_id = $request->o_dependencia_id;
+                $movimiento->o_empleado_id = $request->o_empleado_id;
+                $movimiento->o_persona_id = $request->o_persona_id;
                 $movimiento->o_fecha = $ahora->format('Y-m-d H:i:s');
                 $movimiento->o_user_id = $user->id;
                 $movimiento->o_year = $ahora->year;
                 $movimiento->o_numero = ($ultimo_emitido ? $ultimo_emitido->o_numero + 1 : 1);
-                $movimiento->o_descripcion = $o_dependencia->nombre;
-
+                $movimiento->o_descripcion = $o_dependencia->nombre." | ".$request->remitente;
+              
                 //quien recibe
                 $movimiento->d_tipo = $destino["tipo"];//0:interno, 1:externo
 
                 if($destino["tipo"] == 0) //0:interno
                 {   
-                    $movimiento->d_dependencia_id = $destino["id"];  
+                    $movimiento->d_dependencia_id = $destino["d_dependencia_id"];
+                    if($destino["d_empleado_id"] != 0){//dirigido a una persona 
+                        $movimiento->d_empleado_id = $destino["d_empleado_id"];  
+                        $movimiento->d_persona_id = $destino["d_persona_id"];  
+                    }
                 }
-                elseif ($destino["tipo"] == 1) //1:externo
+                else//1:externo
                 {
                     $movimiento->d_identidad_documento_id = ($destino["d_identidad_documento_id"] != 0 ? $destino["d_identidad_documento_id"] : null);
                     $movimiento->d_nro_documento = $destino["d_nro_documento"];     
                     $movimiento->d_nombre = $destino["d_nombre"];  	
-                }  
+                }
 
                 $movimiento->estado = 1;//0:anulado, 1:por recepcionar, 2:recepcionado, 3:derivado/referido, 4:atendido, 5:observado     
                 $movimiento->save();
@@ -162,12 +172,17 @@ class TramiteController extends Controller
     {
         $year = $request->input('year');
         $dependencia_id = $request->input('dependencia_id');
+        $persona_id = $request->input('persona_id');        
 
         $query = Documento::with(['tramite','documento_tipo','user','movimientos' => function ($query) {
-                    $query->with('d_dependencia')->whereNotNull('o_numero');
+                    $query->with(['d_dependencia','d_persona'])->whereNotNull('o_numero');
                 }])
                 ->where('dependencia_id', $dependencia_id)
                 ->where('year', $year);
+
+        if($persona_id != 0){
+            $query->where('persona_id', $persona_id);
+        }
 
         return DataTables::of($query)->toJson();
     }
@@ -249,8 +264,9 @@ class TramiteController extends Controller
                     $recepcionado = false;
                     $continua = false;
 
+                    //0:anulado, 1:por recepcionar, 2:recepcionado, 3:derivado/referido, 4:atendido, 5:observado            
                     foreach ($movimientos as $movimiento) {
-                        if($movimiento->estado > 0)//alguno de los movimientos ya ha sido recepcionado
+                        if($movimiento->estado > 1)//alguno de los movimientos ya ha sido recepcionado
                             $recepcionado = true;
 
                         if($movimiento->anterior_id != null)//alguno de los movimientos es una continuacion de otro
@@ -296,12 +312,21 @@ class TramiteController extends Controller
     {
         $year = $request->input('year');
         $dependencia_id = $request->input('dependencia_id');
+        $persona_id = $request->input('persona_id');        
         $user = Auth::user();
 
-        $query = Movimiento::with(['o_dependencia.sede','documento.documento_tipo','tramite','o_user','accion'])
+        $query = Movimiento::with(['o_dependencia.sede','d_persona','documento.documento_tipo','tramite','o_user','accion'])
                 ->where('d_dependencia_id', $dependencia_id)
                 ->where('estado', 1)//0:anulado, 1:por recepcionar, 2:recepcionado, 3:derivado/referido, 4:atendido, 5:observado     
                 ->whereYear('created_at', $year);
+
+        if($persona_id != -1){
+            if($persona_id != 0){
+                $query->where('d_persona_id', $persona_id);
+            } else {
+                $query->whereNull('d_persona_id');
+            }
+        }
 
         return DataTables::of($query)->toJson();
     }
@@ -358,11 +383,20 @@ class TramiteController extends Controller
     {
         $year = $request->input('year');
         $dependencia_id = $request->input('dependencia_id');
+        $persona_id = $request->input('persona_id');   
         $estado = $request->input('estado');
 
-        $query = Movimiento::with(['o_dependencia.sede','documento.documento_tipo','tramite','d_user','accion'])
+        $query = Movimiento::with(['o_dependencia.sede','d_persona','documento.documento_tipo','tramite','d_user','accion'])
                 ->where('d_dependencia_id', $dependencia_id)
                 ->whereYear('created_at', $year);
+
+        if($persona_id != -1){
+            if($persona_id != 0){
+                $query->where('d_persona_id', $persona_id);
+            } else {
+                $query->whereNull('d_persona_id');
+            }
+        }
         //0:anulado, 1:por recepcionar, 2:recepcionado, 3:derivado/referido, 4:atendido, 5:observado 
         if($estado != 0){
             $query->where('estado', '=', $estado);
@@ -383,6 +417,8 @@ class TramiteController extends Controller
             'destinos' => 'required',
             'metodo' => 'required',
             //si es adjuntar nuevo documento
+            'o_empleado_id' => 'required_if:metodo,1',
+            'o_persona_id' => 'required_if:metodo,1',
             'documento_tipo_id' => 'required_if:metodo,1',
             'numero' => 'required_if:metodo,1',
             'remitente' => 'required_if:metodo,1',
@@ -426,6 +462,8 @@ class TramiteController extends Controller
                 $documento->year = $ahora->year;
                 $documento->tramite_id = $movimiento->tramite_id;
                 $documento->dependencia_id = $o_dependencia->id;
+                $documento->empleado_id = $request->o_empleado_id;
+                $documento->persona_id = $request->o_persona_id;
                 $documento->o_numero = $o_numero;
                 $documento->documento_tipo_id = $request->documento_tipo_id;
                 $documento->numero = $request->numero;
@@ -475,6 +513,8 @@ class TramiteController extends Controller
                     $movimiento_nuevo->tipo = 1;//1:derivacion (proveido)
                 } else {//nuevo documento
                     $movimiento_nuevo->tipo = 2;//2:referido (derivado con nuevo documento)
+                    $movimiento_nuevo->o_empleado_id = $request->o_empleado_id;
+                    $movimiento_nuevo->o_persona_id = $request->o_persona_id;
                 }
                 $movimiento_nuevo->anterior_id = $movimiento->id;
                 $movimiento_nuevo->copia = $destino["como_copia"];
@@ -489,15 +529,19 @@ class TramiteController extends Controller
                 //quien recibe      
                 $movimiento_nuevo->d_tipo = $destino["tipo"];//0:interno, 1:externo
 
-                if($destino["tipo"] == 0)//0:interno
-                {      
-                    $movimiento_nuevo->d_dependencia_id = $destino["id"];                      	
+                if($destino["tipo"] == 0) //0:interno
+                {   
+                    $movimiento_nuevo->d_dependencia_id = $destino["d_dependencia_id"];  
+                    if($destino["d_empleado_id"] != 0){//dirigido a una persona 
+                        $movimiento_nuevo->d_empleado_id = $destino["d_empleado_id"];  
+                        $movimiento_nuevo->d_persona_id = $destino["d_persona_id"];  
+                    }
                 }
-                elseif ($destino["tipo"] == 1)//1:externo    
-                {                                          
+                else
+                {
                     $movimiento_nuevo->d_identidad_documento_id = ($destino["d_identidad_documento_id"] != 0 ? $destino["d_identidad_documento_id"] : null);
-                    $movimiento_nuevo->d_nro_documento = $destino["d_nro_documento"];     
-                    $movimiento_nuevo->d_nombre = $destino["d_nombre"];  
+                    $movimiento_nuevo->d_nro_documento = $destino["d_nro_documento"];
+                    $movimiento_nuevo->d_nombre = $destino["d_nombre"];
                 }
 
                 $movimiento_nuevo->estado = 1;//1:por recepcionar,

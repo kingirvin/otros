@@ -213,8 +213,8 @@
                   <!-- Gestión de documentos -->
                   @if(request()->is('admin/tramite*') && array_key_exists('TRAMITE', $modulos))
 
-                    @if(in_array('RECPDOC', $modulos['TRAMITE']))
-                    <li class="nav-item {{ (request()->is('admin/tramite/recepcion')) ? 'active' : '' }}">
+                    @if(in_array('ENVREC', $modulos['TRAMITE']))
+                    <li class="nav-item {{ (request()->is('admin/tramite/recepcion*')) ? 'active' : '' }}">
                       <a class="nav-link nav-link-custom" href="{{ url('admin/tramite/recepcion') }}">
                         <button class="btn btn-outline-success w-100">                         
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><polyline points="7 11 12 16 17 11" /><line x1="12" y1="4" x2="12" y2="16" /></svg>
@@ -222,8 +222,8 @@
                         </button>
                       </a>
                     </li>
-                    <li class="nav-item {{ (request()->is('admin/tramite/recepcion/*')) ? 'active' : '' }}">
-                      <a class="nav-link" href="{{ url('admin/tramite/recepcion/recibidos') }}">
+                    <li class="nav-item {{ (request()->is('admin/tramite/recibidos*')) ? 'active' : '' }}">
+                      <a class="nav-link" href="{{ url('admin/tramite/recibidos') }}">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="4" y="4" width="16" height="16" rx="2" /><path d="M4 13h3l3 3h4l3 -3h3" /></svg>
                         </span>
@@ -231,10 +231,7 @@
                           Documentos recibidos
                         </span>
                       </a>
-                    </li>
-                    @endif                 
-
-                    @if(in_array('ENVDOC', $modulos['TRAMITE']))
+                    </li>                    
                     <li class="nav-item dropdown {{ (request()->is('admin/tramite/emision*')) ? 'active' : '' }}">
                       <a class="nav-link dropdown-toggle" href="#sistema" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">

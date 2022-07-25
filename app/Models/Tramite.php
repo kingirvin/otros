@@ -10,7 +10,7 @@ class Tramite extends Model
     use HasFactory;
 
     protected $fillable = [
-        'year', 'correlativo', 'codigo', 'o_tipo', 'o_externo_tipo', 'o_dependencia_id', 'o_user_id', 'o_identidad_documento_id', 'o_nro_documento', 'o_nombre', 'o_apaterno', 'o_amaterno', 'o_telefono', 'o_correo', 'o_direccion', 'procedimiento_id', 'observaciones', 'user_id', 'estado', 
+        'year', 'correlativo', 'codigo', 'o_tipo', 'o_externo_tipo', 'o_dependencia_id', 'o_user_id', 'ruc', 'razon_social', 'o_identidad_documento_id', 'o_nro_documento', 'o_nombre', 'o_apaterno', 'o_amaterno', 'o_telefono', 'o_correo', 'o_direccion', 'procedimiento_id', 'observaciones', 'user_id', 'estado', 
     ];
 
     public function o_dependencia()

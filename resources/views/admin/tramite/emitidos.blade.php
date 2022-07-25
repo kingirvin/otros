@@ -9,7 +9,7 @@
 <script src="{{ asset('js/tramite/documentos_emitidos.js') }}" type="text/javascript"></script>
 @endsection
 @section('contenido')
-<div class="container-xl">
+<div class="container-fluid">
     <!-- Page title -->
     <div class="page-header">
         <div class="row align-items-center">
@@ -36,29 +36,53 @@
         </div>
     </div>
 </div>
+@php
+    $modulos =  request('modulos', array());
+    $jefe = false;
+    if(array_key_exists('TRAMITE', $modulos)){
+        if(in_array('GESTDOC', $modulos['TRAMITE'])){
+            $jefe = true;
+        }
+    }
+@endphp
 <div class="page-body">
-    <div class="container-xl">
+    <div class="container-fluid">
         <div class="row row-cards">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header pb-1">
                         <div class="w-100">
                             <div class="row">
-                                <div class="col-md-2 pb-2" style="padding-bottom: .5rem;">
+                                <div class="col-md-2 select_label_container" style="padding-bottom: .5rem;">
+                                    <div class="select_label_min">AÑO DE REGISTRO</div>
                                     <select id="year_select" class="form-select">
                                         @for ($i = 0; $i < 10; $i++)
                                         <option value="{{$ahora->year - $i}}">{{$ahora->year - $i}}</option>
                                         @endfor
                                     </select>
                                 </div>
-                                <div class="col-md-4" style="padding-bottom: .5rem;">
-                                    <select id="dependencia_select" class="form-select" title="DEPENDENCIA DE ORIGEN">
+                                <div class="col-md-4 select_label_container" style="padding-bottom: .5rem;">
+                                    <div class="select_label_min">DEPENDENCIA DE ORIGEN</div>
+                                    <select id="dependencia_select" class="form-select">
                                     @if(count($origenes) > 0)
                                         @foreach ($origenes as $origen)
-                                        <option value="{{ $origen->dependencia_id }}">{{ $origen->dependencia->nombre }}</option>
+                                        <option value="{{ $origen->dependencia_id }}" {{$origen->dependencia_id == $origen_actual ? 'selected' : ''}}>{{ $origen->dependencia->nombre }}</option>
                                         @endforeach
                                     @else
                                         <option value="0">NO TIENES ASIGNADO UNA DEPENDENCIA</option>
+                                    @endif
+                                    </select>
+                                </div>   
+                                <div class="col-md-3 select_label_container" style="padding-bottom: .5rem;">
+                                    <div class="select_label_min">REMITENTE</div>
+                                    <select id="persona_select" class="form-select">
+                                    @if($jefe)
+                                        <option value="0">TODOS</option>
+                                        @foreach ($empleados as $empleado)
+                                        <option value="{{ $empleado->persona_id }}">{{ $empleado->persona->nombre.' '.$empleado->persona->apaterno.' '.$empleado->persona->amaterno }}</option>
+                                        @endforeach
+                                    @else
+                                        <option value="{{ $empleado_actual->persona_id }}">{{ $empleado_actual->persona->nombre.' '.$empleado_actual->persona->apaterno.' '.$empleado_actual->persona->amaterno }}
                                     @endif
                                     </select>
                                 </div>   
@@ -88,6 +112,7 @@
                                     <th>TRÁMITE</th>
                                     <th>DOCUMENTO</th>
                                     <th></th>
+                                    <th>REMITENTE</th>
                                     <th>DESTINO</th>
                                     <th>REGISTRA</th>
                                     <th>FECHA</th>
@@ -96,7 +121,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td colspan="8">Cargando...</td>
+                                    <td colspan="9">Cargando...</td>
                                 </tr>
                             </tbody>
                         </table>   

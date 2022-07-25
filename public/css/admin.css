@@ -134,6 +134,15 @@
 }
 */
 
+.bg-interno{
+    background: #f9ffd6;
+    /*
+    box-shadow: 5px 0px 0px 0px rgb(253 208 44) inset;
+    -webkit-box-shadow: 5px 0px 0px 0px rgb(253 208 44) inset;
+    -moz-box-shadow: 5px 0px 0px 0px rgb(253 208 44) inset;
+    */
+}
+
 /*------------------select2*/
 .select2-container--bootstrap4 .select2-selection{
     border: 1px solid #dadcde;
@@ -148,6 +157,33 @@
 {
     display: none;
 }
+
+.select2-results__option--disabled{
+    background: #ededed;
+    color: #b7b7b7;
+}
+
+.select_label_container{
+    position: relative;
+}
+
+.select_label_min{
+    display: none;
+    position: absolute;
+    font-size: 9px;
+    padding: 3px 8px;
+    background: #d9dbde;
+    top: -7px;
+    border-radius: 3px;
+    left: 15px;
+    line-height: 1;
+}
+
+.select_label_container:hover > .select_label_min{
+    display: block;
+}
+
+
 /*
 .select2-container--default .select2-selection--single {
     border: 1px solid #d9dbde !important;

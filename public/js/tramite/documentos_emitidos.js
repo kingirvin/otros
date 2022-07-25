@@ -14,7 +14,8 @@ $( document ).ready(function() {
             "type": "GET",
             "data": function ( d ) {
                 d.year = $("#year_select").val(); 
-                d.dependencia_id = $("#dependencia_select").val();               
+                d.dependencia_id = $("#dependencia_select").val();  
+                d.persona_id = $("#persona_select").val();
             },
             error: default_error_handler
         },
@@ -39,6 +40,7 @@ $( document ).ready(function() {
                 }        
             },
             { "data": "asunto", "orderable": false, "searchable": true, "visible": false},
+            { "data": "remitente"},
             { "data": "movimientos", "searchable": false, "orderable": false,
                 render: function ( data, type, full ) {       
                     return get_destinos(data);
@@ -85,11 +87,17 @@ $( document ).ready(function() {
     
     $('#year_select').on('change', function() {
         tabla.ajax.reload();
-    });
+    });   
 
     $('#dependencia_select').on('change', function() {
+        $("#cargando_pagina").show();
+        window.location.href = default_server + "/admin/tramite/emision/emitidos?origen="+$(this).val();
+    });  
+
+    $('#persona_select').on('change', function() {
         tabla.ajax.reload();
     });
+
     
 });
 
@@ -101,15 +109,17 @@ function get_destinos(movimientos) {
         if(movimientos[i].d_tipo == 0)//interno
         {
             destinos.push({
-                d_text: textoMax(movimientos[i].d_dependencia.nombre, 25),
-                d_completo: movimientos[i].d_dependencia.nombre
+                d_text: textoMax(movimientos[i].d_dependencia.nombre, 30),
+                d_completo: movimientos[i].d_dependencia.nombre,
+                d_aux: (movimientos[i].d_persona != null ? movimientos[i].d_persona.nombre+' '+movimientos[i].d_persona.apaterno+' '+movimientos[i].d_persona.amaterno : '')
             });
         } 
         else 
         {
             destinos.push({
-                d_text: safeText(movimientos[i].d_nro_documento)+' | '+textoMax(movimientos[i].d_nombre, 25),
-                d_completo: safeText(movimientos[i].d_nro_documento)+' | '+movimientos[i].d_nombre
+                d_text: safeText(movimientos[i].d_nro_documento)+' | '+textoMax(movimientos[i].d_nombre, 30),
+                d_completo: safeText(movimientos[i].d_nro_documento)+' | '+movimientos[i].d_nombre,
+                d_aux: ''
             });
         }
     }
@@ -118,7 +128,7 @@ function get_destinos(movimientos) {
         return 'SIN DESTINOS';
     }
     else if(destinos.length == 1){
-        return '<div title="'+destinos[0].d_completo+'">'+destinos[0].d_text+'</div>';
+        return '<div class="lh-1" title="'+destinos[0].d_completo+'">'+destinos[0].d_text+(destinos[0].d_aux != '' ? '<small class="d-block text-muted">'+destinos[0].d_aux+'</small>' : '')+'</div>';
     }
     else {
         var destino_text = '';

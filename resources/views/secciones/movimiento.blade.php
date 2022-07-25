@@ -57,8 +57,11 @@ if($item->total > 1){
                         @endif
                     </div>
                     <div class="col">
+                        @if($item->personal != '')
+                        <small class="d-block text-lime text-truncate lh-1" title="{{ $item->personal }}">{{ $item->personal }}</small>
+                        @endif
                         <div class="fw-bold lh-1 text-truncate" title="{{ $item->nombre }}">{{ $item->nombre }} </div> 
-                        <small class="d-block text-muted text-truncate" title="{{ $item->detalle }}">{{ $item->detalle }}</small>
+                        <small class="d-block text-muted text-truncate" title="{{ $item->detalle }}">{{ $item->detalle }}</small>                        
                     </div>
                 </div> 
                 @if($item->accion != null)

@@ -27,7 +27,7 @@
                     <ol class="breadcrumb breadcrumb-alternate" aria-label="breadcrumbs">
                         <li class="breadcrumb-item"><a href="{{ url('admin') }}">Inicio</a></li>
                         <li class="breadcrumb-item"><a href="{{ url('admin/tramite') }}">Trámite</a></li>
-                        <li class="breadcrumb-item"><a href="{{ url('admin/tramite/recepcion/recibidos') }}">Recibidos</a></li>                        
+                        <li class="breadcrumb-item"><a href="{{ url('admin/tramite/recibidos') }}">Recibidos</a></li>                        
                         <li class="breadcrumb-item active" aria-current="page">Derivar</li>
                     </ol>
                 </div>
@@ -38,6 +38,15 @@
         </div>
     </div>
 </div>
+@php
+    $modulos =  request('modulos', array());
+    $jefe = false;
+    if(array_key_exists('TRAMITE', $modulos)){
+        if(in_array('GESTDOC', $modulos['TRAMITE'])){
+            $jefe = true;
+        }
+    }
+@endphp
 <div class="page-body">
     <div class="container-lg">
         <div id="form-documento" class="row">            
@@ -116,7 +125,18 @@
                                 <div class="row">
                                     <div class="col-md-9 form-group form-required mb-3">
                                         <label class="form-label">Remitente</label>
-                                        <input id="remitente" type="text" class="form-control mayuscula" placeholder="">
+                                        @if($jefe)
+                                        <select id="o_empleado_id" class="form-select validar_select">
+                                            <option value="0" data-persona="0">Seleccione...</option>
+                                            @foreach ($empleados as $empleado)
+                                            <option value="{{$empleado->id}}" data-persona="{{$empleado->persona_id}}">{{$empleado->persona->nombre.' '.$empleado->persona->apaterno.' '.$empleado->persona->amaterno}}</option>
+                                            @endforeach
+                                        </select>
+                                        @else
+                                        <select id="o_empleado_id" class="form-select validar_select">
+                                            <option value="{{$empleado_actual->id}}" data-persona="{{$empleado_actual->persona_id}}">{{$empleado_actual->persona->nombre.' '.$empleado_actual->persona->apaterno.' '.$empleado_actual->persona->amaterno}}</option>                                   
+                                        </select>
+                                        @endif
                                     </div>
                                     <div class="col-md-3 form-group form-required mb-3">
                                         <label class="form-label">Folios</label>
@@ -161,6 +181,13 @@
                             <input type="hidden" id="o_dependencia_id" value="{{$movimiento->d_dependencia->id}}">
                             <input type="text" class="form-control" value="{{$movimiento->d_dependencia->nombre}}" disabled="">
                         </div>
+                        @if($movimiento->d_persona != null)
+                        <div class="form-group mb-3">
+                            <label class="form-label">Personal </label>
+                            <input type="hidden" id="o_persona_id" value="{{$movimiento->d_persona->id}}">
+                            <input type="text" class="form-control" value="{{$movimiento->d_persona->nombre.' '.$movimiento->d_persona->apaterno.' '.$movimiento->d_persona->amaterno}}" disabled="">
+                        </div>
+                        @endif
                         <div class="form-group form-required">
                             <div class="w-100 mb-2">
                                 <div class="row align-items-center">
@@ -220,7 +247,7 @@
 
                 <div class="row">
                     <div class="col-md-6">
-                        <a href="{{url('admin/tramite/recepcion/recibidos')}}" class="btn btn-link link-secondary w-100">
+                        <a href="{{url('admin/tramite/recibidos')}}" class="btn btn-link link-secondary w-100">
                             Cancelar
                         </a>
                     </div>
@@ -265,13 +292,18 @@
                     @endforeach
                 </select>
             </div>
+            <div class="form-group mb-3">
+                <label class="form-label">Personal</label>
+                <select id="empleado_select" class="form-select">
+                    <option value="0" data-persona="0">Seleccione...</option>                   
+                </select>
+            </div>
             <div class="form-group">
                 <div class="d-flex justify-content-between">
                     <label class="form-check form-switch m-0">
                         <input id="copia" class="form-check-input" type="checkbox">
                         <span class="form-check-label">Como copia</span>
-                    </label>
-                    <!--<a class="interrogante" tabindex="0" role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-content="Los documento enviados como copia no podran ser derivados, son solo de conocimiento.">?</a>-->
+                    </label>                    
                     <a class="interrogante" tabindex="0" role="button" data-bs-toggle="tooltip" data-bs-placement="left" title="Los documento enviados como copia no podran ser derivados, son solo de conocimiento.">?</a>
                 </div>
             </div>
@@ -285,7 +317,7 @@
             <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
                 Cancelar
             </a>
-            <button id="btn_destino" type="button" class="btn btn-primary ms-auto" onclick="agregar_destino_dependencia()">
+            <button id="btn_destino" type="button" class="btn btn-primary ms-auto" onclick="agregar_destino_interno()">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 Agregar
             </button>

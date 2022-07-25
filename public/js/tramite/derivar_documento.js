@@ -15,6 +15,11 @@ $( document ).ready(function() {
         theme: 'bootstrap4',
         width: '100%',
     });
+
+    $("#o_empleado_id").select2({
+        theme: 'bootstrap4',
+        width: '100%',
+    });
 });
 
 
@@ -62,9 +67,11 @@ function guardar_todo() {
             movimiento_id: elMovimiento,
             destinos: destinos,
             metodo: el_metodo,
+            o_empleado_id: (el_metodo == 1 ? $("#o_empleado_id").val() : null),
+            o_persona_id: (el_metodo == 1 ? $("#o_empleado_id").find(":selected").data("persona") : null),
             documento_tipo_id: (el_metodo == 1 ? $("#documento_tipo_id").val() : null),
             numero: (el_metodo == 1 ? $("#numero").val() : null),
-            remitente: (el_metodo == 1 ? $("#remitente").val() : null),
+            remitente: (el_metodo == 1 ? $("#o_empleado_id option:selected").text() : null),
             asunto: (el_metodo == 1 ? $("#asunto").val() : null),
             folios: (el_metodo == 1 ? $("#folios").val() : null),
             observaciones: (el_metodo == 1 ? $("#observaciones").val() : null),
@@ -75,7 +82,7 @@ function guardar_todo() {
         },
         success: function(result){  
             alerta(result.message, true); 
-            window.location.href = default_server + "/admin/tramite/recepcion/recibidos";
+            window.location.href = default_server + "/admin/tramite/recibidos";
         },
         error: function(error) {                
             alerta(response_helper(error), false);

@@ -45,12 +45,30 @@ class TramiteController extends Controller
         $procedimientos = Procedimiento::where('tipo', 0)->where('estado', 1)->has('pasos')->get();
         $user = Auth::user();
         $ahora = Carbon::now();
-
+        //posee datos de persona
         if($user->persona_id == null){
             return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No posees datos de persona", 'mensaje' => "No tienes registrado datos de PERSONA, ponte en contacto con el administrador del sistema para su registro.", 'accion' => "back" )]);  
         }
-
+        //dependencias a la cual pertenece el usuario
         $origenes = Empleado::with('dependencia')->where('persona_id', $user->persona_id)->where('estado', 1)->orderBy('created_at', 'desc')->get();
+        $origen_actual = $request->has('origen') ? $request->origen : $origenes[0]->dependencia_id;        
+        if(!$origenes->contains('dependencia_id', $origen_actual)){//el origen actual esta dentro de los origenes
+            return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No perteneces a la dependencia", 'mensaje' => "El usuario actual no pertenece a la dependencia seleccionada.", 'accion' => "back" )]);  
+        }
+        //empleados de la dependencia actual
+        $empleados = Empleado::with(['persona.identidad_documento'])->where('estado', 1)->where('dependencia_id', '=', $origen_actual)->get();
+        $empleado_actual = null;
+        foreach ($empleados as $empleado) {
+            if($empleado->persona_id == $user->persona_id){
+                $empleado_actual = $empleado;
+                break;
+            }
+        }
+
+        if($empleado_actual == null){
+            return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No perteneces a la dependencia", 'mensaje' => "El usuario actual no pertenece a la dependencia seleccionada.", 'accion' => "back" )]);  
+        }
+
         //sedes y dependencias
         $sedes = Sede::where('estado', 1)->get();
         if(count($sedes) > 0)
@@ -59,9 +77,8 @@ class TramiteController extends Controller
             $dependencias = collect();   
         //tipo de documento (gestion e identidad)
         $identidad_tipos = Identidad_documento::where('estado', 1)->get();
-        $documento_tipos = Documento_tipo::where('estado', 1)->get();         
-
-        return view('admin.tramite.nuevo',compact('procedimientos','origenes','sedes','dependencias','identidad_tipos','documento_tipos'));
+        $documento_tipos = Documento_tipo::where('estado', 1)->get();
+        return view('admin.tramite.nuevo',compact('procedimientos','origenes','origen_actual','empleados','empleado_actual','sedes','dependencias','identidad_tipos','documento_tipos','user'));
     }
 
     /**
@@ -71,9 +88,34 @@ class TramiteController extends Controller
     {
         $user = Auth::user();
         $ahora = Carbon::now();
+
+        if($user->persona_id == null){
+            return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No posees datos de persona", 'mensaje' => "No tienes registrado datos de PERSONA, ponte en contacto con el administrador del sistema para su registro.", 'accion' => "back" )]);  
+        }
+
         $documento_tipos = Documento_tipo::where('estado', 1)->get();
         $origenes = Empleado::with('dependencia')->where('persona_id', $user->persona_id)->where('estado', 1)->orderBy('created_at', 'desc')->get();
-        return view('admin.tramite.emitidos', compact('origenes','ahora','user','documento_tipos'));
+        $origen_actual = $request->has('origen') ? $request->origen : $origenes[0]->dependencia_id;
+
+        //el origen actual esta dentro de los origenes
+        if(!$origenes->contains('dependencia_id', $origen_actual)){
+            return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No perteneces a la dependencia", 'mensaje' => "El usuario actual no pertenece a la dependencia seleccionada.", 'accion' => "back" )]);  
+        }
+
+        $empleados = Empleado::with(['persona.identidad_documento'])->where('estado', 1)->where('dependencia_id', '=', $origen_actual)->get();
+        $empleado_actual = null;
+        foreach ($empleados as $empleado) {
+            if($empleado->persona_id == $user->persona_id){
+                $empleado_actual = $empleado;
+                break;
+            }
+        }
+
+        if($empleado_actual == null){
+            return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No perteneces a la dependencia", 'mensaje' => "El usuario actual no pertenece a la dependencia seleccionada.", 'accion' => "back" )]);  
+        }
+
+        return view('admin.tramite.emitidos', compact('origenes','origen_actual','empleados','empleado_actual','ahora','user','documento_tipos'));
     }
 
     /**
@@ -83,8 +125,61 @@ class TramiteController extends Controller
     {
         $user = Auth::user();
         $ahora = Carbon::now();
+
+        if($user->persona_id == null){
+            return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No posees datos de persona", 'mensaje' => "No tienes registrado datos de PERSONA, ponte en contacto con el administrador del sistema para su registro.", 'accion' => "back" )]);  
+        }
+
         $destinos = Empleado::with('dependencia')->where('persona_id', $user->persona_id)->where('estado', 1)->orderBy('created_at', 'desc')->get();
-        return view('admin.tramite.por_recibir',compact('destinos','ahora','user'));
+        $destino_actual = $request->has('destino') ? $request->destino : $destinos[0]->dependencia_id;
+
+        //el destino actual esta dentro de los origenes
+        if(!$destinos->contains('dependencia_id', $destino_actual)){
+            return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No perteneces a la dependencia", 'mensaje' => "El usuario actual no pertenece a la dependencia seleccionada.", 'accion' => "back" )]);  
+        }
+
+        $empleados = Empleado::with(['persona.identidad_documento'])->where('estado', 1)->where('dependencia_id', '=', $destino_actual)->get();
+        $empleado_actual = null;
+        foreach ($empleados as $empleado) {
+            if($empleado->persona_id == $user->persona_id){
+                $empleado_actual = $empleado;
+                break;
+            }
+        }
+
+        if($empleado_actual == null){
+            return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No perteneces a la dependencia", 'mensaje' => "El usuario actual no pertenece a la dependencia seleccionada.", 'accion' => "back" )]);  
+        }
+
+        return view('admin.tramite.por_recibir',compact('destinos','destino_actual','empleados','empleado_actual','ahora','user'));
+    }
+
+    /**
+     * RECIBIR DOCUMENTO EXTERNO SIMPLE
+     */
+    public function externo(Request $request)
+    {
+        $procedimientos = Procedimiento::where('tipo', 2)->where('estado', 1)->has('pasos')->get();//tipo: 0:interno, 1:universitario, 2:externo
+        $user = Auth::user();
+        $ahora = Carbon::now();
+
+        if($user->persona_id == null){
+            return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No posees datos de persona", 'mensaje' => "No tienes registrado datos de PERSONA, ponte en contacto con el administrador del sistema para su registro.", 'accion' => "back" )]);  
+        }
+
+        $destinos = Empleado::with('dependencia')->where('persona_id', $user->persona_id)->where('estado', 1)->orderBy('created_at', 'desc')->get();
+        $destino_actual = $request->has('destino') ? $request->destino : $destinos[0]->dependencia_id;
+
+        //el destino actual esta dentro de los origenes
+        if(!$destinos->contains('dependencia_id', $destino_actual)){
+            return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No perteneces a la dependencia", 'mensaje' => "El usuario actual no pertenece a la dependencia seleccionada.", 'accion' => "back" )]);  
+        }
+        
+        //tipo de documento (gestion e identidad)
+        $identidad_tipos = Identidad_documento::where('estado', 1)->get();
+        $documento_tipos = Documento_tipo::where('estado', 1)->get();  
+        
+        return view('admin.tramite.externo',compact('procedimientos','destinos','destino_actual','identidad_tipos','documento_tipos'));
     }
 
     /**
@@ -94,8 +189,32 @@ class TramiteController extends Controller
     {        
         $user = Auth::user();
         $ahora = Carbon::now();
+
+        if($user->persona_id == null){
+            return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No posees datos de persona", 'mensaje' => "No tienes registrado datos de PERSONA, ponte en contacto con el administrador del sistema para su registro.", 'accion' => "back" )]);  
+        }
+
         $destinos = Empleado::with('dependencia')->where('persona_id', $user->persona_id)->where('estado', 1)->orderBy('created_at', 'desc')->get();
-        return view('admin.tramite.recibidos', compact('destinos','ahora','user'));
+        $destino_actual = $request->has('destino') ? $request->destino : $destinos[0]->dependencia_id;
+        //el destino actual esta dentro de los origenes
+        if(!$destinos->contains('dependencia_id', $destino_actual)){
+            return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No perteneces a la dependencia", 'mensaje' => "El usuario actual no pertenece a la dependencia seleccionada.", 'accion' => "back" )]);  
+        }
+
+        $empleados = Empleado::with(['persona.identidad_documento'])->where('estado', 1)->where('dependencia_id', '=', $destino_actual)->get();
+        $empleado_actual = null;
+        foreach ($empleados as $empleado) {
+            if($empleado->persona_id == $user->persona_id){
+                $empleado_actual = $empleado;
+                break;
+            }
+        }
+
+        if($empleado_actual == null){
+            return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No perteneces a la dependencia", 'mensaje' => "El usuario actual no pertenece a la dependencia seleccionada.", 'accion' => "back" )]);  
+        }
+
+        return view('admin.tramite.recibidos', compact('destinos','destino_actual','empleados','empleado_actual','ahora','user'));
     }
 
     /**
@@ -103,7 +222,7 @@ class TramiteController extends Controller
      */
     public function derivar(Request $request, $id)
     {
-        $movimiento = Movimiento::with(['d_dependencia','documento.documento_tipo','tramite'])->find($id);
+        $movimiento = Movimiento::with(['d_dependencia','d_persona','documento.documento_tipo','tramite'])->find($id);
         if($movimiento == null)
             return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No se pudo encontrar el movimiento", 'mensaje' => "El registro seleccionado ya no se encuentra disponible.", 'accion' => "close" )]);  
         
@@ -124,11 +243,26 @@ class TramiteController extends Controller
                 $dependencias = collect();  
 
             $origenes = Empleado::with('dependencia')->where('persona_id', $user->persona_id)->where('estado', 1)->orderBy('created_at', 'desc')->get();
+
+            //empleados de la dependencia actual
+            $empleados = Empleado::with(['persona.identidad_documento'])->where('estado', 1)->where('dependencia_id', '=', $movimiento->d_dependencia_id)->get();
+            $empleado_actual = null;
+            foreach ($empleados as $empleado) {
+                if($empleado->persona_id == $user->persona_id){
+                    $empleado_actual = $empleado;
+                    break;
+                }
+            }
+
+            if($empleado_actual == null){
+                return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No perteneces a la dependencia", 'mensaje' => "El usuario actual no pertenece a la dependencia seleccionada.", 'accion' => "back" )]);  
+            }
+
             $identidad_tipos = Identidad_documento::where('estado', 1)->get();
             $documento_tipos = Documento_tipo::where('estado', 1)->get();
             $acciones = Accion::where('estado',1)->orderBy('orden')->get();
 
-            return view('admin.tramite.derivar', compact('movimiento','user','sedes','origenes','dependencias','ahora','identidad_tipos','documento_tipos','acciones'));
+            return view('admin.tramite.derivar', compact('movimiento','user','sedes','origenes','empleados','empleado_actual','dependencias','ahora','identidad_tipos','documento_tipos','acciones'));
         }
         else {
             return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No se encuentra habilitado para derivar", 'mensaje' => "El registro seleccionado debe estar en estado pendiente o derivado.", 'accion' => "close" )]);  
@@ -155,7 +289,7 @@ class TramiteController extends Controller
             return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No se pudo encontrar el trámite", 'mensaje' => "El registro seleccionado ya no se encuentra disponible.", 'accion' => "close" )]);  
 
         $documentos = Documento::with(['documento_tipo','archivo','anexos'])->where('tramite_id', $tramite->id)->orderBy('id', 'desc')->get();
-        $movimientos = Movimiento::with(['documento','accion','o_user','d_user','f_user','d_dependencia.sede','observaciones.user'])->where('tramite_id', $tramite->id)->get();
+        $movimientos = Movimiento::with(['documento','accion','o_user','d_user','f_user','d_dependencia.sede','d_persona','observaciones.user'])->where('tramite_id', $tramite->id)->get();
         $ordenado = $this->ordenar($movimientos, null);
         return view('admin.tramite.seguimiento', compact('tramite','documentos','ordenado'));
     }
@@ -174,11 +308,13 @@ class TramiteController extends Controller
                 //destino (0:interno, 1:externo)
                 if($movimiento->d_tipo == 0)//interno
                 {
+                    $elemento->personal = ($movimiento->d_persona ? $movimiento->d_persona->nombre.' '.$movimiento->d_persona->apaterno.' '.$movimiento->d_persona->amaterno : '');
                     $elemento->nombre = $movimiento->d_dependencia->nombre;
                     $elemento->detalle = $movimiento->d_dependencia->sede->nombre;
                 }
                 else//externo
                 {
+                    $elemento->personal = '';
                     $elemento->nombre = $movimiento->d_nombre;
                     $elemento->detalle = $movimiento->d_nro_documento;
                 }

@@ -13,7 +13,8 @@ $( document ).ready(function() {
             "type": "GET",
             "data": function ( d ) {
                 d.year = $("#year_select").val(); 
-                d.dependencia_id = $("#dependencia_select").val();    
+                d.dependencia_id = $("#dependencia_select").val();  
+                d.persona_id = $("#persona_select").val();  
             },
             error: default_error_handler        
         },
@@ -25,7 +26,7 @@ $( document ).ready(function() {
             },
             { "data": "documento.numero", "orderable": false,
                 render: function ( data, type, full ) {
-                    return '<div title="'+data+'">'+full.documento.documento_tipo.abreviatura+' '+textoMax(data,30)+'</div><small title="'+full.documento.asunto+'" class="d-block text-muted text-truncate mt-n1 lh-1">'+textoMax(full.documento.asunto,30)+'</small>';
+                    return '<div title="'+data+'">'+full.documento.documento_tipo.abreviatura+' '+textoMax(data,25)+'</div><small title="'+full.documento.asunto+'" class="d-block text-muted text-truncate mt-n1 lh-1">'+textoMax(full.documento.asunto,25)+'</small>';
                 }
             },
             { "data": "documento.asunto", "orderable": false, "searchable": true, "visible": false},
@@ -68,7 +69,12 @@ $( document ).ready(function() {
         },*/
         "dom": default_datatable_dom,
         "language": default_datatable_language,
-        "initComplete" : default_datatable_buttons
+        "initComplete" : default_datatable_buttons,
+        rowCallback: function(row, data, index) {
+            if (data.o_dependencia_id == laDependencia) {
+                $(row).addClass("bg-interno");
+            }
+        },
     }); 
 
     /*tabla.on( 'length', function ( e, settings, len ) {
@@ -77,9 +83,14 @@ $( document ).ready(function() {
     
     $('#year_select').on('change', function() {
         tabla.ajax.reload();
-    });
+    });   
 
     $('#dependencia_select').on('change', function() {
+        $("#cargando_pagina").show();
+        window.location.href = default_server + "/admin/tramite/recepcion?destino="+$(this).val();
+    });
+
+    $('#persona_select').on('change', function() {
         tabla.ajax.reload();
     });
 
@@ -109,20 +120,26 @@ function get_origen(movimiento) {
 }
 
 function get_motivo(movimiento) {
-    var res = '<div class="">';
+    //destinatario
+    var res = '';
+    if(movimiento.d_persona != null)      
+        res += '<div class="lh-1" title="'+movimiento.d_persona.nombre+' '+movimiento.d_persona.apaterno+' '+movimiento.d_persona.amaterno+'">'+textoMax((movimiento.d_persona.nombre+' '+movimiento.d_persona.apaterno+' '+movimiento.d_persona.amaterno),25)+'</div>';
+    else
+        res += '<div class="lh-1">SOLO DEPENDENCIA</div>';
+    //motivo
     if(movimiento.tipo == 0){
-        res += '<div>NUEVO TRÁMITE</div>';
+        res += '<small class="d-block text-muted">NUEVO TRÁMITE</small>';
     } else if(movimiento.tipo == 1) {
-        res += '<div>DERIVADO [PROVEIDO]</div>';
+        var temp = 'DERIVADO [PROVEIDO]';
         if(movimiento.accion != null) {
-            var temp = movimiento.accion.nombre+(movimiento.accion_otros ? ' &#183; '+movimiento.accion_otros : '');
-            res += '<small class="d-block text-muted text-truncate mt-n1 lh-1" title="'+temp+'">'+safeText(temp,30)+'</small>';
+            temp +=  ' &#183 '+movimiento.accion.nombre;
         }
+        res += '<small class="d-block text-muted" title="'+temp+'">'+textoMax(temp,30)+'</small>';
+        
     } else {
-        res += '<div>DERIVADO [DOCUMENTO]</div>';
+        res += '<small class="d-block text-muted">DERIVADO [DOCUMENTO]</small>';
     }
 
-    res += '</div>';
     return res;
 }
 

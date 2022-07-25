@@ -35,6 +35,15 @@
         </div>
     </div>
 </div>
+@php
+    $modulos =  request('modulos', array());
+    $jefe = false;
+    if(array_key_exists('TRAMITE', $modulos)){
+        if(in_array('GESTDOC', $modulos['TRAMITE'])){
+            $jefe = true;
+        }
+    }
+@endphp
 <div class="page-body">
     <div class="container-lg">
         <div id="form-documento" class="row">
@@ -79,7 +88,18 @@
                         <div class="row">
                             <div class="col-md-9 form-group form-required mb-3">
                                 <label class="form-label">Remitente</label>
-                                <input id="remitente" type="text" class="form-control mayuscula" placeholder="">
+                                @if($jefe)
+                                <select id="o_empleado_id" class="form-select validar_select">
+                                    <option value="0" data-persona="0">Seleccione...</option>
+                                    @foreach ($empleados as $empleado)
+                                    <option value="{{$empleado->id}}" data-persona="{{$empleado->persona_id}}">{{$empleado->persona->nombre.' '.$empleado->persona->apaterno.' '.$empleado->persona->amaterno}}</option>
+                                    @endforeach
+                                </select>
+                                @else
+                                <select id="o_empleado_id" class="form-select validar_select">
+                                    <option value="{{$empleado_actual->id}}" data-persona="{{$empleado_actual->persona_id}}">{{$empleado_actual->persona->nombre.' '.$empleado_actual->persona->apaterno.' '.$empleado_actual->persona->amaterno}}</option>                                   
+                                </select>
+                                @endif
                             </div>
                             <div class="col-md-3 form-group form-required mb-3">
                                 <label class="form-label">Folios</label>
@@ -117,7 +137,7 @@
                             <select id="o_dependencia_id" class="form-select validar_select">
                                 @if(count($origenes) > 0)
                                     @foreach ($origenes as $origen)
-                                    <option value="{{$origen->dependencia_id}}">{{$origen->dependencia->nombre}}</option>
+                                    <option value="{{$origen->dependencia_id}}" {{$origen->dependencia_id == $origen_actual ? 'selected' : ''}} >{{$origen->dependencia->nombre}}</option>
                                     @endforeach
                                 @else
                                 <option value="0">NO TIENES ASIGNADO UNA DEPENDENCIA</option>
@@ -139,8 +159,10 @@
                                             <div class="btn-group" role="group">
                                                 <button data-bs-toggle="dropdown" type="button" class="btn dropdown-toggle dropdown-toggle-split" aria-expanded="false"></button>
                                                 <div class="dropdown-menu dropdown-menu-end">
-                                                    <a class="dropdown-item" href="javascript:void(0);" onclick="nuevo_destino_externo()">Destino externo</a>
-                                                    <!--<a class="dropdown-item" href="javascript:void(0);" onclick="nuevo_destino_pide()">Destino PIDE</a>-->
+                                                    <a class="dropdown-item" href="javascript:void(0);" onclick="nuevo_destino_externo()">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon dropdown-item-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 12h5a2 2 0 0 1 0 4h-15l-3 -6h3l2 2h3l-2 -7h3z" transform="rotate(-15 12 12) translate(0 -1)" /><line x1="3" y1="21" x2="21" y2="21" /></svg>
+                                                        Destino externo
+                                                    </a>                                                    
                                                 </div>
                                             </div>
                                         </div>                                          
@@ -226,13 +248,18 @@
                     @endforeach
                 </select>
             </div>
+            <div class="form-group mb-3">
+                <label class="form-label">Personal</label>
+                <select id="empleado_select" class="form-select">
+                    <option value="0" data-persona="0">Seleccione...</option>                   
+                </select>
+            </div>
             <div class="form-group">
                 <div class="d-flex justify-content-between">
                     <label class="form-check form-switch m-0">
                         <input id="copia" class="form-check-input" type="checkbox">
                         <span class="form-check-label">Como copia</span>
-                    </label>
-                    <!--<a class="interrogante" tabindex="0" role="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-content="Los documento enviados como copia no podran ser derivados, son solo de conocimiento.">?</a>-->
+                    </label>                    
                     <a class="interrogante" tabindex="0" role="button" data-bs-toggle="tooltip" data-bs-placement="left" title="Los documento enviados como copia no podran ser derivados, son solo de conocimiento.">?</a>
                 </div>
             </div>
@@ -246,7 +273,7 @@
             <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
                 Cancelar
             </a>
-            <button id="btn_destino" type="button" class="btn btn-primary ms-auto" onclick="agregar_destino_dependencia()">
+            <button id="btn_destino" type="button" class="btn btn-primary ms-auto" onclick="agregar_destino_interno()">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 Agregar
             </button>
@@ -254,7 +281,7 @@
       </div>
     </div>
 </div>
-
+<!-- MODAL DESTINO EXTERNO-->
 <div id="destino_externo" class="modal modal-blur fade" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -295,7 +322,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- MODAL BUSCAR ARCHIVO DIGITAL -->
 <div id="buscar_modal" class="modal modal-blur fade" tabindex="-1" aria-hidden="true">

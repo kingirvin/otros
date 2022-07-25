@@ -22,6 +22,8 @@ class CreateDocumentosTable extends Migration
             //pertenencia
             $table->unsignedBigInteger('tramite_id')->nullable();
             $table->unsignedBigInteger('dependencia_id')->nullable();//dependencia de registro
+            $table->unsignedBigInteger('empleado_id')->nullable();
+            $table->unsignedBigInteger('persona_id')->nullable();
             $table->integer('o_numero');//correlativo por oficina que envia
             $table->unsignedBigInteger('documento_tipo_id')->nullable();
             $table->string('numero');//002-2021-GOREMAD/UI
@@ -36,6 +38,8 @@ class CreateDocumentosTable extends Migration
 
             $table->foreign('tramite_id')->references('id')->on('tramites');
             $table->foreign('dependencia_id')->references('id')->on('dependencias');
+            $table->foreign('empleado_id')->references('id')->on('empleados');
+            $table->foreign('persona_id')->references('id')->on('personas');
             $table->foreign('documento_tipo_id')->references('id')->on('documento_tipos');
             $table->foreign('archivo_id')->references('id')->on('archivos');
             $table->foreign('user_id')->references('id')->on('users');

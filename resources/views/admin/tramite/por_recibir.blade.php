@@ -5,10 +5,22 @@
 <script src="{{ asset('lib/datatables/DataTables-1.11.5/js/dataTables.bootstrap4.min.js') }}" type="text/javascript"></script>
 <script>
     const elUser = {{$user->id}};
+    const laDependencia = {{$destino_actual}};
 </script>
 <script src="{{ asset('js/tramite/recibir_documentos.js') }}" type="text/javascript"></script>
 @endsection
 @section('contenido')
+
+    @php
+    $modulos =  request('modulos', array());
+    $jefe = false;
+    if(array_key_exists('TRAMITE', $modulos)){
+        if(in_array('GESTDOC', $modulos['TRAMITE'])){
+            $jefe = true;
+        }
+    }
+    @endphp
+
 <div class="container-fluid">
     <!-- Page title -->
     <div class="page-header">
@@ -25,14 +37,16 @@
                     Recibir documentos
                 </h2>
             </div> 
-            <!--<div class="col-auto ms-auto">
+            @if($jefe)
+            <div class="col-auto ms-auto">
                 <div class="btn-list">
-                    <a href="{{url('admin/tramite/emision/nuevo')}}" class="btn btn-success d-sm-inline-block" >
-	                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
-                        Agregar
+                    <a href="{{url('admin/tramite/recepcion/externo')}}" class="btn btn-success d-sm-inline-block" >
+	                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 12h5a2 2 0 0 1 0 4h-15l-3 -6h3l2 2h3l-2 -7h3z" transform="rotate(15 12 12) translate(0 -1)" /><line x1="3" y1="21" x2="21" y2="21" /></svg>
+                        Externo
                     </a>
                 </div>
-            </div>-->
+            </div>
+            @endif
         </div>
     </div>
 </div>
@@ -44,24 +58,40 @@
                     <div class="card-header pb-1">
                         <div class="w-100">
                             <div class="row">
-                                <div class="col-md-4" style="padding-bottom: .5rem;">
-                                    <select id="dependencia_select" class="form-select" title="DEPENDENCIA DESTINO">
-                                        @if(count($destinos) > 0)
-                                            @foreach ($destinos as $destino)
-                                            <option value="{{ $destino->dependencia_id }}">{{ $destino->dependencia->nombre }}</option>
-                                            @endforeach
-                                        @else
-                                            <option value="0">NO TIENES ASIGNADO UNA DEPENDENCIA</option>
-                                        @endif
-                                    </select>
-                                </div>
-                                <div class="col-md-2 pb-2" style="padding-bottom: .5rem;" title="AÑO DE REGISTRO">
+                                <div class="col-md-2 select_label_container" style="padding-bottom: .5rem;">
+                                    <div class="select_label_min">AÑO DE REGISTRO</div>
                                     <select id="year_select" class="form-select">
                                         @for ($i = 0; $i < 10; $i++)
                                         <option value="{{$ahora->year - $i}}">{{$ahora->year - $i}}</option>
                                         @endfor
                                     </select>
                                 </div>
+                                <div class="col-md-4 select_label_container" style="padding-bottom: .5rem;">
+                                    <div class="select_label_min">DEPENDENCIA DESTINO</div>
+                                    <select id="dependencia_select" class="form-select">
+                                        @if(count($destinos) > 0)
+                                            @foreach ($destinos as $destino)
+                                            <option value="{{ $destino->dependencia_id }}" {{$destino->dependencia_id == $destino_actual ? 'selected' : ''}}>{{ $destino->dependencia->nombre }}</option>
+                                            @endforeach
+                                        @else
+                                            <option value="0">NO TIENES ASIGNADO UNA DEPENDENCIA</option>
+                                        @endif
+                                    </select>
+                                </div>
+                                <div class="col-md-3 select_label_container" style="padding-bottom: .5rem;">
+                                    <div class="select_label_min">DESTINATARIO</div>
+                                    <select id="persona_select" class="form-select">
+                                    @if($jefe)
+                                        <option value="-1">TODOS</option>
+                                        <option value="0">SOLO DEPENDENCIA</option>
+                                        @foreach ($empleados as $empleado)
+                                        <option value="{{ $empleado->persona_id }}">{{ $empleado->persona->nombre.' '.$empleado->persona->apaterno.' '.$empleado->persona->amaterno }}</option>
+                                        @endforeach
+                                    @else
+                                        <option value="{{ $empleado_actual->persona_id }}">{{ $empleado_actual->persona->nombre.' '.$empleado_actual->persona->apaterno.' '.$empleado_actual->persona->amaterno }}
+                                    @endif
+                                    </select>
+                                </div>   
                             </div>
                         </div>
                     </div>
@@ -73,7 +103,7 @@
                                     <th>DOCUMENTO</th>
                                     <th></th>
                                     <th>ORIGEN</th>
-                                    <th>MOTIVO</th>
+                                    <th>DESTINATARIO / MOTIVO</th>
                                     <th>REGISTRA</th>
                                     <th>FECHA</th>
                                     <th>ACCIONES</th>     
@@ -81,7 +111,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td colspan="8">Cargando...</td>
+                                    <td colspan="7">Cargando...</td>
                                 </tr>
                             </tbody>
                         </table>   

@@ -14,7 +14,7 @@
                     <ol class="breadcrumb breadcrumb-alternate" aria-label="breadcrumbs">
                         <li class="breadcrumb-item"><a href="{{ url('admin') }}">Inicio</a></li>
                         <li class="breadcrumb-item"><a href="{{ url('admin/tramite') }}">Trámite</a></li>
-                        <li class="breadcrumb-item"><a href="{{ url('admin/tramite/recepcion/recibidos') }}">Recibidos</a></li>                        
+                        <li class="breadcrumb-item"><a href="{{ url('admin/tramite/recibidos') }}">Recibidos</a></li>                        
                         <li class="breadcrumb-item active" aria-current="page">Derivaciones</li>
                     </ol>
                 </div>

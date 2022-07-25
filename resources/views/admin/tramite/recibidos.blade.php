@@ -5,6 +5,7 @@
 <script src="{{ asset('lib/datatables/DataTables-1.11.5/js/dataTables.bootstrap4.min.js') }}" type="text/javascript"></script>
 <script>
     const elUser = {{$user->id}};
+    const laDependencia = {{$destino_actual}};
 </script>
 <script src="{{ asset('js/tramite/documentos_recibidos.js') }}" type="text/javascript"></script>
 @endsection
@@ -28,6 +29,15 @@
         </div>
     </div>
 </div>
+@php
+    $modulos =  request('modulos', array());
+    $jefe = false;
+    if(array_key_exists('TRAMITE', $modulos)){
+        if(in_array('GESTDOC', $modulos['TRAMITE'])){
+            $jefe = true;
+        }
+    }
+@endphp
 <div class="page-body">
     <div class="container-fluid">
         <div class="row row-cards">
@@ -36,27 +46,44 @@
                     <div class="card-header pb-1">
                         <div class="w-100">
                             <div class="row">
-                                <div class="col-md-4" style="padding-bottom: .5rem;">
-                                    <select id="dependencia_select" class="form-select" title="DEPENDENCIA DESTINO">
-                                        @if(count($destinos) > 0)
-                                            @foreach ($destinos as $destino)
-                                            <option value="{{ $destino->dependencia_id }}">{{ $destino->dependencia->nombre }}</option>
-                                            @endforeach
-                                        @else
-                                            <option value="0">NO TIENES ASIGNADO UNA DEPENDENCIA</option>
-                                        @endif
-                                    </select>
-                                </div>
-                                <div class="col-md-2 pb-2" style="padding-bottom: .5rem;" title="AÑO DE REGISTRO">
+                                <div class="col-md-2 select_label_container" style="padding-bottom: .5rem;">
+                                    <div class="select_label_min">AÑO DE REGISTRO</div>
                                     <select id="year_select" class="form-select">
                                         @for ($i = 0; $i < 10; $i++)
                                         <option value="{{$ahora->year - $i}}">{{$ahora->year - $i}}</option>
                                         @endfor
                                     </select>
                                 </div>
-                                <div class="col-md-2 pb-2" style="padding-bottom: .5rem;" title="ESTADO">
+                                <div class="col-md-3 select_label_container" style="padding-bottom: .5rem;">
+                                    <div class="select_label_min">DEPENDENCIA DESTINO</div>
+                                    <select id="dependencia_select" class="form-select">
+                                        @if(count($destinos) > 0)
+                                            @foreach ($destinos as $destino)
+                                            <option value="{{ $destino->dependencia_id }}" {{$destino->dependencia_id == $destino_actual ? 'selected' : ''}}>{{ $destino->dependencia->nombre }}</option>
+                                            @endforeach
+                                        @else
+                                            <option value="0">NO TIENES ASIGNADO UNA DEPENDENCIA</option>
+                                        @endif
+                                    </select>
+                                </div>
+                                <div class="col-md-3 select_label_container" style="padding-bottom: .5rem;">
+                                    <div class="select_label_min">DESTINATARIO</div>
+                                    <select id="persona_select" class="form-select">
+                                    @if($jefe)
+                                        <option value="-1">TODOS</option>
+                                        <option value="0">SOLO DEPENDENCIA</option>
+                                        @foreach ($empleados as $empleado)
+                                        <option value="{{ $empleado->persona_id }}">{{ $empleado->persona->nombre.' '.$empleado->persona->apaterno.' '.$empleado->persona->amaterno }}</option>
+                                        @endforeach
+                                    @else
+                                        <option value="{{ $empleado_actual->persona_id }}">{{ $empleado_actual->persona->nombre.' '.$empleado_actual->persona->apaterno.' '.$empleado_actual->persona->amaterno }}
+                                    @endif
+                                    </select>
+                                </div>                                
+                                <div class="col-md-2 select_label_container" style="padding-bottom: .5rem;">
+                                    <div class="select_label_min">ESTADO</div>
                                     <select id="estado_select" class="form-select">
-                                        <option value="0">ESTADO - [TODOS]</option>
+                                        <option value="0">TODOS</option>
                                         <option value="2">PENDIENTE</option>
                                         <option value="3">DERIVADO</option>
                                         <option value="4">ATENDIDO</option>
@@ -75,7 +102,7 @@
                                     <th>DOCUMENTO</th>
                                     <th></th>
                                     <th>ORIGEN</th>
-                                    <th>MOTIVO</th>
+                                    <th>DESTINATARIO / MOTIVO</th>
                                     <th>RECIBE</th>
                                     <th>FECHA</th>
                                     <th>ESTADO</th>

@@ -25,25 +25,34 @@ class CreateMovimientosTable extends Migration
 
             //QUIEN ENVIA 
             $table->tinyInteger('o_tipo')->default(0);//0:interno, 1:externo
-            //dependencia
-            $table->unsignedBigInteger('o_dependencia_id')->nullable();//dependencia de remitente
+            //--interno
+            $table->unsignedBigInteger('o_dependencia_id')->nullable();//dependencia de remitente           
+            $table->unsignedBigInteger('o_empleado_id')->nullable();
+            $table->unsignedBigInteger('o_persona_id')->nullable();
+            //--externo
+            $table->string('o_descripcion')->nullable();//descripcion general
+            //--
             $table->dateTime('o_fecha')->nullable();//fecha de envio
             $table->unsignedBigInteger('o_user_id')->nullable();//quien registra el envio
             $table->integer('o_year')->nullable();//año de correlativo en oficina que envia
             $table->integer('o_numero')->nullable();//correlativo de documento por oficina que envia (solo nuevo)
-            $table->string('o_descripcion')->nullable();//descripcion general
-
+            
             //QUIEN RECIBE 
             $table->tinyInteger('d_tipo')->default(0);//0:interno, 1:externo
-            //dependencia
-            $table->unsignedBigInteger('d_dependencia_id')->nullable();//dependencia de destino 
+            //--interno
+            $table->unsignedBigInteger('d_dependencia_id')->nullable();//dependencia de destino         
+            $table->unsignedBigInteger('d_empleado_id')->nullable();
+            $table->unsignedBigInteger('d_persona_id')->nullable();
+            //--externo
             $table->unsignedBigInteger('d_identidad_documento_id')->nullable();//tipo de documento   
             $table->string('d_nro_documento')->nullable();//documento de persona destino (persona externa)
             $table->string('d_nombre')->nullable();//nombre/razon de persona destino
+            //--
             $table->dateTime('d_fecha')->nullable();//fecha de recepcion
             $table->unsignedBigInteger('d_user_id')->nullable();//quien registro la recepcion
             $table->integer('d_year')->nullable();//año de correlativo que recibe
             $table->integer('d_numero')->nullable();//correlativo por oficina que recibe
+            
             $table->text('d_observacion')->nullable();//observaciones al momento de recibir
 
             //QUIEN TERMINA
@@ -62,9 +71,13 @@ class CreateMovimientosTable extends Migration
             $table->foreign('anterior_id')->references('id')->on('movimientos');
 
             $table->foreign('o_dependencia_id')->references('id')->on('dependencias');
+            $table->foreign('o_empleado_id')->references('id')->on('empleados');
+            $table->foreign('o_persona_id')->references('id')->on('personas');
             $table->foreign('o_user_id')->references('id')->on('users');
 
             $table->foreign('d_dependencia_id')->references('id')->on('dependencias');
+            $table->foreign('d_empleado_id')->references('id')->on('empleados');
+            $table->foreign('d_persona_id')->references('id')->on('personas');
             $table->foreign('d_identidad_documento_id')->references('id')->on('identidad_documentos');
             $table->foreign('d_user_id')->references('id')->on('users');
 

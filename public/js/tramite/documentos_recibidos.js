@@ -13,6 +13,7 @@ $( document ).ready(function() {
             "data": function ( d ) {
                 d.year = $("#year_select").val(); 
                 d.dependencia_id = $("#dependencia_select").val(); 
+                d.persona_id = $("#persona_select").val();  
                 d.estado = $("#estado_select").val();                           
             },
             error: default_error_handler
@@ -37,7 +38,7 @@ $( document ).ready(function() {
             },
             { "data": "documento.numero", "orderable": false,
                 render: function ( data, type, full ) {                      
-                    return '<div title="'+full.documento.documento_tipo.abreviatura+' '+data+'">'+full.documento.documento_tipo.abreviatura+' '+textoMax(data, 30)+'</div><small title="'+full.documento.asunto+'" class="d-block text-muted text-truncate mt-n1 lh-1">'+textoMax(full.documento.asunto,30)+'</small>';
+                    return '<div title="'+full.documento.documento_tipo.abreviatura+' '+data+'">'+full.documento.documento_tipo.abreviatura+' '+textoMax(data, 25)+'</div><small title="'+full.documento.asunto+'" class="d-block text-muted text-truncate mt-n1 lh-1">'+textoMax(full.documento.asunto,25)+'</small>';
                 }        
             },
             { "data": "documento.asunto", "orderable": false, "searchable": true, "visible": false },
@@ -93,7 +94,12 @@ $( document ).ready(function() {
         ],
         "dom": default_datatable_dom,
         "language": default_datatable_language,
-        "initComplete" : default_datatable_buttons
+        "initComplete" : default_datatable_buttons,
+        rowCallback: function(row, data, index) {
+            if (data.o_dependencia_id == laDependencia) {
+                $(row).addClass("bg-interno");
+            }
+        },
     })    
     
     $('#year_select').on('change', function() {
@@ -101,12 +107,19 @@ $( document ).ready(function() {
     });
 
     $('#dependencia_select').on('change', function() {
+        $("#cargando_pagina").show();
+        window.location.href = default_server + "/admin/tramite/recibidos?destino="+$(this).val();
+    });
+
+    $('#persona_select').on('change', function() {
         tabla.ajax.reload();
     });
 
     $('#estado_select').on('change', function() {
         tabla.ajax.reload();
     });   
+
+    //laDependencia
     
 });
 
@@ -125,20 +138,26 @@ function get_origen(movimiento) {
 }
 
 function get_motivo(movimiento) {
-    var res = '<div class="">';
+    //destinatario
+    var res = '';
+    if(movimiento.d_persona != null)      
+        res += '<div class="lh-1" title="'+movimiento.d_persona.nombre+' '+movimiento.d_persona.apaterno+' '+movimiento.d_persona.amaterno+'">'+textoMax((movimiento.d_persona.nombre+' '+movimiento.d_persona.apaterno+' '+movimiento.d_persona.amaterno),25)+'</div>';
+    else
+        res += '<div class="lh-1">SOLO DEPENDENCIA</div>';
+    //motivo
     if(movimiento.tipo == 0){
-        res += '<div>NUEVO TRÁMITE</div>';
+        res += '<small class="d-block text-muted">NUEVO TRÁMITE</small>';
     } else if(movimiento.tipo == 1) {
-        res += '<div>DERIVADO [PROVEIDO]</div>';
+        var temp = 'DERIVADO [PROVEIDO]';
         if(movimiento.accion != null) {
-            var temp = movimiento.accion.nombre+(movimiento.accion_otros ? ' &#183; '+movimiento.accion_otros : '');
-            res += '<small class="d-block text-muted text-truncate mt-n1 lh-1" title="'+temp+'">'+safeText(temp,30)+'</small>';
+            temp +=  ' &#183 '+movimiento.accion.nombre;
         }
+        res += '<small class="d-block text-muted" title="'+temp+'">'+textoMax(temp,30)+'</small>';
+        
     } else {
-        res += '<div>DERIVADO [DOCUMENTO]</div>';
+        res += '<small class="d-block text-muted">DERIVADO [DOCUMENTO]</small>';
     }
 
-    res += '</div>';
     return res;
 }
 
@@ -164,7 +183,7 @@ function get_acciones(movimiento) {
     if(movimiento.estado == 2)//recepcionado
     {
         res += 
-        '<a class="dropdown-item text-blue" href="'+default_server+'/admin/tramite/recepcion/derivar/'+movimiento.id+'">'+
+        '<a class="dropdown-item text-blue" href="'+default_server+'/admin/tramite/recibidos/derivar/'+movimiento.id+'">'+
             '<svg xmlns="http://www.w3.org/2000/svg" class="icon dropdown-item-icon text-blue" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M11.5 21h-4.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v5m-5 6h7m-3 -3l3 3l-3 3" /></svg>'+
             'Derivar'+
         '</a>'+
@@ -185,11 +204,11 @@ function get_acciones(movimiento) {
     else if(movimiento.estado == 3)//3:derivado/referido
     {
         res += 
-        '<a class="dropdown-item text-blue" href="'+default_server+'/admin/tramite/recepcion/derivar/'+movimiento.id+'">'+
+        '<a class="dropdown-item text-blue" href="'+default_server+'/admin/tramite/recibidos/derivar/'+movimiento.id+'">'+
             '<svg xmlns="http://www.w3.org/2000/svg" class="icon dropdown-item-icon text-blue" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M11.5 21h-4.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v5m-5 6h7m-3 -3l3 3l-3 3" /></svg>'+
             'Derivar'+
         '</a>'+
-        '<a class="dropdown-item" href="'+default_server+'/admin/tramite/recepcion/derivaciones/'+movimiento.id+'">'+
+        '<a class="dropdown-item" href="'+default_server+'/admin/tramite/recibidos/derivaciones/'+movimiento.id+'">'+
             '<svg xmlns="http://www.w3.org/2000/svg" class="icon dropdown-item-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 21v-4a3 3 0 0 1 3 -3h5" /><path d="M9 17l3 -3l-3 -3" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 11v-6a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2h-9.5" /></svg>'+
             'Derivaciones'+
         '</a>';

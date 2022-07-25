@@ -19,14 +19,17 @@ class CreateTramitesTable extends Migration
             $table->integer('year');
             $table->integer('correlativo')->nullable();
             $table->string('codigo', 12)->nullable();
-            //quien inicia el tramite //0:interno, 1:universitario, 2:externo
+            //tipo de origen de trámite
             $table->tinyInteger('o_tipo');//0:interno, 1:externo
-            $table->tinyInteger('o_externo_tipo')->nullable();//0:dependencia (empleado), 1:estudiante (pres, virt), 2:externo (mp, mpv, pide)
-            $table->unsignedBigInteger('o_dependencia_id')->nullable();//null:externo, n:interno (dependencia)
-            $table->unsignedBigInteger('o_user_id')->nullable();//usuario remitente
-            
-            //si no se tiene registro
-            $table->unsignedBigInteger('o_identidad_documento_id')->nullable();//tipo de documento   
+            //--interno
+            $table->unsignedBigInteger('o_dependencia_id')->nullable();
+            //--externo
+            $table->tinyInteger('o_externo_tipo')->nullable();//0:persona externa si usuario, 1:persona externa con usuario            
+            $table->unsignedBigInteger('o_user_id')->nullable();//si tiene usuario externo     
+            //si no se tiene usuario externo
+            $table->string('ruc',25)->nullable();
+            $table->string('razon_social')->nullable();
+            $table->unsignedBigInteger('o_identidad_documento_id')->nullable();//tipo de documento            
             $table->string('o_nro_documento',25)->nullable();//envia externo (nombre/razon)            
             $table->string('o_nombre')->nullable();//envia externo (nombre/razon)
             $table->string('o_apaterno')->nullable();

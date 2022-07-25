@@ -34,6 +34,18 @@ class EmpleadoController extends Controller
     }
 
     /**
+     * 
+     */
+    public function buscar(Request $request, $id)
+    {
+        $empleados = Empleado::with(['persona.identidad_documento'])->where('estado', 1)
+                        ->where('dependencia_id', '=', $id)
+                        ->get();
+
+        return response()->json($empleados, 200);
+    }
+
+    /**
      * REGISTRO DE NUEVO EMPLEADO
      */
     public function nuevo(Request $request)

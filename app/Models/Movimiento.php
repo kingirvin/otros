@@ -10,7 +10,7 @@ class Movimiento extends Model
     use HasFactory;
 
     protected $fillable = [
-        'tramite_id', 'documento_id', 'accion_id', 'accion_otros', 'anterior_id', 'tipo', 'copia', 'o_tipo', 'o_dependencia_id', 'o_fecha', 'o_user_id', 'o_year', 'o_numero', 'o_descripcion', 'd_tipo', 'd_dependencia_id', 'd_identidad_documento_id', 'd_nro_documento', 'd_nombre', 'd_fecha', 'd_user_id', 'd_year', 'd_numero', 'd_observacion', 'f_user_id', 'f_fecha', 'f_observacion', 'asignaciones', 'estado',
+        'tramite_id', 'documento_id', 'accion_id', 'accion_otros', 'anterior_id', 'tipo', 'copia', 'o_tipo', 'o_dependencia_id', 'o_empleado_id', 'o_persona_id', 'o_fecha', 'o_user_id', 'o_year', 'o_numero', 'o_descripcion', 'd_tipo', 'd_dependencia_id', 'd_empleado_id', 'd_persona_id', 'd_identidad_documento_id', 'd_nro_documento', 'd_nombre', 'd_fecha', 'd_user_id', 'd_year', 'd_numero', 'd_observacion', 'f_user_id', 'f_fecha', 'f_observacion', 'asignaciones', 'estado',
     ];
 
     protected $dates = [
@@ -47,6 +47,16 @@ class Movimiento extends Model
         return $this->belongsTo(Dependencia::class, 'o_dependencia_id');
     }
 
+    public function o_empleado()
+    {
+        return $this->belongsTo(Empleado::class, 'o_empleado_id');
+    }
+
+    public function o_persona()
+    {
+        return $this->belongsTo(Persona::class, 'o_persona_id');
+    }
+
     public function o_user()
     {
         return $this->belongsTo(User::class, 'o_user_id');
@@ -55,6 +65,16 @@ class Movimiento extends Model
     public function d_dependencia()
     {
         return $this->belongsTo(Dependencia::class, 'd_dependencia_id');
+    }
+
+    public function d_empleado()
+    {
+        return $this->belongsTo(Empleado::class, 'd_empleado_id');
+    }
+
+    public function d_persona()
+    {
+        return $this->belongsTo(Persona::class, 'd_persona_id');
     }
 
     public function destino_identidad()

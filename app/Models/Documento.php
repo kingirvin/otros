@@ -10,9 +10,9 @@ class Documento extends Model
     use HasFactory;
 
     protected $fillable = [
-        'year', 'correlativo', 'codigo', 'tramite_id', 'dependencia_id', 'o_numero', 'documento_tipo_id', 'numero', 'remitente', 'asunto', 'folios', 'observaciones', 'anexos_url', 'archivo_id', 'user_id', 
+        'year', 'correlativo', 'codigo', 'tramite_id', 'dependencia_id', 'empleado_id', 'persona_id', 'o_numero', 'documento_tipo_id', 'numero', 'remitente', 'asunto', 'folios', 'observaciones', 'anexos_url', 'archivo_id', 'user_id', 
     ];
-
+    
     public function tramite()
     {
         return $this->belongsTo(Tramite::class, 'tramite_id');

@@ -60,13 +60,14 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('tramite', [App\Http\Controllers\TramiteController::class, 'index'])->middleware('modulo:TRAMITE');    
     Route::get('tramite/archivos', [App\Http\Controllers\TramiteController::class, 'archivos'])->middleware('submodulo:ARCHIVOS');
     Route::get('tramite/archivos/{id}/firma', [App\Http\Controllers\TramiteController::class, 'firma'])->middleware('submodulo:ARCHIVOS');
-    Route::get('tramite/emision', [App\Http\Controllers\TramiteController::class, 'nuevo'])->middleware('submodulo:ENVDOC');
-    Route::get('tramite/emision/emitidos', [App\Http\Controllers\TramiteController::class, 'emitidos'])->middleware('submodulo:ENVDOC');
-    Route::get('tramite/recepcion', [App\Http\Controllers\TramiteController::class, 'recibir'])->middleware('submodulo:RECPDOC');
-    Route::get('tramite/recepcion/recibidos', [App\Http\Controllers\TramiteController::class, 'recibidos'])->middleware('submodulo:RECPDOC');    
-    Route::get('tramite/recepcion/derivar/{id}', [App\Http\Controllers\TramiteController::class, 'derivar'])->middleware('submodulo:RECPDOC');
-    Route::get('tramite/recepcion/derivaciones/{id}', [App\Http\Controllers\TramiteController::class, 'derivaciones'])->middleware('submodulo:RECPDOC');
-    Route::get('tramite/recepcion/asignaciones/{id}', [App\Http\Controllers\TramiteController::class, 'asignaciones'])->middleware('submodulo:RECPDOC');
+    Route::get('tramite/emision', [App\Http\Controllers\TramiteController::class, 'nuevo'])->middleware('submodulo:ENVREC');
+    Route::get('tramite/emision/emitidos', [App\Http\Controllers\TramiteController::class, 'emitidos'])->middleware('submodulo:ENVREC');
+    Route::get('tramite/recepcion', [App\Http\Controllers\TramiteController::class, 'recibir'])->middleware('submodulo:ENVREC');
+    Route::get('tramite/recepcion/externo', [App\Http\Controllers\TramiteController::class, 'externo'])->middleware('submodulo:GESTDOC');
+    Route::get('tramite/recibidos', [App\Http\Controllers\TramiteController::class, 'recibidos'])->middleware('submodulo:ENVREC');    
+    Route::get('tramite/recibidos/derivar/{id}', [App\Http\Controllers\TramiteController::class, 'derivar'])->middleware('submodulo:ENVREC');
+    Route::get('tramite/recibidos/derivaciones/{id}', [App\Http\Controllers\TramiteController::class, 'derivaciones'])->middleware('submodulo:ENVREC');
+    Route::get('tramite/recibidos/asignaciones/{id}', [App\Http\Controllers\TramiteController::class, 'asignaciones'])->middleware('submodulo:ENVREC');
     Route::get('tramite/seguimiento/{id}', [App\Http\Controllers\TramiteController::class, 'seguimiento']);  
     Route::get('tramite/documento/{id}', [App\Http\Controllers\TramiteController::class, 'documento']);  
 
@@ -142,6 +143,7 @@ Route::prefix('json')->group(function () {
     
     //EMPLEADOS
     Route::get('empleados', [App\Http\Controllers\Api\EmpleadoController::class, 'listar']);
+    Route::get('empleados/{id}/buscar', [App\Http\Controllers\Api\EmpleadoController::class, 'buscar']);
     Route::post('empleados',  [App\Http\Controllers\Api\EmpleadoController::class, 'nuevo'])->middleware('submoduloapi:PERSONA');
     Route::put('empleados/{id}',  [App\Http\Controllers\Api\EmpleadoController::class, 'finalizar'])->middleware('submoduloapi:PERSONA');
 
@@ -187,29 +189,29 @@ Route::prefix('json')->group(function () {
     Route::post('firma/{id}/cargar',  [App\Http\Controllers\Api\FirmaController::class, 'cargar_firmado']);
 
     //TRAMITE
-    Route::post('tramites', [App\Http\Controllers\Api\TramiteController::class, 'nuevo'])->middleware('submoduloapi:ENVDOC');  
-    Route::get('documentos/emitidos', [App\Http\Controllers\Api\TramiteController::class, 'emitidos'])->middleware('submoduloapi:ENVDOC');    
-    Route::put('documentos/{id}', [App\Http\Controllers\Api\TramiteController::class, 'modificar_documento'])->middleware('submoduloapi:ENVDOC'); 
-    Route::delete('documentos/{id}', [App\Http\Controllers\Api\TramiteController::class, 'anular_emision'])->middleware('submoduloapi:ENVDOC');
+    Route::post('tramites', [App\Http\Controllers\Api\TramiteController::class, 'nuevo'])->middleware('submoduloapi:ENVREC');  
+    Route::get('documentos/emitidos', [App\Http\Controllers\Api\TramiteController::class, 'emitidos'])->middleware('submoduloapi:ENVREC');    
+    Route::put('documentos/{id}', [App\Http\Controllers\Api\TramiteController::class, 'modificar_documento'])->middleware('submoduloapi:ENVREC'); 
+    Route::delete('documentos/{id}', [App\Http\Controllers\Api\TramiteController::class, 'anular_emision'])->middleware('submoduloapi:ENVREC');
 
-    Route::get('movimientos/pendientes', [App\Http\Controllers\Api\TramiteController::class, 'por_recepcionar'])->middleware('submoduloapi:RECPDOC');
-    Route::put('movimientos/{id}/recibir', [App\Http\Controllers\Api\TramiteController::class, 'recepcionar'])->middleware('submoduloapi:RECPDOC'); 
-    Route::get('movimientos/recibidos', [App\Http\Controllers\Api\TramiteController::class, 'recepcionados'])->middleware('submoduloapi:RECPDOC');
-    Route::post('movimientos/derivar', [App\Http\Controllers\Api\TramiteController::class, 'derivar'])->middleware('submoduloapi:RECPDOC'); 
-    Route::delete('movimientos/{id}/derivacion/anular', [App\Http\Controllers\Api\TramiteController::class, 'anular_derivacion'])->middleware('submoduloapi:RECPDOC');  
-    Route::put('movimientos/{id}/atender', [App\Http\Controllers\Api\TramiteController::class, 'atender'])->middleware('submoduloapi:RECPDOC');     
-    Route::put('movimientos/{id}/atencion/anular', [App\Http\Controllers\Api\TramiteController::class, 'anular_atendido'])->middleware('submoduloapi:RECPDOC');
-    Route::delete('movimientos/{id}/recibido/anular', [App\Http\Controllers\Api\TramiteController::class, 'anular_recepcion'])->middleware('submoduloapi:RECPDOC');  
+    Route::get('movimientos/pendientes', [App\Http\Controllers\Api\TramiteController::class, 'por_recepcionar'])->middleware('submoduloapi:ENVREC');
+    Route::put('movimientos/{id}/recibir', [App\Http\Controllers\Api\TramiteController::class, 'recepcionar'])->middleware('submoduloapi:ENVREC'); 
+    Route::get('movimientos/recibidos', [App\Http\Controllers\Api\TramiteController::class, 'recepcionados'])->middleware('submoduloapi:ENVREC');
+    Route::post('movimientos/derivar', [App\Http\Controllers\Api\TramiteController::class, 'derivar'])->middleware('submoduloapi:ENVREC'); 
+    Route::delete('movimientos/{id}/derivacion/anular', [App\Http\Controllers\Api\TramiteController::class, 'anular_derivacion'])->middleware('submoduloapi:ENVREC');  
+    Route::put('movimientos/{id}/atender', [App\Http\Controllers\Api\TramiteController::class, 'atender'])->middleware('submoduloapi:ENVREC');     
+    Route::put('movimientos/{id}/atencion/anular', [App\Http\Controllers\Api\TramiteController::class, 'anular_atendido'])->middleware('submoduloapi:ENVREC');
+    Route::delete('movimientos/{id}/recibido/anular', [App\Http\Controllers\Api\TramiteController::class, 'anular_recepcion'])->middleware('submoduloapi:ENVREC');  
     
-    Route::post('movimientos/{id}/observar', [App\Http\Controllers\Api\TramiteController::class, 'observar'])->middleware('submoduloapi:RECPDOC');
+    Route::post('movimientos/{id}/observar', [App\Http\Controllers\Api\TramiteController::class, 'observar'])->middleware('submoduloapi:ENVREC');
     Route::get('movimientos/{id}/observaciones', [App\Http\Controllers\Api\TramiteController::class, 'observaciones']);  
-    Route::delete('movimientos/observacion/{id}/anular', [App\Http\Controllers\Api\TramiteController::class, 'anular_observacion'])->middleware('submoduloapi:RECPDOC');  
+    Route::delete('movimientos/observacion/{id}/anular', [App\Http\Controllers\Api\TramiteController::class, 'anular_observacion'])->middleware('submoduloapi:ENVREC');  
     
     //ASIGNACIONES
     Route::get('asignaciones/{id}', [App\Http\Controllers\Api\AsignacionController::class, 'listar']);
-    Route::post('asignaciones',  [App\Http\Controllers\Api\AsignacionController::class, 'nuevo'])->middleware('submoduloapi:RECPDOC');
-    Route::put('asignaciones/{id}', [App\Http\Controllers\Api\AsignacionController::class, 'modificar'])->middleware('submoduloapi:RECPDOC');
-    Route::put('asignaciones/{id}/estado', [App\Http\Controllers\Api\AsignacionController::class, 'estado'])->middleware('submoduloapi:RECPDOC');  
-    Route::delete('asignaciones/{id}', [App\Http\Controllers\Api\AsignacionController::class, 'eliminar'])->middleware('submoduloapi:RECPDOC');
+    Route::post('asignaciones',  [App\Http\Controllers\Api\AsignacionController::class, 'nuevo'])->middleware('submoduloapi:ENVREC');
+    Route::put('asignaciones/{id}', [App\Http\Controllers\Api\AsignacionController::class, 'modificar'])->middleware('submoduloapi:ENVREC');
+    Route::put('asignaciones/{id}/estado', [App\Http\Controllers\Api\AsignacionController::class, 'estado'])->middleware('submoduloapi:ENVREC');  
+    Route::delete('asignaciones/{id}', [App\Http\Controllers\Api\AsignacionController::class, 'eliminar'])->middleware('submoduloapi:ENVREC');
 
 });
