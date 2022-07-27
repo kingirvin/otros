@@ -123,11 +123,11 @@ class Recursos
 
     public function incrustar_codigo($archivo)
     {        
-        $ahora = Carbon::now();
-        $texto = utf8_decode("Esta es una representación impresa cuya autenticidad puede ser contrastada con la representación imprimible localizada en la sede digital de la UNAMAD. La verificación puede ser efectuada a partir del ".$ahora->format('d/m/Y').". Base Legal: Decreto Legislativo Nº 1412, Decreto Supremo Nº 029-2021-PCM y la Directiva Nº 002-2021-PCM/SGTD.");
-        $texto_min = utf8_decode("Esta es una representación impresa cuya autenticidad puede ser contrastada con la representación imprimible. Base Legal: Decreto Legislativo Nº 1412, Decreto Supremo Nº 029-2021-PCM y la Directiva Nº 002-2021-PCM/SGTD.");
+        $ahora = Carbon::now();     
+        $link = "sgd.unamad.edu.pe/verificar";  
+        $texto = utf8_decode("Esta es una representación impresa de un documento electrónico archivado en la UNAMAD, según Decreto Legislativo Nº 1412, Decreto Supremo Nº 029-2021-PCM y la Directiva Nº 002-2021-PCM/SGTD, su autenticidad puede ser contrastada con su versión digital en la siguiente dirección web.");
         $codigo = substr($archivo->cvd,0,4).' '.substr($archivo->cvd,4,4).' '.substr($archivo->cvd,8,4).' '.substr($archivo->cvd,12,4);
-        $link = "sgd.unamad.edu.pe/verificar";
+        
         $resultado = false;        
         //si existe el archivo
         if(Storage::disk($this->disco)->exists($archivo->ruta))
@@ -142,28 +142,32 @@ class Recursos
                 $pdf->addPage();//agrega pagina en blanco
                 $pdf->useTemplate($tpl, 1, 1, null, null, true);//usa como template la pagina del pdf cargado
                 $pdf->SetAutoPageBreak(false);
-                $pdf->SetLeftMargin(10);
-                $pdf->SetY(-22);
-                $pdf->SetTextColor(110);  
-                $pdf->SetFont('Courier','',8);
-                if($size['width'] > 150) {
-                    $pdf->MultiCell(($size['width'] - 42),2.7,$texto,0,'J');//A4
-                } else {
-                    $pdf->MultiCell(($size['width'] - 42),2.7,$texto_min,0,'J');//A5
-                }
-                $pdf->Ln(0.7);
-                $pdf->SetFont('Courier','',9);
-                $pdf->Cell(10,3,'URL: ');
-                $pdf->SetFont('Courier','B',9);
-                $pdf->Cell(($size['width'] - 42),3,$link);
-                $pdf->Ln(3);
-                $pdf->SetFont('Courier','',9);
-                $pdf->Cell(10,3,'CVD: ');
-                $pdf->SetFont('Courier','B',9);
-                $pdf->Cell(($size['width'] - 42),3, $codigo);
-
+                //colocamos el qr
                 $pdf->SetY(0);
-                $pdf->Image(public_path().'/img/qrcodes/qrcode.png', ($size['width'] - 27), ($size['height'] - 22), 17, 17, 'png');
+                $pdf->Image(public_path().'/img/qrcodes/qrcode.png', 7, ($size['height'] - 25), 17, 17, 'png');
+                //colocamos el texto
+                $pdf->SetLeftMargin(27);
+                $pdf->SetY(-25);
+                $pdf->SetTextColor(110);  
+                $pdf->SetFont('Arial','',8);
+                $pdf->MultiCell(90,2.7,$texto,0,'J');//95 = ancho A4 / 2 - margen 10
+                //colocamos URL (90)
+                $pdf->Ln(1);
+                $pdf->SetFont('Arial','',8);
+                $pdf->Cell(8,3,'URL: ');
+                $pdf->SetFont('Arial','B',8);
+                $pdf->Cell(44,3,$link);
+                //colocamos CVD        
+                $pdf->SetFont('Arial','',8);
+                $pdf->Cell(8,3,'CVD: ');
+                $pdf->SetFont('Arial','B',8);
+                $pdf->Cell(40,3, $codigo);
+                //colocamos logo bicentenario                  
+                if($size['width'] >= 205) {//A4
+                    $pdf->SetY(0);
+                    $pdf->Image(public_path().'/img/siempre_pueblo.png', ($size['width'] - 90), ($size['height'] - 22), 37, 13, 'png');
+                    $pdf->Image(public_path().'/img/bicentenario.png', ($size['width'] - 51), ($size['height'] - 25), 45, 17, 'png');
+                }               
             }            
             
             $pdf->Output("F", $ruta);

@@ -135,12 +135,17 @@
 */
 
 .bg-interno{
-    background: #f9ffd6;
+    background: #feffd5;
     /*
     box-shadow: 5px 0px 0px 0px rgb(253 208 44) inset;
     -webkit-box-shadow: 5px 0px 0px 0px rgb(253 208 44) inset;
     -moz-box-shadow: 5px 0px 0px 0px rgb(253 208 44) inset;
     */
+}
+
+.w-40
+{
+    width: 40%;
 }
 
 /*------------------select2*/

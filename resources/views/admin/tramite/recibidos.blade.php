@@ -42,7 +42,7 @@
     <div class="container-fluid">
         <div class="row row-cards">
             <div class="col-12">
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-header pb-1">
                         <div class="w-100">
                             <div class="row">
@@ -116,6 +116,14 @@
                             </tbody>
                         </table>   
                     </div>                   
+                </div>
+                <div>
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <span class="badge bg-yellow"></span>                            
+                            Documentos internos
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

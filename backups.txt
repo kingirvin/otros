@@ -1,0 +1,50 @@
+public function incrustar_codigo($archivo)
+{        
+    $ahora = Carbon::now();
+    $texto = utf8_decode("Esta es una representación impresa cuya autenticidad puede ser contrastada con la representación imprimible localizada en la sede digital de la UNAMAD. La verificación puede ser efectuada a partir del ".$ahora->format('d/m/Y').". Base Legal: Decreto Legislativo Nº 1412, Decreto Supremo Nº 029-2021-PCM y la Directiva Nº 002-2021-PCM/SGTD.");
+    $texto_min = utf8_decode("Esta es una representación impresa cuya autenticidad puede ser contrastada con la representación imprimible. Base Legal: Decreto Legislativo Nº 1412, Decreto Supremo Nº 029-2021-PCM y la Directiva Nº 002-2021-PCM/SGTD.");
+    $codigo = substr($archivo->cvd,0,4).' '.substr($archivo->cvd,4,4).' '.substr($archivo->cvd,8,4).' '.substr($archivo->cvd,12,4);
+    $link = "sgd.unamad.edu.pe/verificar";
+    $resultado = false;        
+    //si existe el archivo
+    if(Storage::disk($this->disco)->exists($archivo->ruta))
+    {
+        $ruta = Storage::disk($this->disco)->path($archivo->ruta);
+        $pdf = new Fpdi();
+        $paginas = $pdf->setSourceFile($ruta);            
+        //insertamos codigo de verficiacion
+        for ($i = 1; $i <= $paginas; $i++) { 
+            $tpl = $pdf->importPage($i);
+            $size = $pdf->getTemplateSize($tpl);//obtenemos las dimenciones de la pagina
+            $pdf->addPage();//agrega pagina en blanco
+            $pdf->useTemplate($tpl, 1, 1, null, null, true);//usa como template la pagina del pdf cargado
+            $pdf->SetAutoPageBreak(false);
+            $pdf->SetLeftMargin(10);
+            $pdf->SetY(-22);
+            $pdf->SetTextColor(110);  
+            $pdf->SetFont('Courier','',8);
+            if($size['width'] > 150) {//A4
+                $pdf->MultiCell(($size['width'] - 42),2.7,$texto,0,'J');
+            } else {//A5
+                $pdf->MultiCell(($size['width'] - 42),2.7,$texto_min,0,'J');
+            }
+            $pdf->Ln(0.7);
+            $pdf->SetFont('Courier','',9);
+            $pdf->Cell(10,3,'URL: ');
+            $pdf->SetFont('Courier','B',9);
+            $pdf->Cell(($size['width'] - 42),3,$link);
+            $pdf->Ln(3);
+            $pdf->SetFont('Courier','',9);
+            $pdf->Cell(10,3,'CVD: ');
+            $pdf->SetFont('Courier','B',9);
+            $pdf->Cell(($size['width'] - 42),3, $codigo);
+
+            $pdf->SetY(0);
+            $pdf->Image(public_path().'/img/qrcodes/qrcode.png', ($size['width'] - 27), ($size['height'] - 22), 17, 17, 'png');
+        }            
+        
+        $pdf->Output("F", $ruta);
+        $resultado = true;
+    } 
+    return $resultado;        
+}

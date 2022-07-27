@@ -11,7 +11,6 @@
 <script src="{{ asset('lib/select2/js/i18n/es.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/agregar_anexos.js?v='.config('app.version')) }}" type="text/javascript"></script>
 <script src="{{ asset('js/buscar_archivos.js?v='.config('app.version')) }}" type="text/javascript"></script>
-<script src="{{ asset('js/buscar_destino.js?v='.config('app.version')) }}" type="text/javascript"></script>
 <script src="{{ asset('js/tramite/recibir_externo.js?v='.config('app.version')) }}" type="text/javascript"></script>
 @endsection
 @section('contenido')
@@ -217,7 +216,7 @@
                             <select id="d_dependencia_id" class="form-select validar_select">
                                 @if(count($destinos) > 0)
                                     @foreach ($destinos as $destino)
-                                    <option value="{{$destino->dependencia_id}}">{{$destino->dependencia->nombre}}</option>
+                                    <option value="{{$destino->dependencia_id}}" {{$destino->dependencia_id == $destino_actual ? 'selected' : ''}}>{{$destino->dependencia->nombre}}</option>
                                     @endforeach
                                 @else
                                 <option value="0">NO TIENES ASIGNADO UNA DEPENDENCIA</option>
@@ -243,4 +242,87 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('modal')
+<!-- MODAL BUSCAR ARCHIVO DIGITAL -->
+<div id="buscar_modal" class="modal modal-blur fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Buscar archivo digital</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="position-relative overflow-auto">
+                <div class="border-bottom pt-2 px-3" >
+                    <div class="row">
+                        <div class="col-md-4 pb-2">
+                            <select id="ubicacion_select" class="form-select">
+                                <option value="m">Mis archivos</option>
+                                <option value="d">Archivos de dependencia</option>
+                                <option value="c">Compartidos conmigo</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 pb-2">
+                            <select id="estado_select" class="form-select">
+                                <option value="0">TODOS</option>
+                                <option value="1">FIRMADOS</option>                                        
+                            </select>
+                        </div>
+                        <div class="col-md-5 pb-2">
+                            <div class="d-flex">                                       
+                                <input id="texto_select" type="text" class="form-control" placeholder="Buscar...">                                       
+                                <button class="btn btn-secondary align-top btn-icon ms-1" onclick="filtrar_documento();"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="10" cy="10" r="7"></circle><line x1="21" y1="21" x2="15" y2="15"></line></svg></button>
+                            </div>                                    
+                        </div>
+                    </div>
+                </div>  
+                <div id="origen_dependencia" class="border-bottom py-2 px-3" style="display: none;">  
+                    <select id="dependencia_archivo_select" class="form-select">
+                        @if(count($destinos) > 0)
+                            @foreach ($destinos as $destino)
+                            <option value="{{$destino->dependencia_id}}">{{$destino->dependencia->nombre}}</option>
+                            @endforeach
+                        @else
+                        <option value="0">NO TIENES ASIGNADO UNA DEPENDENCIA</option>
+                        @endif
+                    </select>
+                </div>            
+                <div class="border-bottom py-2 px-3" style="color: #626976; background: rgb(242, 243, 244);">
+                    <ol id="carpetas_buscar" class="breadcrumb breadcrumb-alternate" aria-label="breadcrumbs">   
+                    -                   
+                    </ol>
+                </div>
+                <div class="">
+                    <table class="table table-vcenter mb-1">
+                        <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tabla_buscar">
+                            <tr>
+                                <td colspan="4">
+                                    Cargando...                                                         
+                                </td>
+                            </tr>                                       
+                        </tbody>
+                    </table>
+                </div> 
+                <div id="loading_buscar" class="cargando">
+                    <div class="text-center pt-4">
+                      <div class="spinner-border text-blue" role="status"></div> <b>Cargando...</b>
+                    </div>
+                </div>
+            </div>          
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
