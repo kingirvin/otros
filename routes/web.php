@@ -194,6 +194,8 @@ Route::prefix('json')->group(function () {
     Route::put('documentos/{id}', [App\Http\Controllers\Api\TramiteController::class, 'modificar_documento'])->middleware('submoduloapi:ENVREC'); 
     Route::delete('documentos/{id}', [App\Http\Controllers\Api\TramiteController::class, 'anular_emision'])->middleware('submoduloapi:ENVREC');
 
+    Route::post('tramites/externo', [App\Http\Controllers\Api\TramiteController::class, 'recepcionar_externo'])->middleware('submoduloapi:GESTDOC');  
+
     Route::get('movimientos/pendientes', [App\Http\Controllers\Api\TramiteController::class, 'por_recepcionar'])->middleware('submoduloapi:ENVREC');
     Route::put('movimientos/{id}/recibir', [App\Http\Controllers\Api\TramiteController::class, 'recepcionar'])->middleware('submoduloapi:ENVREC'); 
     Route::get('movimientos/recibidos', [App\Http\Controllers\Api\TramiteController::class, 'recepcionados'])->middleware('submoduloapi:ENVREC');

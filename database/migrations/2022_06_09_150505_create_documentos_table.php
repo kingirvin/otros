@@ -24,7 +24,7 @@ class CreateDocumentosTable extends Migration
             $table->unsignedBigInteger('dependencia_id')->nullable();//dependencia de registro
             $table->unsignedBigInteger('empleado_id')->nullable();
             $table->unsignedBigInteger('persona_id')->nullable();
-            $table->integer('o_numero');//correlativo por oficina que envia
+            $table->integer('o_numero')->nullable();//correlativo por oficina que envia
             $table->unsignedBigInteger('documento_tipo_id')->nullable();
             $table->string('numero');//002-2021-GOREMAD/UI
             $table->string('remitente');//JUAN PERES

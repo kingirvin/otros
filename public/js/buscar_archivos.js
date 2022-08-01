@@ -157,29 +157,34 @@ function render() {
 function seleccionar_documento(ida) {
     var elemento = elementId(ida, archivos);
     if(elemento != null){
-        $("#buscar_modal").modal("hide");
-        archivo_seleccion = elemento;
-        $("#archivo_seleccionado").html(
-        '<div class="d-flex align-items-center">'+
-            get_icono_archivo(archivo_seleccion)+
-            '<div class="flex-fill">'+
-                '<div class="font-weight-medium lh-1">'+
-                    '<a href="'+url_time(default_server+(archivo_seleccion.formato == 'pdf' ? '/admin/archivos/stream/':'/admin/archivos/download/')+archivo_seleccion.codigo)+'" target="_blank">'+archivo_seleccion.nombre+'</a>'+
-                '</div>'+
-                '<div class="d-flex mt-1">'+
-                    get_estado(archivo_seleccion)+
-                    '<div class="text-muted ms-2">'+archivo_seleccion.formato.toUpperCase()+' &#183; '+archivo_seleccion.format_size+'</div>'+
-                '</div>'+
-'                '+
-            '</div>'+
-            '<div class="px-2 flex-shrink-0">'+
-                '<a href="javascript:void(0);" onclick="eliminar_seleccion();" class="text-danger">'+
-                    '<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="4" y1="7" x2="20" y2="7" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>'+
-                '</a>'+
-            '</div>'+
-        '</div>'
-        );
+        if(elemento.formato == 'pdf'){
 
+            $("#buscar_modal").modal("hide");
+            archivo_seleccion = elemento;
+            $("#archivo_seleccionado").html(
+            '<div class="d-flex align-items-center">'+
+                get_icono_archivo(archivo_seleccion)+
+                '<div class="flex-fill">'+
+                    '<div class="font-weight-medium lh-1">'+
+                        '<a href="'+url_time(default_server+(archivo_seleccion.formato == 'pdf' ? '/admin/archivos/stream/':'/admin/archivos/download/')+archivo_seleccion.codigo)+'" target="_blank">'+archivo_seleccion.nombre+'</a>'+
+                    '</div>'+
+                    '<div class="d-flex mt-1">'+
+                        get_estado(archivo_seleccion)+
+                        '<div class="text-muted ms-2">'+archivo_seleccion.formato.toUpperCase()+' &#183; '+archivo_seleccion.format_size+'</div>'+
+                    '</div>'+
+    '                '+
+                '</div>'+
+                '<div class="px-2 flex-shrink-0">'+
+                    '<a href="javascript:void(0);" onclick="eliminar_seleccion();" class="text-danger">'+
+                        '<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="4" y1="7" x2="20" y2="7" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>'+
+                    '</a>'+
+                '</div>'+
+            '</div>'
+            );
+        }
+        else {
+            alerta("Seleccione un archivo en formato PDF",false);
+        }
     } else {
         alerta("No se encontro el archivo",false);
     }

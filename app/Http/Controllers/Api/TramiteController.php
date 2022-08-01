@@ -786,4 +786,155 @@ class TramiteController extends Controller
         else
             return response()->json(['message'=>"No se pudo encontrar la observación"], 500);
     }
+
+    public function recepcionar_externo(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'documento_tipo_id' => 'required', 
+            'numero' => 'required', 
+            'remitente' => 'required', 
+            'folios' => 'required', 
+            'asunto' => 'required', 
+            'tipo_persona' => 'required', 
+            'ruc' => 'required_if:tipo_persona,1',
+            'razon_social' => 'required_if:tipo_persona,1',
+            'identidad_documento_id' => ['required'],
+            'nro_documento' => ['required','numeric','min:8'],
+            'nombre' => ['required'],
+            'apaterno' => ['required'],
+            'amaterno' => ['required'],
+            'email' => ['required', 'email', 'max:255'],
+            'd_dependencia_id' => 'required'
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json(['message'=>$validator->errors()], 500);
+        }
+
+        try 
+        {
+            $ahora = Carbon::now(); 
+            $user = Auth::user();
+            $recursos = new Recursos;
+            $d_dependencia = Dependencia::find($request->d_dependencia_id);
+
+            //TRAMIE
+            $tramite = new Tramite;
+            $tramite->year = $ahora->year;
+            $tramite->o_tipo = 1;//1:externo
+            $tramite->o_externo_tipo = 0;//0:persona externa si usuario
+            
+            if($request->tipo_persona == 1)//1:Persona Jurídica
+            {
+                $tramite->ruc = $request->ruc;
+                $tramite->razon_social = $request->razon_social;
+            }
+
+            $tramite->o_identidad_documento_id = $request->identidad_documento_id;
+            $tramite->o_nro_documento = $request->nro_documento;
+            $tramite->o_nombre = $request->nombre;
+            $tramite->o_apaterno = $request->apaterno;
+            $tramite->o_amaterno = $request->amaterno;
+            $tramite->o_telefono = $request->telefono;
+            $tramite->o_correo = $request->email;
+            $tramite->o_direccion = $request->direccion;
+
+            if($request->has('procedimiento_id')){
+                $tramite->procedimiento_id = ($request->procedimiento_id != 0 ? $request->procedimiento_id : null);
+            }   
+
+            $tramite->observaciones = $request->asunto;
+            $tramite->o_user_id = $user->id;
+            $tramite->user_id = $user->id;
+            $tramite->estado = 1;//1:activo
+
+            if (!$tramite->save()) {
+                return response()->json(['message'=>'No se pudo registrar el trámite'], 500);
+            }
+
+            $tramite->codigo = $recursos->codigo_alpha($tramite->id);
+            $tramite->save();
+
+            //DOCUMENTO
+            $documento = new Documento;
+            $documento->year = $ahora->year;
+            $documento->tramite_id = $tramite->id;
+            $documento->documento_tipo_id = $request->documento_tipo_id;
+            $documento->numero = $request->numero;
+            $documento->remitente = $request->remitente;
+            $documento->asunto = $request->asunto;
+            $documento->folios = $request->folios;            
+            $documento->observaciones = $request->observaciones;            
+            $documento->archivo_id = ($request->archivo_id != 0 ? $request->archivo_id : null);
+            $documento->user_id = $user->id;
+
+            if (!$documento->save()) {
+                return response()->json(['message'=>'No se pudo registrar el documento'], 500);
+            }
+
+            $documento->codigo = $recursos->codigo_alpha($documento->id);
+            $documento->save();
+
+            //registramos los documentos anexos
+            if(isset($request->anexos)) {
+                foreach ($request->anexos as $anexo) {
+                    if($anexo["id"] != 0) {
+                        $documento_anexo = new Documento_anexo;
+                        $documento_anexo->documento_id = $documento->id;
+                        $documento_anexo->archivo_id = $anexo["id"];
+                        $documento_anexo->principal = 1;
+                        $documento_anexo->save(); 
+                    }
+                }
+            }
+
+            //MOVIMIENTO
+            $movimiento = new Movimiento;
+            $movimiento->tramite_id = $tramite->id;
+            $movimiento->documento_id = $documento->id;                
+            $movimiento->tipo = 0;//0:inicio de trámite
+            $movimiento->copia = 0;
+            //quien envia
+            $movimiento->o_tipo = 1;//1:externo  
+
+            if($request->tipo_persona == 1){//1:Persona Jurídica            
+                $movimiento->o_descripcion = $request->ruc." | ".$request->razon_social;
+            } else {
+                $movimiento->o_descripcion = $request->nro_documento." | ".$request->nombre." ".$request->apaterno." ".$request->amaterno;
+            }
+
+            $movimiento->o_fecha = $ahora->format('Y-m-d H:i:s');
+            $movimiento->o_user_id = $user->id;
+            $movimiento->o_year = $ahora->year;
+            
+            //quien recibe
+            $movimiento->d_tipo = 0;//0:interno
+            $movimiento->d_dependencia_id = $request->d_dependencia_id;            
+            if($request->d_empleado_id != 0){
+                $movimiento->d_empleado_id = $request->d_empleado_id;  
+                $movimiento->d_persona_id = $request->d_persona_id;  
+            }
+
+            //obtenemos el ultimo movimiento recepcionado de la oficina destino
+            $ultimo = Movimiento::where('d_dependencia_id', $request->d_dependencia_id)
+            ->where('estado', '>', 1)//0:anulado, 1:por recepcionar, 2:recepcionado, 3:derivado/referido, 4:atendido, 5:observado     
+            ->where('d_year', $ahora->year)//de este año
+            ->orderBy('d_numero', 'desc')
+            ->first();
+
+            $movimiento->d_fecha = $ahora->format('Y-m-d H:i:s');
+            $movimiento->d_user_id = $user->id;
+            $movimiento->d_observacion = $request->observaciones;
+            $movimiento->d_year = $ahora->year;
+            $movimiento->d_numero = ($ultimo ? $ultimo->d_numero + 1 : 1 );
+            $movimiento->estado = 2;//recepcionado  
+            $movimiento->save();            
+
+            return response()->json(['data'=>$tramite, 'message'=>'Registrado correctamente'], 200); 
+        }
+        catch (\Exception $e) {
+            return response()->json(['message'=>$e->getMessage()."- linea: ".__LINE__." ".__FILE__], 500);
+        }   
+        
+    }
 }

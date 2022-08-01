@@ -36,7 +36,7 @@
 </div>
 <div class="page-body">
     <div class="container-lg">
-        <div id="form-documento" class="row">
+        <div class="row">
             <div class="col-md-6">
                 <div class="card mb-3">
                     <div class="card-header">
@@ -54,7 +54,7 @@
                             </div>
                         </div>                        
                     </div>
-                    <div class="card-body">
+                    <div id="form_documento" class="card-body">
                         <div class="form-grou mb-3">
                             <div class="form-label">Archivo digital</div>
                             <fieldset id="archivo_seleccionado" class="form-fieldset p-2 m-0 h-input">  
@@ -165,7 +165,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6 form-group form-required mb-3">
-                                    <label class="form-label" for="identidad_documento_id">Número de documento</label>
+                                    <label class="form-label" for="nro_documento">Número de documento</label>
                                     <input type="text" id="nro_documento" name="nro_documento" class="form-control validar_numero validar_minimo:8" placeholder="" autofocus>
                                 </div>
                             </div>
@@ -201,7 +201,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body"> 
+                    <div id="form_destino_interno" class="card-body"> 
                         <div class="form-group mb-3">                               
                             <label class="form-label">Procedimiento</label>
                             <select id="procedimiento_id" class="form-select">
@@ -211,7 +211,7 @@
                                 @endforeach
                             </select>                               
                         </div>
-                        <div class="form-group form-required">
+                        <div class="form-group mb-3 form-required">
                             <label class="form-label">Destino</label>
                             <select id="d_dependencia_id" class="form-select validar_select">
                                 @if(count($destinos) > 0)
@@ -221,6 +221,15 @@
                                 @else
                                 <option value="0">NO TIENES ASIGNADO UNA DEPENDENCIA</option>
                                 @endif
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Destinatario</label>
+                            <select id="d_empleado_id" class="form-select">
+                                <option value="0" data-persona="0">Seleccione...</option>
+                                @foreach ($empleados as $empleado)
+                                <option value="{{$empleado->id}}" data-persona="{{$empleado->persona_id}}">{{$empleado->persona->nombre.' '.$empleado->persona->apaterno.' '.$empleado->persona->amaterno}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>

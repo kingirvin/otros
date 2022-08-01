@@ -174,12 +174,14 @@ class TramiteController extends Controller
         if(!$destinos->contains('dependencia_id', $destino_actual)){
             return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No perteneces a la dependencia", 'mensaje' => "El usuario actual no pertenece a la dependencia seleccionada.", 'accion' => "back" )]);  
         }
+
+        $empleados = Empleado::with(['persona.identidad_documento'])->where('estado', 1)->where('dependencia_id', '=', $destino_actual)->get();
         
         //tipo de documento (gestion e identidad)
         $identidad_tipos = Identidad_documento::where('estado', 1)->get();
         $documento_tipos = Documento_tipo::where('estado', 1)->get();  
         
-        return view('admin.tramite.externo',compact('procedimientos','destinos','destino_actual','identidad_tipos','documento_tipos'));
+        return view('admin.tramite.externo',compact('procedimientos','destinos','empleados','destino_actual','identidad_tipos','documento_tipos'));
     }
 
     /**

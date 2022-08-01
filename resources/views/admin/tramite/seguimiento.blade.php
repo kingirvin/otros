@@ -155,11 +155,27 @@
                                                         <div class="fw-bold lh-1 text-truncate" title="{{ $tramite->o_dependencia->nombre }}">{{ $tramite->o_dependencia->nombre }} </div> 
                                                         <small class="text-muted text-truncate" title="{{ $tramite->o_dependencia->sede->nombre }}">{{ $tramite->o_dependencia->sede->nombre }}</small>
                                                         @else
-                                                        <div class="fw-bold lh-1 text-truncate" title="{{ $o_dependencia->o_nombre }}">{{ $o_dependencia->nombre }} </div> 
-                                                        <small class="text-muted text-truncate" title="{{ $o_dependencia->o_nro_documento }}">{{ $o_dependencia->o_nro_documento }}</small>
+                                                            @if($tramite->o_externo_tipo == 1)
+                                                            <div class="fw-bold lh-1 text-truncate" title="{{ "-" }}">{{ "-" }} </div> 
+                                                            <small class="text-muted text-truncate" title="{{ "-" }}">{{ "-" }}</small>
+                                                            @else
+                                                                @if($tramite->ruc != null)
+                                                                <div class="fw-bold lh-1 text-truncate" title="{{ $tramite->ruc }}">{{ $tramite->ruc }} </div> 
+                                                                <small class="text-muted text-truncate" title="{{ $tramite->razon_social }}">{{ $tramite->razon_social }}</small>
+                                                                @else
+                                                                <div class="fw-bold lh-1 text-truncate" title="{{ $tramite->o_nro_documento }}">{{ $tramite->o_nro_documento }} </div> 
+                                                                <small class="text-muted text-truncate" title="{{ $tramite->o_nombre." ".$tramite->o_apaterno." ".$tramite->o_amaterno }}">{{ $tramite->o_nombre." ".$tramite->o_apaterno." ".$tramite->o_amaterno }}</small>
+                                                                @endif
+                                                            @endif
                                                         @endif
                                                     </div>
                                                 </div>
+                                                @if($tramite->o_tipo == 1)
+                                                <hr class="my-2">  
+                                                <small class="lh-1 d-block text-muted">{{ $tramite->o_correo }}</small>
+                                                <small class="lh-1 d-block text-muted">{{ ($tramite->o_telefono != null ? "Tel. ".$tramite->o_telefono : "") }}</small>
+                                                <small class="lh-1 d-block text-muted">{{ ($tramite->o_direccion != null ? "Dir. ".$tramite->o_direccion : "") }}</small>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="card-body" style="padding: 0.75rem 1rem; !important">
