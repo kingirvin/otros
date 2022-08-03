@@ -121,7 +121,7 @@
                     <ul class="list-inline">
                         <li class="list-inline-item">
                             <span class="badge bg-yellow"></span>                            
-                            Documentos internos
+                            Documentos enviados dentro de la misma dependencia
                         </li>
                     </ul>
                 </div>

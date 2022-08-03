@@ -127,7 +127,7 @@ function get_origen(movimiento) {
     var res = '<div class="d-flex align-items-center">';
 
     if(movimiento.o_tipo == 1){//0:interno, 1:externo
-        res += '<div class="pe-2"><span class="avatar bg-yellow-lt" title="ORIGEN EXTERNO"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><line x1="3.6" y1="9" x2="20.4" y2="9" /><line x1="3.6" y1="15" x2="20.4" y2="15" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" /></svg></span></div>';
+        res += '<div class="pe-2"><span class="avatar bg-pink-lt" title="ORIGEN EXTERNO"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9" /><line x1="3.6" y1="9" x2="20.4" y2="9" /><line x1="3.6" y1="15" x2="20.4" y2="15" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" /></svg></span></div>';
         res += '<div><div>EXTERNO</div><small class="d-block text-muted text-truncate mt-n1 lh-1" title="'+movimiento.o_descripcion+'">'+textoMax(movimiento.o_descripcion,25)+'</small></div>';
     } else {
         res += '<div><div title="'+movimiento.o_dependencia.nombre+'">'+textoMax(movimiento.o_dependencia.nombre, 25)+'</div><small class="d-block text-muted text-truncate mt-n1 lh-1">'+movimiento.o_dependencia.sede.nombre+'</small></div>';

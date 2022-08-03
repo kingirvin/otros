@@ -135,12 +135,10 @@
 */
 
 .bg-interno{
-    background: #fff9b1;
-    /*
-    box-shadow: 5px 0px 0px 0px rgb(253 208 44) inset;
-    -webkit-box-shadow: 5px 0px 0px 0px rgb(253 208 44) inset;
-    -moz-box-shadow: 5px 0px 0px 0px rgb(253 208 44) inset;
-    */
+    /*background: #fff9b1;*/    
+    box-shadow: 5px 0px 0px 0px #f59f00 inset;
+    -webkit-box-shadow: 5px 0px 0px 0px #f59f00 inset;
+    -moz-box-shadow: 5px 0px 0px 0px #f59f00 inset;    
 }
 
 .w-40

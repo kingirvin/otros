@@ -22,38 +22,6 @@
 <div class="page-body">
     <div class="container-xl">
         <div class="row">
-            <div class="col-md-8">
-                <div class="card mb-3">
-                    <div class="card-header">
-                        <h3 class="card-title">Dependencias</h3>
-                    </div>
-                    @if(count($origenes) > 0)
-                    <div class="list-group list-group-flush list-group-hoverable">
-                    @foreach ($origenes as $origen)
-                    <div class="list-group-item">
-                        <div class="row align-items-center">
-                            <div class="col-auto">                                
-                                <span class="avatar bg-blue-lt">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon avatar-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="3" y1="21" x2="21" y2="21" /><line x1="9" y1="8" x2="10" y2="8" /><line x1="9" y1="12" x2="10" y2="12" /><line x1="9" y1="16" x2="10" y2="16" /><line x1="14" y1="8" x2="15" y2="8" /><line x1="14" y1="12" x2="15" y2="12" /><line x1="14" y1="16" x2="15" y2="16" /><path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16" /></svg>
-                                </span>                                
-                            </div>
-                            <div class="col text-truncate">
-                                <div class="text-body">{{$origen->dependencia->nombre}}</div>
-                                <small class="d-block text-muted text-truncate mt-n1">{{$origen->dependencia->sede->nombre}}</small>
-                            </div>                           
-                        </div>
-                    </div>
-                    @endforeach
-                    </div>
-                    @else
-                    <div class="card-body">
-                        <div class="alert alert-important" role="alert">
-                            No tienes asignado una dependencia, ponte en contacto con el administrador del sistema.
-                        </div>
-                    </div>
-                    @endif  
-                </div>            
-            </div> 
             <div class="col-md-4">
                 <!--<div class="card mb-3">
                     <div class="card-header">
@@ -130,7 +98,62 @@
                         </div>
                     </div>
                 </div>            
-            </div>           
+            </div>
+            <div class="col-md-8">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h3 class="card-title">Dependencias</h3>
+                    </div>
+                    @if(count($origenes) > 0)
+                    <div class="list-group list-group-flush list-group-hoverable">
+                    @foreach ($origenes as $origen)
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-auto">                                
+                                <span class="avatar bg-blue-lt">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon avatar-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="3" y1="21" x2="21" y2="21" /><line x1="9" y1="8" x2="10" y2="8" /><line x1="9" y1="12" x2="10" y2="12" /><line x1="9" y1="16" x2="10" y2="16" /><line x1="14" y1="8" x2="15" y2="8" /><line x1="14" y1="12" x2="15" y2="12" /><line x1="14" y1="16" x2="15" y2="16" /><path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16" /></svg>
+                                </span>                                
+                            </div>
+                            <div class="col text-truncate">
+                                <div class="text-body">{{$origen->dependencia->nombre}}</div>
+                                <small class="d-block text-muted text-truncate mt-n1">{{$origen->dependencia->sede->nombre}}</small>
+                            </div>                           
+                        </div>
+                    </div>
+                    @endforeach
+                    </div>
+                    @else
+                    <div class="card-body">
+                        <div class="alert alert-important" role="alert">
+                            No tienes asignado una dependencia, ponte en contacto con el administrador del sistema.
+                        </div>
+                    </div>
+                    @endif  
+                </div>   
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h3 class="card-title">Material de ayuda</h3>
+                            </div>
+                            <div class="list-group list-group-flush list-group-hoverable">
+                                <div class="list-group-item">
+                                    <div class="row align-items-center">                          
+                                        <div class="col-auto">
+                                            <span class="avatar bg-teal-lt">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon avatar-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><line x1="3" y1="6" x2="3" y2="19" /><line x1="12" y1="6" x2="12" y2="19" /><line x1="21" y1="6" x2="21" y2="19" /></svg>
+                                            </span>                                    
+                                        </div>
+                                        <div class="col text-truncate">
+                                            <a href="#" class="text-body d-block" target="_blank">Manual de usuario</a>                                
+                                        </div>
+                                    </div>                            
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                </div>         
+            </div>                        
         </div>
     </div>
 </div>

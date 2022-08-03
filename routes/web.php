@@ -23,7 +23,7 @@ Route::get('/', function () {
 
 //ACCESO GENERAL
 Route::get('login', [App\Http\Controllers\UserController::class, 'ingreso'])->name('login');
-Route::post('login', [App\Http\Controllers\UserController::class, 'login']);//->middleware('throttle:limite');
+Route::post('login', [App\Http\Controllers\UserController::class, 'login'])->middleware('throttle:limite');
 Route::post('logout', [App\Http\Controllers\UserController::class, 'logout']);
 Route::get('register', [App\Http\Controllers\UserController::class, 'registro'])->name('register');
 Route::post('register', [App\Http\Controllers\UserController::class, 'register']);
@@ -33,6 +33,15 @@ Route::get('restablecer', [App\Http\Controllers\UserController::class, 'restable
 Route::get('/mensaje', function () {
     return view('paginas.mensaje');
 });
+
+Route::get('/status', function () {
+    return  view('paginas.status');
+});
+
+
+/*Route::get('/verificar', function () {
+    return redirect('/home/dashboard');
+});*/
 
 
 
