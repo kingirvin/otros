@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="{{ asset('img/favicon.ico') }}" />
     
     <title>{{ config('app.name', 'Titulo') }} - @yield('titulo')</title>
-
+    <link rel="manifest" href="/manifest.json">
     <link href="{{ asset('lib/tabler/css/tabler.min.css') }}" rel="stylesheet"/>
     <link href="{{ asset('lib/tabler/css/tabler-vendors.min.css') }}" rel="stylesheet"/> 
     <link href="{{ asset('css/admin.css?v='.config('app.version')) }}" rel="stylesheet"/>    

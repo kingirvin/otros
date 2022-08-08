@@ -260,7 +260,7 @@
                     </label>
                 </div>             
                 <small class="form-hint">
-                    Los documentos cargados para firma digital deberán estar en <b>formato PDF</b> y deberán contemplar el <a href="{{ asset('pdf/guia_documento.pdf') }}" target="_blank">diseño recomendado</a> para documentos firmados digitalmente.
+                    Los documentos cargados para firma digital deberán estar en <b>formato PDF</b> y deberán contemplar el <a href="{{ asset('pdf/documento_recomendado.pdf') }}" target="_blank">diseño recomendado</a> para documentos firmados digitalmente.
                 </small>
             </div>                              
             <div class="form-group form-required mb-3">

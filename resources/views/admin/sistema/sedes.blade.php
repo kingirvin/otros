@@ -76,7 +76,7 @@
                 <div class="row">
                     <div class="col-md-4 form-required form-group mb-3">
                         <label class="form-label">Abreviatura</label>
-                        <input id="abreviatura" type="text" class="form-control mayuscula" placeholder="" maxlength="10">
+                        <input id="abreviatura" type="text" class="form-control mayuscula" placeholder="" maxlength="20">
                     </div>
                     <div class="col-md-8 form-group form-required mb-3">
                         <label class="form-label">Nombre</label>

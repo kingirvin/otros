@@ -8,6 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Titulo') }}</title>
+    <link rel="manifest" href="/manifest.json">
     <link href="{{ asset('lib/tabler/css/tabler.min.css') }}" rel="stylesheet"/>
     <link href="{{ asset('lib/tabler/css/tabler-flags.min.css') }}" rel="stylesheet"/>
     <link href="{{ asset('lib/tabler/css/tabler-payments.min.css') }}" rel="stylesheet"/>
