@@ -118,7 +118,7 @@
                         <label class="form-label">Teléfono</label>
                         <input id="telefono" type="text" class="form-control" placeholder="">
                     </div> 
-                    <div class="col-md-6 form-group mb-3">
+                    <div class="col-md-6 form-group form-required mb-3">
                         <label class="form-label">Correo</label>
                         <input id="correo" type="text" class="form-control validar_correo" placeholder="">
                     </div> 

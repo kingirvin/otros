@@ -87,12 +87,16 @@ $( document ).ready(function() {
                   results: $.map(data, function(obj) {
                     return { 
                         id: obj.id, 
-                        text: obj.nombre+' '+obj.apaterno+' '+obj.amaterno
+                        text: obj.nombre+' '+obj.apaterno+' '+obj.amaterno,
+                        email: obj.correo
                     };
                   })
                 };
             }
         }
+    }).on('select2:selecting', function (e) {
+        var data = e.params.args.data;
+        $("#email").val(data.email);
     });
     
 });
