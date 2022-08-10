@@ -39,7 +39,7 @@ $( document ).ready(function() {
             }, 
             { "data": "empleados_count", "orderable": false, "searchable": false, className: "w-1",
                 render: function ( data, type, full ) {       
-                    return data;
+                    return full.activos_count+'<span class="text-muted">/'+data+'</span>';
                 }        
             },         
             { "data": "estado", "searchable": false, className: "w-1 text-center",

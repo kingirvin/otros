@@ -21,8 +21,15 @@ class DependenciaController extends Controller
      */
     public function listar(Request $request)
     {
-        $query = Dependencia::with('sede')->withCount('empleados');
-        if ($request->has('sede_id')) {
+        $query = Dependencia::with('sede')
+                ->withCount([
+                    'empleados',
+                    'empleados as activos_count'=> function ($query) {
+                        $query->where('estado', 1);
+                    }
+                ]);
+
+        if($request->has('sede_id')) {
             if($request->sede_id != 0)
                 $query->where('sede_id', $request->sede_id);
         }
