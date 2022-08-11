@@ -8,13 +8,15 @@ use Carbon\Carbon;
 use App\Models\Archivo;
 use Smalot\PdfParser\Parser;
 use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class ProgramadorController extends Controller
 {
     public function codigo(Request $request, $id)
     {
         //echo $this->toPoints(841.919)."<br>";
-
+        $link = "https://sgd.unamad.edu.pe/verificar";
+        QrCode::size(200)->format('png')->generate($link, public_path().'/img/qrcodes/qrcode.png');
 
         $archivo = Archivo::find($id);
         /*$parser = new Parser();
@@ -30,8 +32,8 @@ class ProgramadorController extends Controller
         print_r($dataTm);*/
         $recursos = new Recursos;
 
-        $ress = $recursos->obtener_info($archivo);
-        print_r($ress);
+        //$ress = $recursos->obtener_info($archivo);
+        //print_r($ress);
         return "<br>";
 
 
