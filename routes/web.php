@@ -39,9 +39,9 @@ Route::get('/status', function () {
 });
 
 
-/*Route::get('/verificar', function () {
-    return redirect('/home/dashboard');
-});*/
+Route::get('/validar', function () {
+    return redirect('/');
+});
 
 
 

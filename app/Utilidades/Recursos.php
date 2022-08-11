@@ -124,7 +124,7 @@ class Recursos
     public function incrustar_codigo($archivo)
     {        
         $ahora = Carbon::now();     
-        $link = "sgd.unamad.edu.pe/verificar";  
+        $link = "sgd.unamad.edu.pe/validar";  
         $texto = utf8_decode("Esta es una representación impresa de un documento electrónico archivado en la UNAMAD, según Decreto Legislativo Nº 1412, Decreto Supremo Nº 029-2021-PCM y la Directiva Nº 002-2021-PCM/SGTD, su autenticidad puede ser contrastada con su versión digital en la siguiente dirección web.");
         $codigo = substr($archivo->cvd,0,4).' '.substr($archivo->cvd,4,4).' '.substr($archivo->cvd,8,4).' '.substr($archivo->cvd,12,4);
         

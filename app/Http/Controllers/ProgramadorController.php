@@ -15,7 +15,7 @@ class ProgramadorController extends Controller
     public function codigo(Request $request, $id)
     {
         //echo $this->toPoints(841.919)."<br>";
-        $link = "https://sgd.unamad.edu.pe/verificar";
+        $link = "https://sgd.unamad.edu.pe/validar";
         QrCode::size(200)->format('png')->generate($link, public_path().'/img/qrcodes/qrcode.png');
 
         $archivo = Archivo::find($id);
