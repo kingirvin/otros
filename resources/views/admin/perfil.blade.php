@@ -79,11 +79,9 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Tipo de documento</label>
-                                            @if($user->tipo_documento == 1)
-                                            <input type="text" class="form-control" value="DNI" readonly>
-                                            @elseif($user->tipo_documento == 2)
-                                            <input type="text" class="form-control" value="CARNET DE EXTRANJERIA" readonly>
+                                            <label class="form-label">Tipo de documento</label>              
+                                            @if($identidad_documento != null)
+                                            <input type="text" class="form-control" value="{{ $identidad_documento->nombre }}" readonly>
                                             @else
                                             <input type="text" class="form-control" value="NO DEFINIDO" readonly>
                                             @endif

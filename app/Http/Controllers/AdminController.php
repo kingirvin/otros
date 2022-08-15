@@ -27,8 +27,9 @@ class AdminController extends Controller
     public function perfil()
     {
         $user = Auth::user();
+        $identidad_documento = $user->identidad_documento;
         $privilegios = Privilegio::with('submodulo.modulo')->where('rol_id', $user->rol_id)->get();   
-        return view('admin.perfil',compact('user','privilegios'));
+        return view('admin.perfil',compact('user','identidad_documento','privilegios'));
     }
 
 }

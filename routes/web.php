@@ -25,10 +25,10 @@ Route::get('/', function () {
 Route::get('login', [App\Http\Controllers\UserController::class, 'ingreso'])->name('login');
 Route::post('login', [App\Http\Controllers\UserController::class, 'login'])->middleware('throttle:limite');
 Route::post('logout', [App\Http\Controllers\UserController::class, 'logout']);
-Route::get('register', [App\Http\Controllers\UserController::class, 'registro'])->name('register');
-Route::post('register', [App\Http\Controllers\UserController::class, 'register']);
-Route::get('verificar', [App\Http\Controllers\UserController::class, 'verificar']);
-Route::get('restablecer', [App\Http\Controllers\UserController::class, 'restablecer']);
+//Route::get('register', [App\Http\Controllers\UserController::class, 'registro'])->name('register');
+//Route::post('register', [App\Http\Controllers\UserController::class, 'register']);
+//Route::get('verificar', [App\Http\Controllers\UserController::class, 'verificar']);
+//Route::get('restablecer', [App\Http\Controllers\UserController::class, 'restablecer']);
 
 Route::get('/mensaje', function () {
     return view('paginas.mensaje');
