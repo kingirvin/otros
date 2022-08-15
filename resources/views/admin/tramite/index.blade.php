@@ -145,10 +145,22 @@
                                             </span>                                    
                                         </div>
                                         <div class="col text-truncate">
-                                            <a href="#" class="text-body d-block" target="_blank">Manual de usuario</a>                                
+                                            <a href="{{ asset('pdf/manual_usuario.pdf') }}" class="text-body d-block" target="_blank">Manual de usuario</a>                                
                                         </div>
                                     </div>                            
                                 </div>
+                                <div class="list-group-item">
+                                    <div class="row align-items-center">                          
+                                        <div class="col-auto">
+                                            <span class="avatar bg-red-lt">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon avatar-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="3" y="5" width="18" height="14" rx="4" /><path d="M10 9l5 3l-5 3z" /></svg>
+                                            </span>                                    
+                                        </div>
+                                        <div class="col text-truncate">
+                                            <a href="https://youtu.be/ZiDATlML5XA" class="text-body d-block" target="_blank">Video tutorial</a>                                
+                                        </div>
+                                    </div>                            
+                                </div>                                
                             </div>
                         </div>
                     </div>    
