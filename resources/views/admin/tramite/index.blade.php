@@ -23,14 +23,6 @@
     <div class="container-xl">
         <div class="row">
             <div class="col-md-4">
-                <!--<div class="card mb-3">
-                    <div class="card-header">
-                        <h3 class="card-title">Material de ayuda</h3>
-                    </div>
-                    <div class="card-body">
-                        sfdf
-                    </div>
-                </div>-->
                 <div class="card mb-3">
                     <div class="card-header">
                         <h3 class="card-title">Herramientas para firma digital</h3>
@@ -140,6 +132,18 @@
                                 <div class="list-group-item">
                                     <div class="row align-items-center">                          
                                         <div class="col-auto">
+                                            <span class="avatar bg-blue-lt">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon avatar-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15l2 2l4 -4" /></svg>
+                                            </span>                                    
+                                        </div>
+                                        <div class="col text-truncate">
+                                            <a href="{{ asset('pdf/documento_recomendado.pdf') }}" class="text-body d-block" target="_blank">Guía de diseño recomendado</a>                                
+                                        </div>
+                                    </div>                            
+                                </div>  
+                                <div class="list-group-item">
+                                    <div class="row align-items-center">                          
+                                        <div class="col-auto">
                                             <span class="avatar bg-teal-lt">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon avatar-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0" /><line x1="3" y1="6" x2="3" y2="19" /><line x1="12" y1="6" x2="12" y2="19" /><line x1="21" y1="6" x2="21" y2="19" /></svg>
                                             </span>                                    
@@ -160,7 +164,7 @@
                                             <a href="https://youtu.be/ZiDATlML5XA" class="text-body d-block" target="_blank">Video tutorial</a>                                
                                         </div>
                                     </div>                            
-                                </div>                                
+                                </div>                                                              
                             </div>
                         </div>
                     </div>    

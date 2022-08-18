@@ -24,7 +24,7 @@ class CreateTramitesTable extends Migration
             //--interno
             $table->unsignedBigInteger('o_dependencia_id')->nullable();
             //--externo
-            $table->tinyInteger('o_externo_tipo')->nullable();//0:persona externa si usuario, 1:persona externa con usuario            
+            $table->tinyInteger('o_externo_tipo')->nullable();//0:persona externa sin usuario, 1:persona externa con usuario            
             $table->unsignedBigInteger('o_user_id')->nullable();//si tiene usuario externo     
             //si no se tiene usuario externo
             $table->string('ruc',25)->nullable();

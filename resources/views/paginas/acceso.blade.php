@@ -5,9 +5,7 @@
 @section('contenido')
 <div class="container-narrow py-4">
     <div class="text-center mb-4">
-        <a href="{{ url('/') }}">
-            <img src="{{ asset('img/logo_horizontal.png') }}" height="60" alt="">
-        </a>
+        <img src="{{ asset('img/logo_horizontal.png') }}" height="60" alt="">        
     </div>
     <div class="card card-md">
         <div class="card-body">

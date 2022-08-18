@@ -295,6 +295,17 @@ class TramiteController extends Controller
         $ordenado = $this->ordenar($movimientos, null);
         return view('admin.tramite.seguimiento', compact('tramite','documentos','ordenado'));
     }
+
+    public function hoja(Request $request, $id)
+    {
+        $tramite = Tramite::with(['user','o_dependencia.sede','procedimiento'])->where('id', $id)->first();
+        if($tramite == null)
+            return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No se pudo encontrar el trámite", 'mensaje' => "El registro seleccionado ya no se encuentra disponible.", 'accion' => "close" )]);  
+
+        $documento = Documento::with(['documento_tipo','archivo','anexos'])->where('tramite_id', $tramite->id)->orderBy('id', 'asc')->first();
+        $movimientos = Movimiento::with(['d_dependencia.sede'])->where('tramite_id', $tramite->id)->where('tipo', 0)->get();        
+        return view('reporte.hoja_tramite', compact('tramite','documento','movimientos'));
+    }
    
     protected function ordenar($movimientos, $anterior)
     {

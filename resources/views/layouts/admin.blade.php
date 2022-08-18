@@ -106,6 +106,20 @@
                   </li> 
                   @endif
 
+                  <!-- Ventanilla virtual -->
+                  @if(request()->is('admin/externo*'))
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url('admin/externo') }}">
+                      <span class="nav-link-icon d-md-none d-lg-inline-block">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="3" y1="12" x2="6" y2="12" /><line x1="12" y1="3" x2="12" y2="6" /><line x1="7.8" y1="7.8" x2="5.6" y2="5.6" /><line x1="16.2" y1="7.8" x2="18.4" y2="5.6" /><line x1="7.8" y1="16.2" x2="5.6" y2="18.4" /><path d="M12 12l9 3l-4 2l-2 4l-3 -9" /></svg>
+                      </span>
+                      <span class="nav-link-title">
+                        Ventanilla virtual
+                      </span>
+                    </a>
+                  </li> 
+                  @endif
+
                   <!-- ... -->
 
                 </ul>
@@ -210,6 +224,7 @@
                     @endif
 
                   @endif  
+                  <!-- END Administración de sistemas -->
 
                   <!-- Gestión de documentos -->
                   @if(request()->is('admin/tramite*') && array_key_exists('TRAMITE', $modulos))
@@ -267,9 +282,52 @@
                     </li>
                     @endif
 
-                    <!-- ... -->
+                  @endif 
+                  <!-- END Gestión de documentos -->
+
+                  <!-- Ventanilla virtual -->
+                  @if(request()->is('admin/externo*') && array_key_exists('EXTERNO', $modulos))
+
+                    @if(in_array('MESADEPARTES', $modulos['EXTERNO']))
+                    <li class="nav-item {{ (request()->is('admin/externo/tramite*')) ? 'active' : '' }}">
+                      <a class="nav-link nav-link-custom" href="{{ url('admin/externo/tramite') }}">
+                        <button class="btn btn-outline-success w-100">                         
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="12" y1="11" x2="12" y2="17" /><polyline points="9 14 12 11 15 14" /></svg>
+                          Ingresar documento                          
+                        </button>
+                      </a>
+                    </li>
+                    @endif 
+
+                    @if(in_array('SEGUIMIENTO', $modulos['EXTERNO']))
+                    <li class="nav-item {{ (request()->is('admin/externo/consulta*')) ? 'active' : '' }}">
+                      <a class="nav-link" href="{{ url('admin/externo/consulta') }}">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="15" cy="15" r="4" /><path d="M18.5 18.5l2.5 2.5" /><path d="M4 6h16" /><path d="M4 12h4" /><path d="M4 18h4" /></svg>
+                        </span>
+                        <span class="nav-link-title">
+                          Consultar trámite
+                        </span>
+                      </a>
+                    </li>
+                    @endif
+
+                    @if(in_array('VALIDAR', $modulos['EXTERNO']))
+                    <li class="nav-item {{ (request()->is('admin/externo/validar*')) ? 'active' : '' }}">
+                      <a class="nav-link" href="{{ url('admin/externo/validar') }}">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15l2 2l4 -4" /></svg>
+                        </span>
+                        <span class="nav-link-title">
+                          Validar documento
+                        </span>
+                      </a>
+                    </li>
+                    @endif
 
                   @endif 
+                  <!-- END Ventanilla virtual -->
+
                   <!-- ... -->
 
                 </ul>                

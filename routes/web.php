@@ -77,14 +77,24 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('tramite/recibidos/derivar/{id}', [App\Http\Controllers\TramiteController::class, 'derivar'])->middleware('submodulo:ENVREC');
     Route::get('tramite/recibidos/derivaciones/{id}', [App\Http\Controllers\TramiteController::class, 'derivaciones'])->middleware('submodulo:ENVREC');
     Route::get('tramite/recibidos/asignaciones/{id}', [App\Http\Controllers\TramiteController::class, 'asignaciones'])->middleware('submodulo:ENVREC');
-    Route::get('tramite/seguimiento/{id}', [App\Http\Controllers\TramiteController::class, 'seguimiento']);  
+    Route::get('tramite/seguimiento/{id}', [App\Http\Controllers\TramiteController::class, 'seguimiento']);
+    Route::get('tramite/hoja/{id}', [App\Http\Controllers\TramiteController::class, 'hoja']);
     Route::get('tramite/documento/{id}', [App\Http\Controllers\TramiteController::class, 'documento']);  
 
-
+    //VENTANILLA VIRTUAL
+    Route::get('externo', [App\Http\Controllers\ExternoController::class, 'index'])->middleware('modulo:EXTERNO'); 
+    Route::get('externo/tramite', [App\Http\Controllers\ExternoController::class, 'ingresar'])->middleware('submodulo:MESADEPARTES');
+    Route::post('externo/tramite', [App\Http\Controllers\ExternoController::class, 'ingresar_post'])->middleware('submodulo:MESADEPARTES');
+    Route::get('externo/tramite/seguimiento/{codigo}', [App\Http\Controllers\ExternoController::class, 'seguimiento_tramite'])->middleware('submodulo:MESADEPARTES');
+    Route::get('externo/consulta', [App\Http\Controllers\ExternoController::class, 'consulta'])->middleware('submodulo:SEGUIMIENTO');
+    Route::post('externo/seguimiento', [App\Http\Controllers\ExternoController::class, 'seguimiento']);
+    Route::get('externo/validar', [App\Http\Controllers\ExternoController::class, 'validar'])->middleware('submodulo:VALIDAR');  
+    Route::post('externo/validar', [App\Http\Controllers\ExternoController::class, 'validar_post'])->middleware('submodulo:VALIDAR');  
+    
 
     //DE USO GENERAL
     Route::get('archivos/stream/{codigo}', [App\Http\Controllers\TramiteController::class, 'vista_previa']);
-    Route::get('archivos/download/{id}', [App\Http\Controllers\TramiteController::class, 'descargar']);    
+    Route::get('archivos/download/{id}', [App\Http\Controllers\TramiteController::class, 'descargar']);
     
 
 
@@ -93,6 +103,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 Route::prefix('info')->group(function () {
     Route::get('/acceso', function () { return view('paginas.acceso'); });
     Route::get('/terminos', function () { return view('paginas.terminos'); });
+    Route::get('/declaracion', function () { return view('paginas.declaracion'); });
     Route::get('/versiones', function () { return view('paginas.version'); });
 });
 

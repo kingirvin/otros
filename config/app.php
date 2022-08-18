@@ -19,6 +19,7 @@ return [
     'disco' => env('DEFAULT_DISK', 'D:'),
     'almacenamiento' => env('DEFAULT_STORAGE', 'partitionD'),
     'rol_externo' => env('DEFAULT_ROL_EXTERNO', '1'),    
+    'mesa_partes' => env('APP_MESA_PARTES', '5'),
     'recaptcha_secret' => env('RECAPTCHA_SECRET_KEY','6LfjLl4gAAAAAMO5QUmeODtWM238v5a_UlTacObx'),
     'recaptcha_public' => env('RECAPTCHA_PUBLIC_KEY','6LfjLl4gAAAAAIX8pPdp5yET1vySl1Y443h8EWLf'),
     'reniec_id' => env('RENIEC_CLIENT_ID','ZIzAvpCQernywPNktelaHQH0yi0'),

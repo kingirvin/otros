@@ -43,6 +43,11 @@ class Tramite extends Model
         return $this->hasMany(Documento::class, 'tramite_id');
     }
 
+    public function primero_documento()
+    {        
+        return $this->hasOne(Documento::class, 'tramite_id')->orderBy('id', 'asc');
+    }
+
     public function movimientos()
     {
         return $this->hasMany(Movimiento::class, 'tramite_id');

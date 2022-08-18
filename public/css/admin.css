@@ -36,6 +36,11 @@
     display: block;
 }
 
+.input-group:has(.is-invalid) > .input-group-text {
+    border-color: red;
+}
+
+
 .cargando
 {
     display: none;

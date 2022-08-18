@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('titulo', 'Seguimiento')
+@section('titulo', 'Seguimiento de trámite')
 
 @section('css')
 <link href="{{ asset('css/seguimiento.css?v='.config('app.version')) }}" rel="stylesheet" >
@@ -8,23 +8,30 @@
 @section('js')
 <script src="{{ asset('js/tramite/seguimiento.js?v='.config('app.version')) }}" type="text/javascript"></script>
 @endsection
+
 @section('contenido')
 <div class="container-fluid">
     <!-- Page title -->
     <div class="page-header">
-        <div class="row align-items-center mw-100">
+        <div class="row align-items-center">
             <div class="col">
                 <div>
                     <ol class="breadcrumb breadcrumb-alternate" aria-label="breadcrumbs">
                         <li class="breadcrumb-item"><a href="{{ url('admin') }}">Inicio</a></li>
-                        <li class="breadcrumb-item"><a href="{{ url('admin/tramite') }}">Trámite</a></li>                    
+                        <li class="breadcrumb-item"><a href="{{ url('admin/externo') }}">Ventanilla</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Seguimiento</li>
                     </ol>
                 </div>
                 <h2 class="page-title">
                     Seguimiento de trámite
                 </h2>
-            </div>            
+            </div>  
+            <div class="col-auto ms-auto">                
+                <a href="{{ url($back) }}" class="btn btn-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="5" y1="12" x2="19" y2="12" /><line x1="5" y1="12" x2="11" y2="18" /><line x1="5" y1="12" x2="11" y2="6" /></svg>
+                    Regresar
+                </a>                  
+            </div>         
         </div>
     </div>
 </div>
@@ -34,20 +41,7 @@
             <div class="col-md-3">
                 <div class="card mb-3">
                     <div class="card-header">
-                        <div class="col">
-                            <h3 class="card-title">Trámite</h3>
-                        </div>
-                        <div class="col-auto">
-                            <div class="dropdown">
-                                <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2" /><path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4" /><rect x="7" y="13" width="10" height="8" rx="2" /></svg>
-                                    Imprimir
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                  <li><a class="dropdown-item" href="{{ url('admin/tramite/hoja/'.$tramite->id) }}" target="_blank">Hoja de trámite</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                        <h3 class="card-title">Trámite</h3>
                     </div>
                     <div class="card-body">
                         <dl>
@@ -102,7 +96,7 @@
                                     @endif
                               </div>
                               <div class="col text-truncate">
-                                <a href="{{ url('admin/tramite/documento/'.$documento->id) }}" class="text-body d-block lh-1" target="_blank">{{ $documento->documento_tipo->abreviatura }} {{ $documento->numero }}</a>
+                                <span class="text-body d-block lh-1" target="_blank">{{ $documento->documento_tipo->abreviatura }} {{ $documento->numero }}</span>
                                 <small class="d-block text-muted text-truncate lh-1" title="{{ $documento->asunto }}">{{ $documento->asunto }}</small>
                                 <h6 class="d-block lh-1 m-0" style="font-weight: 500;">
                                     <span class="text-azure">D-{{ $documento->codigo }}</span> -
@@ -235,7 +229,7 @@
                         Anulado
                     </li>
                 </ul>
-            </div>
+            </div>                              
         </div>
     </div>
 </div>

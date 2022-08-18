@@ -73,7 +73,7 @@ function validar(ident_form) //validar_fecha, validar_entero, validar_decimal
     var resultado = true;
     limpiar(ident_form);
     //recorremos los items del formulario
-    $( ident_form+" .form-group").each(function() {
+    $(ident_form+" .form-group").each(function() {
         var grupo = this;
 
         if($(grupo).hasClass("form-required"))//es obligatorio
@@ -470,6 +470,31 @@ function validar(ident_form) //validar_fecha, validar_entero, validar_decimal
             }
         }
 
+        //validar mask
+        var input_mask = $(this).find('.validar_mask');        
+        if(input_mask.length)
+        {
+            var mask_raw = input_mask.val();
+            var mask_value = input_mask.val().replace(/\D/g,'');
+            var mask_data = input_mask.data("mask");
+
+            if(mask_value.length > 0)//hay datos
+            {
+                if(!cumple_formato(mask_raw, mask_data))
+                {
+                    resultado=false;
+                    $(input_mask).addClass('is-invalid');
+                    $(grupo).find('.invalid-feedback').remove();
+                    $(grupo).append('<div class="invalid-feedback">No cumple con el formato requerido</div>');
+                } 
+            } else {
+                resultado=false;
+                $(input_mask).addClass('is-invalid');
+                $(grupo).find('.invalid-feedback').remove();
+                $(grupo).append('<div class="invalid-feedback">Este campo es obligatorio</div>');       
+            }
+        }
+
         
 
     });
@@ -761,6 +786,17 @@ function esCorreo(dateEmail)
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(dateEmail);
 };
+
+function cumple_formato(texto, formato) {//____ ____ ____ ____ 0000 0000 0000 0000
+    var resultado = true;
+    var texto_value = texto.replace(/\D/g,'');
+    var formato_value = formato.replace(/\D/g,'');
+
+    if(texto_value.length != formato_value.length)
+        resultado = false;
+
+    return resultado;
+}
 
 function textoMax(texto, max) 
 {
