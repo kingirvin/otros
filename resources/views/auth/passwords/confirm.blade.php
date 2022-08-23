@@ -1,49 +1,50 @@
-@extends('layouts.app')
+@extends('layouts.blanco')
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Confirm Password') }}</div>
+@section('titulo', 'Ingresar nueva contraseña')
 
-                <div class="card-body">
-                    {{ __('Please confirm your password before continuing.') }}
+@section('js')
+<script src="{{ asset('js/nueva_contraseña.js?v='.config('app.version')) }}"></script>
+@endsection
 
-                    <form method="POST" action="{{ route('password.confirm') }}">
-                        @csrf
-
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Confirm Password') }}
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
+@section('contenido')
+<div class="container-tight py-4">
+    <div class="text-center mb-4">        
+        <img src="{{ asset('img/logo_horizontal.png') }}" height="60" alt="">      
+    </div>
+    <form class="card card-md" method="POST" action="{{ url('/confirmar') }}" onsubmit="return enviar(event);">
+        @csrf
+        <div id="formulario" class="card-body">
+            <h2 class="card-title text-center mb-3">Cambio de contraseña</h2>
+            <div class="pb-2">
+                @if ($errors->any())
+                <div class="alert alert-important alert-danger alert-dismissible mb-2" role="alert">                
+                    <div>
+                        <ul style="margin: 0; padding: 0; list-style: none;">
+                            @foreach ($errors->all() as $error)
+                            <li class="lh-1 my-1">{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>                
+                    <a class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></a>
                 </div>
+                @endif
+            </div>      
+            <p class="text-muted text-justify mb-3">Hola <b>{{$user->email}} </b> ingresa tu nueva contraseña en los siguientes campos, la contraseña debe ser de almenos de 8 digitos.</p>
+            <input type="hidden" name="codigo" value="{{$restablecimiento->codigo}}">
+            <div class="form-group form-required mb-3">
+                <label class="form-label" for="password">Contraseña</label>
+                <input type="password" id="password" name="password" class="form-control validar_minimo:8" placeholder="">
+            </div>
+            <div class="form-group form-required mb-3">
+                <label class="form-label" for="password_confirmation">Confirmar contraseña</label>
+                <input type="password" id="password_confirmation" name="password_confirmation" class="form-control validar_igual:password" placeholder="">
+            </div>
+            <div class="form-footer">
+                <button type="submit" class="btn btn-pink w-100">
+                    Restablecer
+                </button>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 @endsection

@@ -15,16 +15,15 @@ return [
 
     'name' => env('APP_NAME', 'Sistema de Gestión Documental'),
     'version' => env('APP_VERSION', '1.0.0'),
-
     'disco' => env('DEFAULT_DISK', 'D:'),
     'almacenamiento' => env('DEFAULT_STORAGE', 'partitionD'),
-    'rol_externo' => env('DEFAULT_ROL_EXTERNO', '1'),    
-    'mesa_partes' => env('APP_MESA_PARTES', '5'),
-    'recaptcha_secret' => env('RECAPTCHA_SECRET_KEY','6LfjLl4gAAAAAMO5QUmeODtWM238v5a_UlTacObx'),
-    'recaptcha_public' => env('RECAPTCHA_PUBLIC_KEY','6LfjLl4gAAAAAIX8pPdp5yET1vySl1Y443h8EWLf'),
-    'reniec_id' => env('RENIEC_CLIENT_ID','ZIzAvpCQernywPNktelaHQH0yi0'),
-    'reniec_secret' => env('RENIEC_CLIENT_SECRET','B6jWcQmOjJkD94A-EgTl'),
-    'ghostscript_path' => env('GHOSTSCRIPT_PATH','C:\\Program Files\\gs\\gs9.56.1\\bin\\gswin64c.exe'),
+    'rol_externo' => env('DEFAULT_ROL_EXTERNO', '0'),    
+    'mesa_partes' => env('APP_MESA_PARTES', '0'),
+    'recaptcha_secret' => env('RECAPTCHA_SECRET_KEY',''),
+    'recaptcha_public' => env('RECAPTCHA_PUBLIC_KEY',''),
+    'reniec_id' => env('RENIEC_CLIENT_ID',''),
+    'reniec_secret' => env('RENIEC_CLIENT_SECRET',''),
+    'ghostscript_path' => env('GHOSTSCRIPT_PATH',''),
 
 
 

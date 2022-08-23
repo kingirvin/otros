@@ -25,10 +25,15 @@ Route::get('/', function () {
 Route::get('login', [App\Http\Controllers\UserController::class, 'ingreso'])->name('login');
 Route::post('login', [App\Http\Controllers\UserController::class, 'login'])->middleware('throttle:limite');
 Route::post('logout', [App\Http\Controllers\UserController::class, 'logout']);
-//Route::get('register', [App\Http\Controllers\UserController::class, 'registro'])->name('register');
-//Route::post('register', [App\Http\Controllers\UserController::class, 'register']);
-//Route::get('verificar', [App\Http\Controllers\UserController::class, 'verificar']);
-//Route::get('restablecer', [App\Http\Controllers\UserController::class, 'restablecer']);
+Route::get('register', [App\Http\Controllers\UserController::class, 'registro'])->name('register');
+Route::post('register', [App\Http\Controllers\UserController::class, 'registro_post']);
+Route::get('verificar/{codigo}', [App\Http\Controllers\UserController::class, 'verificar']);
+Route::get('verificar', [App\Http\Controllers\UserController::class, 'reenviar_verificacion']);
+Route::post('verificar', [App\Http\Controllers\UserController::class, 'reenviar_verificacion_post']);
+Route::get('restablecer', [App\Http\Controllers\UserController::class, 'restablecer']);
+Route::post('restablecer', [App\Http\Controllers\UserController::class, 'restablecer_post']);
+Route::get('restablecer/{codigo}', [App\Http\Controllers\UserController::class, 'confirmar']);
+Route::post('confirmar', [App\Http\Controllers\UserController::class, 'confirmar_post']);
 
 Route::get('/mensaje', function () {
     return view('paginas.mensaje');
@@ -40,7 +45,7 @@ Route::get('/status', function () {
 
 
 Route::get('/validar', function () {
-    return redirect('/');
+    return redirect('admin/externo/validar');
 });
 
 
@@ -109,12 +114,13 @@ Route::prefix('info')->group(function () {
 
 
 Route::get('/prueba', function () {
-    return view('paginas.mensaje');
+    return view('email.verificacion');
 });
 
 
 Route::prefix('programador')->group(function () {
     Route::get('codigo/{id}', [App\Http\Controllers\ProgramadorController::class, 'codigo']);
+    Route::get('prueba', [App\Http\Controllers\ProgramadorController::class, 'prueba']);
    
 
 });

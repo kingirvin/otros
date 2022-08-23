@@ -9,6 +9,7 @@ use App\Models\Archivo;
 use Smalot\PdfParser\Parser;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Auth;
 
 class ProgramadorController extends Controller
 {
@@ -108,5 +109,10 @@ class ProgramadorController extends Controller
         }        
     }
 
+    public function prueba()
+    {
+        $user = Auth::user();
+        return view('email.restablecer',compact('user'));
+    }
     
 }

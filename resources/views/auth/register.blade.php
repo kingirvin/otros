@@ -50,9 +50,9 @@
             </div>
             <!--TIPO-->
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-group mb-3 row">
-                        <label for="persona" class="form-label col-3 col-form-label">Persona</label>
+                        <label for="persona" class="form-label col-6 col-form-label">Tipo de persona</label>
                         <div class="col">
                             <select name="persona" id="persona" class="form-select" onchange="cambio_persona(this);">
                                 <option value="0">Natural</option>
@@ -62,6 +62,7 @@
                     </div>
                 </div>
             </div>
+            <hr class="mt-0 mb-3">
             <!--PERSONA JURIDICA-->
             <div id="es_juridica" class="oculto">
                 <fieldset class="form-fieldset pb-1 mb-3">

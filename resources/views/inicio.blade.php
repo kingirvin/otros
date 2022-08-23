@@ -39,7 +39,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M20 12h-13l3 -3m0 6l-3 -3" /></svg>
                         Ingresar
                     </a>
-                    <a href="{{ url('register') }}" class="btn btn-white disabled ">
+                    <a href="{{ url('register') }}" class="btn btn-white">
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 11h6m-3 -3v6" /></svg>
                         Registrarse
                     </a>                                
@@ -51,9 +51,10 @@
         <div class="w-40 flex-shrink-0 h-100 d-none d-md-block" style="background-color: #303030; border-left: 3px solid #ff4187;">
            <div class="d-table h-100 w-100 p-4 text-center" style="background: url({{ asset('img/background.jpg') }}) no-repeat center center fixed; background-size: cover;">
                 <div class="d-table-cell" style="vertical-align: middle">
-                    <h2 class="text-white mb-4">MESA DE PARTES VIRTUAL</h2>
+                    <h2 class="text-white mb-4">VENTANILLA VIRTUAL</h2>
                     <img src="{{ asset('img/bienvenido2.png') }}" style="width: 60%">
                     <div class="mb-4"></div>
+                    <p class="" style="color: rgb(255 255 255 / 75%);">Registrate para acceder a las siguientes opciones:</p>
                     <div class="d-inline-block text-start" style="color: rgb(255 255 255 / 75%);">                        
                         <div class="mb-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="9" y1="9" x2="10" y2="9" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="9" y1="17" x2="15" y2="17" /></svg>

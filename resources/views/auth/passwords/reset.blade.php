@@ -14,89 +14,47 @@
             <img src="{{ asset('img/logo_horizontal.png') }}" height="60" alt="">
         </a>
     </div>
-    <form class="card card-md" action="." method="get">
-        <div class="card-body">
-        <h2 class="card-title text-center mb-4">Forgot password</h2>
-        <p class="text-muted mb-4">Enter your email address and your password will be reset and emailed to you.</p>
-        <div class="mb-3">
-            <label class="form-label">Email address</label>
-            <input type="email" class="form-control" placeholder="Enter email">
-        </div>
-        <div class="form-footer">
-            <a href="#" class="btn btn-primary w-100">
-            <!-- Download SVG icon from http://tabler-icons.io/i/mail -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><rect x="3" y="5" width="18" height="14" rx="2"></rect><polyline points="3 7 12 13 21 7"></polyline></svg>
-            Send me new password
-            </a>
-        </div>
+    <form class="card card-md" method="POST" action="{{ url('/restablecer') }}" onsubmit="return enviar(event);">
+        @csrf
+        <div id="formulario" class="card-body">
+            <h2 class="card-title text-center mb-3">Restablecer contraseña</h2>
+            <div class="pb-2">
+                @if(session('restablecer'))
+                <div class="alert alert-important alert-success alert-dismissible mb-2" role="alert">                
+                    <div>Se ha enviado un nuevo enlace de restablecimiento a <b>{{ session('restablecer') }}</b>.</div>                
+                    <a class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+                @endif
+
+                @if ($errors->any())
+                <div class="alert alert-important alert-danger alert-dismissible mb-2" role="alert">                
+                    <div>
+                        <ul style="margin: 0; padding: 0; list-style: none;">
+                            @foreach ($errors->all() as $error)
+                            <li class="lh-1 my-1">{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>                
+                    <a class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+                @endif
+            </div>      
+            <p class="text-muted text-justify mb-3">Ingresa el correo asociado a tu cuenta de usuario y te enviaremos un enlace para el restablecimiento de tu contraseña.</p>
+            <div class="form-group form-required mb-3">
+                <label class="form-label">Correo electrónico</label>
+                <input type="email" name="email" class="form-control validar_correo" placeholder="Ingrese su correo" autofocus>
+            </div>
+            <div class="form-footer">
+                <button type="submit" class="btn btn-pink w-100">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/mail -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><rect x="3" y="5" width="18" height="14" rx="2"></rect><polyline points="3 7 12 13 21 7"></polyline></svg>
+                    Enviar correo de restablecimiento
+                </button>
+            </div>
         </div>
     </form>
     <div class="text-center text-muted mt-3">
-        Forget it, <a href="./sign-in.html">send me back</a> to the sign in screen.
-    </div>
-</div>
-@endsection
-
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
-
-                <div class="card-body">
-                    <form method="POST" action="">
-                        @csrf
-
-                        <input type="hidden" name="token" value="">
-
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Reset Password') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        Ya he restablecido mi contraseña, <a href="{{url('login')}}">Ingresar</a>.
     </div>
 </div>
 @endsection

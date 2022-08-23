@@ -47,6 +47,13 @@ class FirmaController extends Controller
             return response()->json(['message'=>"No se encontro el archivo (FILESYSTEM)!"], 500);
         }
 
+        $reniec_id = config('app.reniec_id');
+        $reniec_secret = config('app.reniec_secret');
+
+        if ($reniec_id == '' | $reniec_secret == '') {
+            return response()->json(['message'=>"No se encontraron las claves reniec!"], 500);
+        }
+
         $recursos = new Recursos;
         $ubicacion = $recursos->obtener_pagina($archivo, $request->num_pagina, $request->exacto, $request->pos_pagina, $request->apariencia);
         
@@ -55,8 +62,8 @@ class FirmaController extends Controller
             "fileUploadUrl":"'.url('json/firma/'.$archivo->id).'/cargar",
             "reason":"'.$request->motivo.'",
             "type":"W",
-            "clientId":"'.config('app.reniec_id').'",
-            "clientSecret":"'.config('app.reniec_secret').'",
+            "clientId":"'.$reniec_id.'",
+            "clientSecret":"'.$reniec_secret.'",
             "dcfilter":".*FIR.*|.*FAU.*",
             "fileDownloadUrl":"'.url('json/firma/'.$archivo->codigo).'/descargar",
             "fileDownloadLogoUrl":"",

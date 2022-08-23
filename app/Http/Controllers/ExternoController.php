@@ -38,15 +38,17 @@ class ExternoController extends Controller
         $user = Auth::user();
         $tramites = Tramite::with(['primero_documento.documento_tipo','procedimiento'])->where('o_user_id',$user->id)->orderBy('id','desc')->paginate(50);
         return view('admin.externo.index',compact('tramites'));
-
     }
 
     public function ingresar()
-    { 
+    {         
+        $mesa_partes = Dependencia::with('sede')->find($this->mesa_partes);
+        if($mesa_partes == null) {
+            return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "Error", 'mensaje' => "La mesa de partes no esta configurada.", 'accion' => "admin" )]); 
+        }
         //0:presencial, 1:virtual //0:interno, 1:universitario, 2:externo
         $procedimientos = Procedimiento::where('tipo', 2)->where('presentar_modalidad', 1)->where('estado', 1)->has('pasos')->get();
         $documento_tipos = Documento_tipo::where('estado', 1)->get();
-        $mesa_partes = Dependencia::with('sede')->find($this->mesa_partes);
         return view('admin.externo.ingresar', compact('procedimientos','documento_tipos','mesa_partes'));
     }
 

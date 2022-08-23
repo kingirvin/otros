@@ -5,7 +5,12 @@
 @section('contenido')
     @php
         if(isset($datos))
-            $color = ($datos["tipo"] == 1 ? "info" : "danger");
+            if($datos["tipo"] == 1)
+                $color = "info";
+            elseif ($datos["tipo"] == 2) 
+                $color = "success";            
+            else
+                $color = "danger"; 
         else 
             $color = "dark";        
     @endphp
@@ -22,14 +27,19 @@
                         {{ isset($datos) ? $datos["titulo"] : "Mensaje" }}
                     </h3>
                     <p class="text-muted mb-4">
-                        {{ isset($datos) ? $datos["mensaje"] : "No definido" }}
+                        {!! isset($datos) ? $datos["mensaje"] : "No definido" !!}
                     </p>
                 </div>
             </div>
             <div class="text-center">
                 @isset($datos)
-                    @if($datos["accion"] == "home")
+                    @if($datos["accion"] == "admin")
                     <a href="{{ url('/admin') }}" class="btn btn-{{$color}}">                
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="5" y1="12" x2="19" y2="12"></line><line x1="5" y1="12" x2="11" y2="18"></line><line x1="5" y1="12" x2="11" y2="6"></line></svg>
+                        Ir al inicio
+                    </a>
+                    @elseif($datos["accion"] == "home")
+                    <a href="{{ url('/') }}" class="btn btn-{{$color}}">                
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="5" y1="12" x2="19" y2="12"></line><line x1="5" y1="12" x2="11" y2="18"></line><line x1="5" y1="12" x2="11" y2="6"></line></svg>
                         Ir al inicio
                     </a>
