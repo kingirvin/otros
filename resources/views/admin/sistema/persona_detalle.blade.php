@@ -90,6 +90,12 @@
                             <dt>Fecha de nacimiento</dt>
                             <dd>{{$persona->nacimiento->format('d/m/Y')}}</dd>
                             @endif
+                            <dt>Registro</dt>
+                            @if($persona->registro == 1)
+                            <dd class="text-green">INTERNO</dd>                   
+                            @else  
+                            <dd class="text-yellow">EXTERNO</dd>    
+                            @endif     
                         </dl>
                     </div>
                 </div>

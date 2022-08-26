@@ -38,7 +38,7 @@ class PersonaController extends Controller
             return response()->json(['message'=>$validator->errors()], 500);
         }
 
-        $result = Persona::where('estado', 1)
+        $result = Persona::where('estado', 1)->where('registro', 1)//0:externo, 1:interno
         ->where(function ($query) use ($request) {
             $query->where('nro_documento','like', '%'.$request->input('term').'%')
                 ->orWhere('nombre','like', '%'.$request->input('term').'%')
@@ -86,6 +86,8 @@ class PersonaController extends Controller
         try 
         {
             $input = $request->all(); 
+            $input["registro"] = 1;
+
             $item = Persona::create($input);
 
             if($item)

@@ -16,10 +16,10 @@ $( document ).ready(function() {
         "columns": [    
             { "data": null, "orderable": false, "searchable": false,
                 render: function ( data, type, full ) {              
-                    if(full.tipo == 0)      //0:natural, 1:juridic  
-                        return '<span class="badge bg-blue-lt">NATURAL</span>';
+                    if(full.registro == 1)      //0:externo, 1:interno
+                        return '<span class="badge bg-blue-lt">INTERNO</span>';
                     else
-                        return '<span class="badge bg-purple-lt">JURÍDICA</span>';
+                        return '<span class="badge bg-purple-lt">EXTERNO</span>';
                 }        
             },        
             { "data": "nro_documento" , className: "w-1",
@@ -120,6 +120,7 @@ function nuevo()
     limpiar('#form_editar');
     vaciar('#form_editar');
     $('#estado').prop('checked', true);
+    $('#control_interno').addClass('oculto');
     $("#editar").modal("show");
 }
 
@@ -144,6 +145,8 @@ function modificar(iditem)
         $("#direccion").val(safeText(objitem.direccion));
         $("#nacimiento").val(dis_fecha(objitem.nacimiento));      
         $('#estado').prop('checked', (objitem.estado == 1));
+        $('#control_interno').removeClass('oculto');
+        $('#interno').prop('checked', (objitem.registro == 1));//0:externo, 1:interno
         $("#titulo_editar").html("Modificar registro"); 
         $("#editar").modal("show");
     }
@@ -174,7 +177,7 @@ function guardar()
                     telefono: $("#telefono").val(),
                     direccion: $("#direccion").val(),       
                     nacimiento: db_fecha($("#nacimiento").val()),             
-                    estado: ($("#estado").is(':checked') ? 1 : 0 )
+                    estado: ($("#estado").is(':checked') ? 1 : 0 )                    
                 },
                 success: function(result){  
                     alerta(result.message, true); 
@@ -200,7 +203,8 @@ function guardar()
                     telefono: $("#telefono").val(),
                     direccion: $("#direccion").val(),       
                     nacimiento: db_fecha($("#nacimiento").val()),             
-                    estado: ($("#estado").is(':checked') ? 1 : 0 )
+                    estado: ($("#estado").is(':checked') ? 1 : 0 ),
+                    registro: ($("#interno").is(':checked') ? 1 : 0 )//0:externo, 1:interno
                 },
                 success: function(result){  
                     alerta(result.message, true); 

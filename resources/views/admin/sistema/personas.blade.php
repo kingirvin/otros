@@ -43,7 +43,7 @@
                         <table id="t_persona" class="table card-table table-vcenter text-nowrap datatable" width="100%">
                             <thead>
                                 <tr>
-                                    <th>TIPO</th>                                      
+                                    <th>REGISTRO</th>                                      
                                     <th>DOCUMENTO</th>
                                     <th>NOMBRE</th>
                                     <th></th>
@@ -133,6 +133,12 @@
                     <label class="form-check form-switch mb-0">
                         <input id="estado" class="form-check-input" type="checkbox" checked="">
                         <span class="form-check-label">Estado</span>
+                    </label>
+                </div>
+                <div id="control_interno">
+                    <label class="form-check form-switch mb-0">
+                        <input id="interno" class="form-check-input" type="checkbox" checked="">
+                        <span class="form-check-label">Interno</span>
                     </label>
                 </div>
                 <button type="button" class="btn btn-link link-secondary ms-auto" data-bs-dismiss="modal">Cancelar</button>

@@ -34,7 +34,7 @@ class UsuarioController extends Controller
             return response()->json(['message'=>$validator->errors()], 500);
         }
 
-        $result = User::where('estado', 1)
+        $result = User::where('estado', 1)->where('tipo', 1)//1:interno, 0:externo
         ->where(function ($query) use ($request) {
             $query->where('nro_documento','like', '%'.$request->input('term').'%')
                 ->orWhere('nombre','like', '%'.$request->input('term').'%')

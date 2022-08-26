@@ -26,6 +26,7 @@ class CreatePersonasTable extends Migration
             $table->string('direccion')->nullable();
             $table->dateTime('nacimiento')->nullable();
             $table->tinyInteger('estado')->default(1);//activo
+            $table->tinyInteger('registro')->default(0);//0:externo, 1:interno
             $table->timestamps();
 
             $table->foreign('identidad_documento_id')->references('id')->on('identidad_documentos');

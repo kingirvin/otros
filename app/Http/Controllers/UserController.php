@@ -337,6 +337,7 @@ class UserController extends Controller
             $persona->correo = $request->email;
             $persona->telefono = $request->telefono;
             $persona->direccion = $request->direccion;
+            $persona->registro = 0;//0:externo, 1:interno
 
             if(!$persona->save()) {
                 return redirect('register')->withErrors(["Ocurrio un error durante el registro."]);
