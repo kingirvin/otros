@@ -54,6 +54,10 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
+        'public_upload' => [
+            'driver' => 'local',
+            'root'   => public_path(),
+        ],
         'partitionD' => [
             'driver' => 'local',
             'root'   => 'D:/unamad_files'

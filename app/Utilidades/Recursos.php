@@ -176,6 +176,53 @@ class Recursos
         return $resultado;        
     }
 
+    //incrustar_codigo_certificado
+    public function incrustar_codigo_certificado($archivo)
+    {
+        $ahora = Carbon::now();     
+        $link = "sgd.unamad.edu.pe/contancias";  
+        $texto = utf8_decode("Revise su autenticidad en $link o escaneado el código QR.");                
+        $resultado = false;      
+        //si existe el archivo
+        if(Storage::disk($this->disco)->exists($archivo->ruta))
+        {
+            $ruta = Storage::disk($this->disco)->path($archivo->ruta);
+            $pdf = new Fpdi();
+            $paginas = $pdf->setSourceFile($ruta);            
+            //insertamos codigo de verficiacion
+            for ($i = 1; $i <= $paginas; $i++) {         
+                $tpl = $pdf->importPage($i);//primera pagina
+                $size = $pdf->getTemplateSize($tpl);//obtenemos las dimenciones de la pagina
+                $pdf->addPage();//agrega pagina en blanco
+                $pdf->useTemplate($tpl, 1, 1, null, null, true);//usa como template la pagina del pdf cargado
+                $pdf->SetAutoPageBreak(false);
+                //solo la primera pagina
+                if($i == 1){
+                    //colocamos el qr
+                    $pdf->SetY(0);
+                    $pdf->Image(public_path().'/img/qrcodes/qrcode_const.png', 16, ($size['height'] - 47), 25, 25, 'png');
+                    //colocamos el texto
+                    $pdf->SetLeftMargin(7);
+                    $pdf->SetY(-20);
+                    $pdf->SetTextColor(0);  
+                    $pdf->SetFont('Arial','',8);
+                    $pdf->SetFillColor(255);
+                    $pdf->MultiCell(41.5,3,$texto,0,'J',true);
+                    $pdf->Ln(1.5);
+                    $pdf->SetFont('Arial','',8);
+                    $pdf->Cell(13.5,3,utf8_decode('CÓDIGO: '),0,0,'L',true);
+                    $pdf->SetFont('Arial','B',8);
+                    $pdf->Cell(28,3, 'C-'.$archivo->codigo,0,0,'L',true); 
+                }
+            }                 
+            
+            $pdf->Output("F", $ruta);
+            $resultado = true;
+        } 
+
+        return $resultado; 
+    }
+
     /**
      * OBTENER DATOS DE PAGINAS Y MINITURAS
      */
@@ -288,9 +335,7 @@ class Recursos
         $factor = 0.352777778;
         return round($mm / $factor);
     }
-
-
-
+  
 
 
     /*

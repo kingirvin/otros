@@ -24,9 +24,7 @@ return [
     'reniec_id' => env('RENIEC_CLIENT_ID',''),
     'reniec_secret' => env('RENIEC_CLIENT_SECRET',''),
     'ghostscript_path' => env('GHOSTSCRIPT_PATH',''),
-
-
-
+    '7zip_path' => env('7ZIP_PATH',''),
 
     /*
     |--------------------------------------------------------------------------

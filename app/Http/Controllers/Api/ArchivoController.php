@@ -346,7 +346,7 @@ class ArchivoController extends Controller
     protected function obtener_codigo_unico()//asegurar que codigo pcm es unico
     {
         $nuevo_codigo = $this->recursos->codigo_cvd();
-        $existe = Archivo::where('codigo', $nuevo_codigo)->count();
+        $existe = Archivo::where('cvd', $nuevo_codigo)->count();
         if($existe > 0){
             return $this->obtener_codigo_unico();
         } else {

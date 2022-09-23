@@ -98,6 +98,32 @@
                 </div>
             </div>
             @endif  
+
+            <!--CERTIFICADOS  DE PARTICIPACION-->
+            @if(isset($modulos['CERTIFICADO']))
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <span class="bg-pink-lt avatar">
+	                                <svg xmlns="http://www.w3.org/2000/svg" class="icon avatar-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="15" cy="15" r="3" /><path d="M13 17.5v4.5l2 -1.5l2 1.5v-4.5" /><path d="M10 19h-5a2 2 0 0 1 -2 -2v-10c0 -1.1 .9 -2 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -1 1.73" /><line x1="6" y1="9" x2="18" y2="9" /><line x1="6" y1="12" x2="9" y2="12" /><line x1="6" y1="15" x2="8" y2="15" /></svg>
+                                </span>
+                            </div>
+                            <div class="col">
+                                <h4 class="mb-0">CERTIFICADOS</h4>
+                                <div class="text-muted">
+                                    Administración y publicación de certificados de participación.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ url('admin/certificado') }}" class="btn btn-success">Ingresar</a>
+                    </div>
+                </div>
+            </div>
+            @endif  
         </div>
     </div>
 </div>

@@ -121,6 +121,20 @@
                   </li> 
                   @endif
 
+                  <!-- Cetificados participacion -->
+                  @if(request()->is('admin/certificado*'))
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url('admin/certificado') }}">
+                      <span class="nav-link-icon d-md-none d-lg-inline-block">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="15" cy="15" r="3" /><path d="M13 17.5v4.5l2 -1.5l2 1.5v-4.5" /><path d="M10 19h-5a2 2 0 0 1 -2 -2v-10c0 -1.1 .9 -2 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -1 1.73" /><line x1="6" y1="9" x2="18" y2="9" /><line x1="6" y1="12" x2="9" y2="12" /><line x1="6" y1="15" x2="8" y2="15" /></svg>
+                      </span>
+                      <span class="nav-link-title">
+                        Certificados
+                      </span>
+                    </a>
+                  </li> 
+                  @endif
+
                   <!-- ... -->
 
                 </ul>
@@ -328,6 +342,38 @@
 
                   @endif 
                   <!-- END Ventanilla virtual -->
+
+                  <!-- Gestión de certificados -->
+                  @if(request()->is('admin/certificado*') && array_key_exists('CERTIFICADO', $modulos))
+
+                    @if(in_array('CERTADMIN', $modulos['CERTIFICADO']))
+                    <li class="nav-item {{ (request()->is('admin/certificado/administrar*')) ? 'active' : '' }}">
+                      <a class="nav-link" href="{{ url('admin/certificado/administrar') }}">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><rect x="9" y="3" width="6" height="4" rx="2" /><line x1="9" y1="12" x2="9.01" y2="12" /><line x1="13" y1="12" x2="15" y2="12" /><line x1="9" y1="16" x2="9.01" y2="16" /><line x1="13" y1="16" x2="15" y2="16" /></svg>
+                        </span>
+                        <span class="nav-link-title">
+                          Administrar
+                        </span>
+                      </a>
+                    </li>
+                    @endif 
+
+                    @if(in_array('CERTPUBLISH', $modulos['CERTIFICADO']))
+                    <li class="nav-item {{ (request()->is('admin/certificado/publicar*')) ? 'active' : '' }}">
+                      <a class="nav-link" href="{{ url('admin/certificado/publicar') }}">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">                          
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 8v-3a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2h-5" /><circle cx="6" cy="14" r="3" /><path d="M4.5 17l-1.5 5l3 -1.5l3 1.5l-1.5 -5" /></svg>
+                        </span>
+                        <span class="nav-link-title">
+                          Publicar
+                        </span>
+                      </a>
+                    </li>
+                    @endif
+
+                  @endif 
+                  <!-- END Gestión de certificados -->
 
                   <!-- ... -->
 

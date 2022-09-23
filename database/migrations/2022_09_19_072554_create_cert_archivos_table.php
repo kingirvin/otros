@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArchivosTable extends Migration
+class CreateCertArchivosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateArchivosTable extends Migration
      */
     public function up()
     {
-        Schema::create('archivos', function (Blueprint $table) {
+        Schema::create('cert_archivos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('dependencia_id')->nullable();
+            $table->unsignedBigInteger('cert_repositorio_id')->nullable();            
+            $table->unsignedBigInteger('cert_carpeta_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('carpeta_id')->nullable();
             $table->string('codigo', 20)->nullable();//alpha
             $table->string('cvd', 20)->nullable();//CVD
             $table->string('nombre');//mi_archivo.pdf
@@ -29,13 +29,12 @@ class CreateArchivosTable extends Migration
             $table->longText('informacion')->nullable();
             $table->tinyInteger('para_firma')->default(0);//0:simple, 1:pdf_adecuado
             $table->tinyInteger('estado');//0:inicial 1:incrustado 2:firmado
-            $table->tinyInteger('publico');//0:no 1:si
-            $table->tinyInteger('lock')->default(0);//1:bloqueado
+            $table->tinyInteger('publico')->default(0);//0:no 1:si
             $table->timestamps();
 
-            $table->foreign('dependencia_id')->references('id')->on('dependencias');
+            $table->foreign('cert_repositorio_id')->references('id')->on('cert_repositorios');            
+            $table->foreign('cert_carpeta_id')->references('id')->on('cert_carpetas');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('carpeta_id')->references('id')->on('carpetas');
         });
     }
 
@@ -46,6 +45,6 @@ class CreateArchivosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('archivos');
+        Schema::dropIfExists('cert_archivos');
     }
 }

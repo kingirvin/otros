@@ -43,9 +43,14 @@ Route::get('/status', function () {
     return  view('paginas.status');
 });
 
-
 Route::get('/validar', function () {
-    return redirect('admin/externo/validar');
+    return redirect('consultas/firmas');
+});
+
+Route::prefix('consultas')->group(function () {
+    Route::get('/', [App\Http\Controllers\ConsultaController::class, 'index']);
+    Route::get('firmas', [App\Http\Controllers\ConsultaController::class, 'firmas']);
+    Route::post('firmas/validar', [App\Http\Controllers\ConsultaController::class, 'firmas_post']);  
 });
 
 
@@ -96,6 +101,15 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('externo/validar', [App\Http\Controllers\ExternoController::class, 'validar'])->middleware('submodulo:VALIDAR');  
     Route::post('externo/validar', [App\Http\Controllers\ExternoController::class, 'validar_post'])->middleware('submodulo:VALIDAR');  
     
+    //CERTIFICADOS
+    Route::get('certificado', [App\Http\Controllers\CertificadoController::class, 'index'])->middleware('modulo:CERTIFICADO');
+    Route::get('certificado/administrar', [App\Http\Controllers\CertificadoController::class, 'administrar'])->middleware('submodulo:CERTADMIN');
+    Route::get('certificado/publicar', [App\Http\Controllers\CertificadoController::class, 'publicar'])->middleware('submodulo:CERTPUBLISH');
+    Route::get('certificado/archivos/stream/{codigo}', [App\Http\Controllers\CertificadoController::class, 'vista_previa'])->middleware('submodulo:CERTPUBLISH');
+    Route::get('certificado/firma', [App\Http\Controllers\CertificadoController::class, 'firma'])->middleware('submodulo:CERTPUBLISH');
+
+    
+
 
     //DE USO GENERAL
     Route::get('archivos/stream/{codigo}', [App\Http\Controllers\TramiteController::class, 'vista_previa']);
@@ -241,5 +255,27 @@ Route::prefix('json')->group(function () {
     Route::put('asignaciones/{id}', [App\Http\Controllers\Api\AsignacionController::class, 'modificar'])->middleware('submoduloapi:ENVREC');
     Route::put('asignaciones/{id}/estado', [App\Http\Controllers\Api\AsignacionController::class, 'estado'])->middleware('submoduloapi:ENVREC');  
     Route::delete('asignaciones/{id}', [App\Http\Controllers\Api\AsignacionController::class, 'eliminar'])->middleware('submoduloapi:ENVREC');
+
+    //REPOSITORIOS DE CERTIFICADOS
+    Route::get('repositorios', [App\Http\Controllers\Api\CertRepositorioController::class, 'listar'])->middleware('submoduloapi:CERTADMIN');    
+    Route::post('repositorios', [App\Http\Controllers\Api\CertRepositorioController::class, 'nuevo'])->middleware('submoduloapi:CERTADMIN');  
+    Route::put('repositorios/{id}', [App\Http\Controllers\Api\CertRepositorioController::class, 'modificar'])->middleware('submoduloapi:CERTADMIN'); 
+    Route::delete('repositorios/{id}', [App\Http\Controllers\Api\CertRepositorioController::class, 'eliminar'])->middleware('submoduloapi:CERTADMIN');
+
+    Route::get('repositorios/{id}/responsables', [App\Http\Controllers\Api\CertResponsableController::class, 'listar'])->middleware('submoduloapi:CERTADMIN');    
+    Route::post('repositorios/responsables', [App\Http\Controllers\Api\CertResponsableController::class, 'nuevo'])->middleware('submoduloapi:CERTADMIN');  
+    Route::delete('repositorios/responsables/eliminar', [App\Http\Controllers\Api\CertResponsableController::class, 'eliminar'])->middleware('submoduloapi:CERTADMIN');
+
+    Route::get('repositorios/archivos/todos', [App\Http\Controllers\Api\CertArchivoController::class, 'listar_todo']);
+    Route::post('repositorios/archivos',  [App\Http\Controllers\Api\CertArchivoController::class, 'nuevo'])->middleware('submoduloapi:CERTPUBLISH');
+    Route::post('repositorios/archivos/mover',  [App\Http\Controllers\Api\CertArchivoController::class, 'mover'])->middleware('submoduloapi:CERTPUBLISH');
+    Route::delete('repositorios/archivos/{id}',  [App\Http\Controllers\Api\CertArchivoController::class, 'eliminar'])->middleware('submoduloapi:CERTPUBLISH');
+
+    Route::get('repositorios/carpetas', [App\Http\Controllers\Api\CertCarpetaController::class, 'listar']);
+    Route::post('repositorios/carpetas',  [App\Http\Controllers\Api\CertCarpetaController::class, 'nuevo'])->middleware('submoduloapi:CERTPUBLISH');
+    Route::post('repositorios/carpetas/mover',  [App\Http\Controllers\Api\CertCarpetaController::class, 'mover'])->middleware('submoduloapi:CERTPUBLISH');
+    Route::put('repositorios/carpetas/{id}', [App\Http\Controllers\Api\CertCarpetaController::class, 'modificar'])->middleware('submoduloapi:CERTPUBLISH'); 
+    Route::delete('repositorios/carpetas/{id}', [App\Http\Controllers\Api\CertCarpetaController::class, 'eliminar'])->middleware('submoduloapi:CERTPUBLISH');
+
 
 });
