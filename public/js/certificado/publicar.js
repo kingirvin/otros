@@ -145,7 +145,7 @@ function render() {
         contenido_tabla += 
         '<tr>'+
             '<td>'+
-                '<input class="form-check-input archivo_select my-0 mx-2" type="checkbox" data-id="'+archivos[i].id+'">'+
+                '<input class="form-check-input archivo_select my-0 ms-2 me-1" type="checkbox" data-id="'+archivos[i].id+'">'+
             '</td>'+
             '<td>'+
                 '<div class="d-flex align-items-center">'+
@@ -551,6 +551,8 @@ function mover_archivo(ida) {
 function eliminar_archivo(ida) {
     if(confirm("Esta seguro que desea eliminar?"))
     {
+        $("#cargando_pagina").show();
+
         $.ajax({
             type: "DELETE",
             url: default_server+"/json/repositorios/archivos/"+ida,
@@ -596,133 +598,32 @@ function firmar_seleccionado() {
 }
 
 
-
-
-function firmar_archivo() {
-    archivo_accion = ida;//archivo a firma   
-    $("#firmar").modal("show");
-}
-
-function firma_avanzada() {   
-    var elemento = elementId(archivo_accion, archivos);
-    if(elemento != null)    
-        location.href = default_server+'/admin/tramite/archivos/'+elemento.codigo+'/firma';    
-    else
-        alert("No se pudo encontrar el elemento");  
-}
-
-function enviar_firma() {
-    var elemento = elementId(archivo_accion, archivos);
-    if(elemento != null) {
-
-        datos_firma = {
-            archivo_id: elemento.id,
-            num_pagina: $("#num_pagina").val(),
-            motivo: $("#motivo").val(),
-            exacto: 0,//posicion relativa
-            pos_pagina: $("input[name='f_posicion']:checked").val(),
-            apariencia: $("#apariencia").val()
-        };
-    
-        confirmar_firma();
-    }      
-    else
-        alert("No se pudo encontrar el elemento");    
-}
-
-function accion_firma() {
-    navegar(); 
-}
-
-/**
- * CAMBIOS
- */
-
-function ver_cambios(ida) {
-    archivo_accion = ida;
-
-    var elemento = elementId(archivo_accion, archivos);
-    if(elemento != null) {
-        $("#version_actual").html(elemento.nombre);
-        $("#datos_actual").html('<span class="text-muted">'+dis_fecha_hora(elemento.updated_at)+'</span> &#183; '+get_estado(elemento));
-        cargar_cambios(ida);
-        $("#versiones").modal("show");
-    }   
-    else
-        alert("No se pudo encontrar el elemento");    
-}
-
-function cargar_cambios(ida) {
-    $("#cargando_cambios").show();
-    $("#lista_cambios").html(''); 
-
-    $.ajax({
-        type: "GET",
-        url: default_server+"/json/versiones/"+ida,
-        success: function(result){  
-            var datos = result.versiones; 
-            if(datos.length > 0)
-            { 
-                for (let i = 0; i < datos.length; i++) {
-                    $("#lista_cambios").append(
-                        '<div class="list-group-item">'+
-                            '<div class="row align-items-center">'+                                
-                                '<div class="col text-truncate">'+
-                                    '<a href="'+default_server+'/archivo/version/'+datos[i].id+'" target="_blank">'+dis_fecha_hora(datos[i].created_at)+'</a>'+
-                                    '<div class="mt-n1">'+get_estado(datos[i])+'</div>'+
-                                '</div>'+
-                                '<div class="col-auto">'+
-                                    '<button onclick="revertir('+ida+','+datos[i].id+');" class="btn btn-danger btn-icon" title="REVERTIR">'+
-                                        '<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="12 8 12 12 14 14" /><path d="M3.05 11a9 9 0 1 1 .5 4m-.5 5v-5h5" /></svg>'+
-                                    '</button>'+
-                                '</div>'+
-                            '</div>'+
-                        '</div>'
-                    );
-                } 
+function publicar_seleccionado() {
+    var selecionados = obtener_seleccionados();
+    if(selecionados.length > 0){
+        if(confirm("Esta seguro que desea publicar los archivos seleccionados?\nUna ves publicados no podrá modificarlos")){
+            var select = [];
+            for (let i = 0; i < selecionados.length; i++) {
+                select.push(selecionados[i].id);           
             }
-            else
-            {
-                $("#lista_cambios").append(
-                    '<div class="list-group-item">'+
-                        '<div class="row align-items-center">'+
-                            'Sin registros'+
-                        '</div>'+
-                    '</div>'
-                );
-            }          
-        },
-        error: function(error) {                
-            alerta(response_helper(error), false);
-        },
-        complete: function() {                
-            $("#cargando_cambios").hide();
+
+            $("#cargando_pagina").show();
+
+            $.ajax({
+                type: "POST",
+                url: default_server+"/json/repositorios/archivos/publicar",
+                data: { lista_archivos: select },
+                success: function(result){  
+                    alerta(result.message, true);   
+                    navegar(); 
+                },
+                error: function(error) {      
+                    $("#cargando_pagina").hide();              
+                    alerta(response_helper(error), false);
+                }
+            });  
         }
-    });
-    
-}
-
-function revertir(ida, idv) {
-    if(confirm("Esta seguro que desea volver a una versión anterior?\nEste cambio NO SE PODRA REVERTIR"))
-    {
-        $('#versiones').modal("hide");
-        $("#cargando_pagina").show();
-        
-        $.ajax({
-            type: "POST",
-            url: default_server+"/json/versiones/restaurar",
-            data: {                    
-                archivo_id: ida,
-                version_id: idv
-            },
-            success: function(result){  
-                alerta(result.message, true);   
-                navegar(); 
-            },
-            error: function(error) {      
-                $("#cargando_pagina").hide();              
-                alerta(response_helper(error), false);
-            }
-        });        
+    } else {
+        alerta("Seleccione por lo menos un archivo",false);
     }
 }

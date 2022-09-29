@@ -270,6 +270,10 @@ Route::prefix('json')->group(function () {
     Route::post('repositorios/archivos',  [App\Http\Controllers\Api\CertArchivoController::class, 'nuevo'])->middleware('submoduloapi:CERTPUBLISH');
     Route::post('repositorios/archivos/mover',  [App\Http\Controllers\Api\CertArchivoController::class, 'mover'])->middleware('submoduloapi:CERTPUBLISH');
     Route::delete('repositorios/archivos/{id}',  [App\Http\Controllers\Api\CertArchivoController::class, 'eliminar'])->middleware('submoduloapi:CERTPUBLISH');
+    Route::post('repositorios/archivos/publicar',  [App\Http\Controllers\Api\CertArchivoController::class, 'publicar'])->middleware('submoduloapi:CERTPUBLISH');
+    
+    Route::get('repositorios/archivos/firma/argumentos',  [App\Http\Controllers\Api\CertFirmaController::class, 'obtener_argumentos']);
+    Route::post('repositorios/archivos/firma/cargar',  [App\Http\Controllers\Api\CertFirmaController::class, 'cargar_firmado']);
 
     Route::get('repositorios/carpetas', [App\Http\Controllers\Api\CertCarpetaController::class, 'listar']);
     Route::post('repositorios/carpetas',  [App\Http\Controllers\Api\CertCarpetaController::class, 'nuevo'])->middleware('submoduloapi:CERTPUBLISH');

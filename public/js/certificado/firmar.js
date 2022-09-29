@@ -76,9 +76,8 @@ function enviar() {
 
         datos_firma = {
             archivo_id: elArchivo,
-            num_pagina: 0,
+            zip_name: elZip,
             motivo: $("#motivo").val(),
-            exacto: 1,//posicion exacta
             pos_pagina: (position.top / factor_mult)+'-'+(position.left / factor_mult),
             apariencia: $("#apariencia").val()
         };
@@ -87,9 +86,51 @@ function enviar() {
     }
 }
 
-function accion_firma() {
-    location.href = default_server+'/admin/tramite/archivos';
+window.addEventListener('getArguments', function (e) {								
+    type = e.detail;
+    obtenerArgumentos();
+});
+
+function obtenerArgumentos() {    
+    $.ajax({
+        type: "GET",
+        url: default_server+"/json/repositorios/archivos/firma/argumentos",
+        data: {
+            primero_id: datos_firma.archivo_id,          
+            zip_name: datos_firma.zip_name,
+            motivo: datos_firma.motivo,
+            apariencia: datos_firma.apariencia,
+            pos_pagina: datos_firma.pos_pagina
+         },
+        success: function(result){  
+            document.getElementById("argumentos").value = result;
+			getArguments();
+        },
+        error: function(error) {                
+            alerta(response_helper(error), false);                
+        },
+        complete: function() {              
+        }
+    });
 }
+
+function getArguments(){	
+    arg = document.getElementById("argumentos").value;				
+    dispatchEventClient('sendArguments', arg);																
+}
+
+
+window.addEventListener('invokerOk', function (e) { 
+    type = e.detail;       
+    alerta("Documento firmado correctamente.", true);
+    //funcion por defecto
+    location.href = default_server+'/admin/certificado/publicar';
+});
+
+//si se cancelo la firma
+window.addEventListener('invokerCancel', function (e) {    
+    alerta("El proceso de firma digital fue cancelado.", false);
+});
 
 
 /*

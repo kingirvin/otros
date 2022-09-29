@@ -159,9 +159,9 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-8 form-group form-required mb-3">
+                    <div class="col-md-8 form-group mb-3">
                         <label class="form-label">Remitente</label>
-                        <input id="remitente" type="text" class="form-control mayuscula" placeholder="">
+                        <input id="remitente" type="text" class="form-control mayuscula" placeholder="" readonly>
                     </div>
                     <div class="col-md-4 form-group form-required mb-3">
                         <label class="form-label">Folios</label>

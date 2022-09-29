@@ -22,7 +22,7 @@ class Compresor
         $this->zip_path = $new_ruta;
     }
 
-    public function setDesyino($ruta)
+    public function setDestino($ruta)
     {
         $this->directory_path = $ruta;
     }
@@ -51,7 +51,7 @@ class Compresor
 
     public function descomprimir()
     {
-        $comando = '"'.$this->exe_path.'" e "'.$this->zip_path.'" -o"'.$this->directory_path.'"';
+        $comando = '"'.$this->exe_path.'" e "'.$this->zip_path.'" -o"'.$this->directory_path.'"*';
         $output = null;
         $result = null;
         exec($comando, $output, $result);

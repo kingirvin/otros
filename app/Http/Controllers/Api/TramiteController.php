@@ -195,7 +195,7 @@ class TramiteController extends Controller
         $validator = Validator::make($request->all(), [            
             'documento_tipo_id' => 'required', 
             'numero' => 'required', 
-            'remitente' => 'required', 
+            //'remitente' => 'required', 
             'folios' => 'required', 
             'asunto' => 'required'
         ]);
@@ -214,13 +214,14 @@ class TramiteController extends Controller
                 if($documento->user_id == $user->id)
                 {
                     //el documento tiene movimientos que ya esten recibidos
-                    $movimientos_count = Movimiento::where('documento_id', $documento->id)->where('estado','>',0)->count();
+                    //0:anulado, 1:por recepcionar, 2:recepcionado, 3:derivado/referido, 4:atendido, 5:observado            
+                    $movimientos_count = Movimiento::where('documento_id', $documento->id)->where('estado','>',1)->count();
 
                     if($movimientos_count == 0)
                     {
                         $documento->documento_tipo_id = $request->documento_tipo_id;
                         $documento->numero = $request->numero;
-                        $documento->remitente = $request->remitente;
+                        //$documento->remitente = $request->remitente;
                         $documento->folios = $request->folios;
                         $documento->asunto = $request->asunto;
                         $documento->observaciones = $request->observaciones;

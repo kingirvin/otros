@@ -64,13 +64,13 @@
                 </div>
             </div>
             <div class="col-md-2">
-                <button type="button" class="btn btn-primary w-100" onclick="firmar_seleccionado();">
+                <button type="button" class="btn btn-primary w-100 mb-3" onclick="firmar_seleccionado();">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 17c3.333 -3.333 5 -6 5 -8c0 -3 -1 -3 -2 -3s-2.032 1.085 -2 3c.034 2.048 1.658 4.877 2.5 6c1.5 2 2.5 2.5 3.5 1l2 -3c.333 2.667 1.333 4 3 4c.53 0 2.639 -2 3 -2c.517 0 1.517 .667 3 2" /></svg>
                     FIRMAR
                 </button>
             </div>
             <div class="col-md-2">
-                <button type="button" class="btn btn-purple w-100" onclick="publicar_seleccionado();">
+                <button type="button" class="btn btn-purple w-100 mb-3" onclick="publicar_seleccionado();">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 8v-2a2 2 0 0 1 2 -2h2" /><path d="M4 16v2a2 2 0 0 0 2 2h2" /><path d="M16 4h2a2 2 0 0 1 2 2v2" /><path d="M16 20h2a2 2 0 0 0 2 -2v-2" /><rect x="8" y="11" width="8" height="5" rx="1" /><path d="M10 11v-2a2 2 0 1 1 4 0v2" /></svg>
                     PUBLICAR
                 </button>
@@ -103,9 +103,7 @@
                             <thead>
                                 <tr>
                                     <th class="w-1">
-                                        <a href="javascript:void(0);" onclick="limpiar_checks();" class="text-danger my-0 mx-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 4h10a2 2 0 0 1 2 2v10m-.584 3.412a1.994 1.994 0 0 1 -1.416 .588h-12a2 2 0 0 1 -2 -2v-12c0 -.552 .224 -1.052 .586 -1.414" /><path d="M3 3l18 18" /></svg>
-                                        </a>
+                                        
                                     </th>
                                     <th>NOMBRE</th>
                                     <th>DESCRIPCIÓN</th>
@@ -125,8 +123,8 @@
 
                 <ul class="list-inline">
                     <li class="list-inline-item"><span class="badge bg-yellow"></span> Carpeta</li>
-                    <li class="list-inline-item"><span class="badge"></span> Archivo simple</li>
-                    <li class="list-inline-item"><span class="badge bg-blue"></span> Documento para firma</li>
+                    <li class="list-inline-item"><span class="badge"></span> Archivo error</li>
+                    <li class="list-inline-item"><span class="badge bg-blue"></span> Archivo para firma</li>
                 </ul>
             </div>
         </div>

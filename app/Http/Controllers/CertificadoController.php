@@ -17,7 +17,9 @@ class CertificadoController extends Controller
 {
     public function index()
     { 
-        return view('admin.certificado.index');
+        $user = Auth::user();
+        $repositorios = Cert_repositorio_user::with('repositorio')->where('user_id',$user->id)->get();
+        return view('admin.certificado.index', compact('repositorios'));        
     }
 
     public function administrar(Request $request)

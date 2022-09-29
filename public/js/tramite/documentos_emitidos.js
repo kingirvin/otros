@@ -173,7 +173,7 @@ function guardar_modificar()
             data: {                
                 documento_tipo_id: $("#documento_tipo_id").val(),                
                 numero: $("#numero").val(),                
-                remitente: $("#remitente").val(),
+                //remitente: $("#remitente").val(),
                 folios: $("#folios").val(),
                 asunto: $("#asunto").val(),
                 observaciones: $("#observaciones").val()

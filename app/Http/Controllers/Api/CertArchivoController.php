@@ -242,118 +242,40 @@ class CertArchivoController extends Controller
         catch (\Exception $e) {
             return response()->json(['message'=>$e->getMessage()], 500);
         }
-    }  
+    }
 
-
-    /**
-     * OBTENER ARGUMENTOS PARA REFIRMA PCX
-     */
-    public function obtener_argumentos(Request $request)
+    public function publicar(Request $request)
     {
         $validator = Validator::make($request->all(), [ 
-            'primero_id' => 'required',
-            'zip_name' => 'required',
-            'motivo' => 'required',
-            'pos_pagina' => 'required',
-            'apariencia'=> 'required',
+            'lista_archivos' => 'required'
         ]);
-
         if ($validator->fails()) {
             return response()->json(['message'=>$validator->errors()], 500);
         }
 
-        $archivo = Archivo::find($request->primero_id);
-        $zip_code = str_replace("zip_","",str_replace(".7z","",$request->zip_name));
+        $todos = $request->lista_archivos;
+        //validamos archivos
+        $archivos = Cert_archivo::whereIn('id', $todos)->get();
 
-        if ($archivo == null) {
-            return response()->json(['message'=>"No se encontro el primer archivo!"], 500);
+        if(count($todos) != count($archivos)){
+            return response()->json(['message'=>'No se encontro alguno de los archivos seleccionados en los registros.'], 500);
         }
 
-        if (!file_exists(public_path().'/temp/'.$request->zip_name)) {
-            return response()->json(['message'=>"No se encontro el archivo comprimido!"], 500);
+        foreach ($archivos as $archivo) {
+            if($archivo->estado == 0){
+                return response()->json(['message'=>'Alguno de los archivos seleccionados se encuentra en estado ERROR.'], 500);
+            }
+
+            if($archivo->publico == 1){
+                return response()->json(['message'=>'Alguno de los archivos seleccionados ya han sido publicados.'], 500);
+            }
+        }  
+
+        foreach ($archivos as $archivo) {
+            $archivo->publico = 1;
+            $archivo->save(); 
         }
-       
-        $reniec_id = config('app.reniec_id');
-        $reniec_secret = config('app.reniec_secret');
 
-        if ($reniec_id == '' | $reniec_secret == '') {
-            return response()->json(['message'=>"No se encontraron las claves reniec!"], 500);
-        }
-
-        $recursos = new Recursos;
-        $ubicacion = $recursos->obtener_pagina($archivo, 0, 1, $request->pos_pagina, $request->apariencia);
-        
-        $parametros ='{
-            "app":"pcx",
-            "mode":"lot-p",
-            "clientId":"'.$reniec_id.'",
-            "clientSecret":"'.$reniec_secret.'",
-            "idFile":"archivo_subir",
-            "type":"W",
-            "protocol":"T",
-            "fileDownloadUrl":"'.asset('temp/'.$archivo->zip_name).'",
-            "fileDownloadLogoUrl":"",
-            "fileDownloadStampUrl":"'.asset('img/unamad_firma.png').'",
-            "fileUploadUrl":"'.url('json/repositorios/archivos/firma/'.$zip_code).'/cargar",
-            "contentFile":"'.$archivo->zip_name.'",
-            "reason":"'.$request->motivo.'",
-            "isSignatureVisible":"true",
-            "stampAppearanceId":"'.$request->apariencia.'",
-            "pageNumber":"'.$ubicacion["pagina"].'",
-            "posx":"'.$ubicacion["x"].'",
-            "posy":"'.$ubicacion["y"].'",
-            "fontSize":"7",		
-            "dcfilter":".*FIR.*|.*FAU.*",
-            "signatureLevel":"0",
-            "maxFileSize":"15728640"
-        }';
-
-        //error_log('ENVIO');
-        return base64_encode($parametros);
-        //return $parametros;
+        return response()->json(['message'=>'Registrado correctamente'], 200);
     }
-
-
-    public function cargar_firmado(Request $request, $id)
-    {
-        /*$archivo = Archivo::find($id);
-
-        if(!$archivo)
-        {
-            error_log('No se encontro el archivo');
-            return response()->json(['message'=>'No se encontro el archivo'], 500);
-        }*/
-
-        if(!$request->hasFile('archivo_subir')) {
-            error_log('No se encontro el archivo (FILESYSTEM)');
-            return response()->json(['message'=>'No se encontro el archivo (FILESYSTEM)'], 500);
-        }
-        
-        try 
-        {
-            //cargamos el comprimido
-            $ruta = Storage::disk("public_upload")->putFile('temp', $request->file('archivo_subir'));
-            //desomcprimimos
-            $zip = new Compresor;
-            //$zip->
-           
-           
-           
-            //actualizamos el original
-            $ruta = Storage::disk($this->disco)->putFile('archivos', $request->file('archivo_subir'));
-            $archivo->formato = strtolower($extension);
-            $archivo->size = $size;
-            $archivo->ruta = $ruta;
-            $archivo->nombre_real = basename($ruta);
-            $archivo->estado = 2;//0:inicial 1:incrustado 2:firmado
-            $archivo->save();        
-
-            return response()->json(['archivo'=>$archivo, 'message'=>'Cargado correctamente'], 200);
-        }
-        catch (\Exception $e) {
-            error_log($e->getMessage());
-            return response()->json(['message'=>$e->getMessage()], 500);
-        }
-    }
-
 }
