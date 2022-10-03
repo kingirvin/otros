@@ -43,14 +43,15 @@ Route::get('/status', function () {
     return  view('paginas.status');
 });
 
-Route::get('/validar', function () {
-    return redirect('consultas/firmas');
-});
+Route::get('/validar', function () { return redirect('consultas/firmas'); });
+Route::get('/constancias', function () { return redirect('consultas/constancias'); });
 
 Route::prefix('consultas')->group(function () {
     Route::get('/', [App\Http\Controllers\ConsultaController::class, 'index']);
     Route::get('firmas', [App\Http\Controllers\ConsultaController::class, 'firmas']);
     Route::post('firmas/validar', [App\Http\Controllers\ConsultaController::class, 'firmas_post']);  
+    Route::get('constancias', [App\Http\Controllers\ConsultaController::class, 'constancias']);
+    Route::post('constancias/validar', [App\Http\Controllers\ConsultaController::class, 'constancias_post']);    
 });
 
 

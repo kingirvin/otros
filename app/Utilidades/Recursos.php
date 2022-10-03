@@ -180,7 +180,7 @@ class Recursos
     public function incrustar_codigo_certificado($archivo)
     {
         $ahora = Carbon::now();     
-        $link = "sgd.unamad.edu.pe/contancias";  
+        $link = "sgd.unamad.edu.pe/constancias";  
         $texto = utf8_decode("Revise su autenticidad en $link o escaneado el código QR.");                
         $resultado = false;      
         //si existe el archivo
@@ -207,7 +207,7 @@ class Recursos
                     $pdf->SetTextColor(0);  
                     $pdf->SetFont('Arial','',8);
                     $pdf->SetFillColor(255);
-                    $pdf->MultiCell(41.5,3,$texto,0,'J',true);
+                    $pdf->MultiCell(43,3,$texto,0,'J',true);
                     $pdf->Ln(1.5);
                     $pdf->SetFont('Arial','',8);
                     $pdf->Cell(13.5,3,utf8_decode('CÓDIGO: '),0,0,'L',true);

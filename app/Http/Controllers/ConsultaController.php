@@ -15,6 +15,7 @@ use App\Models\Procedimiento;
 use App\Models\Documento_tipo;
 use App\Models\Dependencia;
 use App\Models\Invitado;
+use App\Models\Cert_archivo;
 use Carbon\Carbon;
 use Validator;
 use stdClass;
@@ -82,6 +83,67 @@ class ConsultaController extends Controller
 
         if($archivo == null) {
             return back()->with('error', 'No se pudo encontrar el archivo en los registros.');  
+        }
+        
+        if($archivo->formato != 'pdf')
+            return back()->with('error', 'El archivo no tiene un formato válido.');   
+
+        $ruta = Storage::disk($this->disco)->path($archivo->ruta);
+
+        if(!file_exists($ruta))
+            return back()->with('error', 'No se pudo encontrar el archivo.');    
+    
+        return response()->file($ruta);
+    }
+
+    public function constancias()
+    {
+        return view('consulta.constancia');
+    }
+
+    public function constancias_post(Request $request)
+    {        
+        //validamos codigo
+        $validator = Validator::make($request->all(), [             
+            'codigo' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return back()->with('error', 'El campo código es requerido.');  
+        }
+
+        if(strlen($request->codigo) != 8){
+            return back()->with('error', 'El campo código debe tener 8 digitos.');  
+        }
+
+        //validamos recaptcha
+        $client = new Client;
+        $response = $client->post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            [
+                'form_params' =>
+                [
+                    'secret' => $this->privado,
+                    'response' => $request->get('g-recaptcha-response')
+                ]
+            ]
+        );
+
+        $body = json_decode((string)$response->getBody());
+
+        if(!$body->success) {
+            return back()->with('error', 'Captcha incorrecto.');    
+        }
+
+        //validamos archivo
+        $archivo = Cert_archivo::where('codigo', $request->codigo)->first();
+
+        if($archivo == null) {
+            return back()->with('error', 'No se pudo encontrar el archivo en los registros.');  
+        }
+        //publico-->0:no 1:si
+        if($archivo->publico != 1) {
+            return back()->with('error', 'No se pudo encontrar el archivo en los registros [Publicado].');  
         }
         
         if($archivo->formato != 'pdf')
