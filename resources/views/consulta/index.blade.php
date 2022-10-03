@@ -13,7 +13,7 @@
     </div>
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <div class="card">
+            <div class="card mb-3">
                 <div class="card-body p-4">
                     <div class="d-flex flex-column align-items-center text-center">
                         <div class="pb-4 pt-2">
@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card">
+            <div class="card mb-3">
                 <div class="card-body p-4">
                     <div class="d-flex flex-column align-items-center text-center">
                         <div class="pb-4 pt-2">

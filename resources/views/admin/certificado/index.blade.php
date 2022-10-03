@@ -117,7 +117,7 @@
                     @else
                     <div class="card-body">
                         <div class="alert alert-important" role="alert">
-                            No tienes asignado una dependencia, ponte en contacto con el administrador del sistema.
+                            No tienes asignado un repositorio, ponte en contacto con el administrador del sistema.
                         </div>
                     </div>
                     @endif 
