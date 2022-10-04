@@ -1,5 +1,5 @@
 const decimal_places = 2;
-const size_maximo = 15728640;//15 MB
+const size_maximo = 26214400;//15 MB
 var default_server = "";
 var default_contanier = "#mensaje_container";
 
