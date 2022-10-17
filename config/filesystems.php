@@ -60,7 +60,7 @@ return [
         ],
         'partitionD' => [
             'driver' => 'local',
-            'root'   => 'D:/unamad_files'
+            'root'   => env('DEFAULT_STORAGE_PATH')
         ],
         's3' => [
             'driver' => 's3',

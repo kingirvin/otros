@@ -200,10 +200,10 @@ class Recursos
                 if($i == 1){
                     //colocamos el qr
                     $pdf->SetY(0);
-                    $pdf->Image(public_path().'/img/qrcodes/qrcode_const.png', 16, ($size['height'] - 47), 25, 25, 'png');
+                    $pdf->Image(public_path().'/img/qrcodes/qrcode_const.png', ($size['width'] - 16 - 25), ($size['height'] - 49), 25, 25, 'png');
                     //colocamos el texto
-                    $pdf->SetLeftMargin(7);
-                    $pdf->SetY(-20);
+                    $pdf->SetLeftMargin($size['width'] - 7 - 43);
+                    $pdf->SetY(-22);
                     $pdf->SetTextColor(0);  
                     $pdf->SetFont('Arial','',8);
                     $pdf->SetFillColor(255);
