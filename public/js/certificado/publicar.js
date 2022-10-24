@@ -514,6 +514,7 @@ function cargar_archivo() {
 
         var formData = new FormData();
         formData.append('cert_repositorio_id', $("#repositorio_select").val());
+        formData.append('ubicacion', $("input[name=ubicacion]:checked").val()); 
         formData.append('cert_carpeta_id', (carpeta_seleccion != null ? carpeta_seleccion.id : 0));    
         formData.append('descripcion', $("#descripcion").val()); 
         for (let i = 0; i < t_files.length; i++) {

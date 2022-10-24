@@ -1,0 +1,39 @@
+.cert_ubicacion{
+    position: relative;
+    display: inline-block;
+    width: 2.5rem;
+    height: 1.5rem;
+    margin-right: .5rem;    
+    background: #efefef;
+    border-bottom: 1px solid #8b8b8b;    
+}
+
+.cert_ubicacion::after {
+    content: '';
+    display: inline-block;
+    height: 1rem;
+    width: 1rem;
+    background: #606060;
+}
+
+
+.cert_ubicacion.derecha {
+    border-right: 1px solid #8b8b8b;
+    text-align: right;
+}
+
+.cert_ubicacion.derecha::after {
+    margin-right: 5px;
+    margin-top: 2px;
+}
+
+
+.cert_ubicacion.izquierda {
+    border-left: 1px solid #8b8b8b;
+    text-align: left;
+}
+
+.cert_ubicacion.izquierda::after {
+    margin-left: 5px;
+    margin-top: 2px;
+}

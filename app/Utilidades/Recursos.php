@@ -177,7 +177,7 @@ class Recursos
     }
 
     //incrustar_codigo_certificado
-    public function incrustar_codigo_certificado($archivo)
+    public function incrustar_codigo_certificado($archivo, $ubicacion)
     {
         $ahora = Carbon::now();     
         $link = "sgd.unamad.edu.pe/constancias";  
@@ -197,22 +197,38 @@ class Recursos
                 $pdf->useTemplate($tpl, 1, 1, null, null, true);//usa como template la pagina del pdf cargado
                 $pdf->SetAutoPageBreak(false);
                 //solo la primera pagina
-                if($i == 1){
-                    //colocamos el qr
+                if($i == 1){                                                            //5 - 17
                     $pdf->SetY(0);
-                    $pdf->Image(public_path().'/img/qrcodes/qrcode_const.png', ($size['width'] - 16 - 25), ($size['height'] - 49), 25, 25, 'png');
-                    //colocamos el texto
-                    $pdf->SetLeftMargin($size['width'] - 7 - 43);
-                    $pdf->SetY(-22);
-                    $pdf->SetTextColor(0);  
-                    $pdf->SetFont('Arial','',8);
-                    $pdf->SetFillColor(255);
-                    $pdf->MultiCell(43,3,$texto,0,'J',true);
-                    $pdf->Ln(1.5);
-                    $pdf->SetFont('Arial','',8);
-                    $pdf->Cell(13.5,3,utf8_decode('CÓDIGO: '),0,0,'L',true);
-                    $pdf->SetFont('Arial','B',8);
-                    $pdf->Cell(28,3, 'C-'.$archivo->codigo,0,0,'L',true); 
+                    if($ubicacion == 0) {//iquierda                       
+                        $pdf->Image(public_path().'/img/qrcodes/qrcode_const.png', 21, ($size['height'] - 64), 25, 25, 'png');
+                        //colocamos el texto
+                        $pdf->SetLeftMargin(12);
+                        $pdf->SetY(-37);
+                        $pdf->SetTextColor(0);  
+                        $pdf->SetFont('Arial','',8);
+                        $pdf->SetFillColor(255);
+                        $pdf->MultiCell(43,3,$texto,0,'J',true);
+                        $pdf->Ln(1.5);
+                        $pdf->SetFont('Arial','',8);
+                        $pdf->Cell(13.5,3,utf8_decode('CÓDIGO: '),0,0,'L',true);
+                        $pdf->SetFont('Arial','B',8);
+                        $pdf->Cell(28,3, 'C-'.$archivo->codigo,0,0,'L',true); 
+                    } else {//derecha
+                        //colocamos el qr
+                        $pdf->Image(public_path().'/img/qrcodes/qrcode_const.png', ($size['width'] - 16 - 25), ($size['height'] - 47), 25, 25, 'png');
+                        //colocamos el texto
+                        $pdf->SetLeftMargin($size['width'] - 7 - 43);
+                        $pdf->SetY(-20);
+                        $pdf->SetTextColor(0);  
+                        $pdf->SetFont('Arial','',8);
+                        $pdf->SetFillColor(255);
+                        $pdf->MultiCell(43,3,$texto,0,'J',true);
+                        $pdf->Ln(1.5);
+                        $pdf->SetFont('Arial','',8);
+                        $pdf->Cell(13.5,3,utf8_decode('CÓDIGO: '),0,0,'L',true);
+                        $pdf->SetFont('Arial','B',8);
+                        $pdf->Cell(28,3, 'C-'.$archivo->codigo,0,0,'L',true); 
+                    }                    
                 }
             }                 
             

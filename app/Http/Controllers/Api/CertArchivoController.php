@@ -92,6 +92,7 @@ class CertArchivoController extends Controller
     {        
         $validator = Validator::make($request->all(), [ 
             'cert_repositorio_id' => 'required',
+            'ubicacion' => 'required',
             'cert_carpeta_id' => 'required',   
             'descripcion' => 'required'             
         ]);            
@@ -138,7 +139,7 @@ class CertArchivoController extends Controller
                     {
                         $archivo->codigo = $this->recursos->codigo_alpha($archivo->id + 1000);
                         //incrustar codigo
-                        if($this->recursos->incrustar_codigo_certificado($archivo)){
+                        if($this->recursos->incrustar_codigo_certificado($archivo, $request->ubicacion)){
                             $archivo->estado = 1;//incrustado                            
                         }
 

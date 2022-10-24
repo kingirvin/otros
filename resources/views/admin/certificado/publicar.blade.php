@@ -3,7 +3,11 @@
 @section('titulo', 'Administrar repositorios')
 
 @section('js')
-<script src="{{ asset('js/certificado/publicar.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/certificado/publicar.js?v='.config('app.version')) }}" type="text/javascript"></script>
+@endsection
+
+@section('css')
+<link href="{{ asset('css/certificado/publicar.css?v='.config('app.version')) }}" rel="stylesheet"/>    
 @endsection
 
 @section('contenido')
@@ -203,7 +207,36 @@
           <h5 class="modal-title">Cargar archivo</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div id="cargar_contenido" class="modal-body">                             
+        <div id="cargar_contenido" class="modal-body"> 
+            <div>
+                <label class="form-label">Ubicación</label> 
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-selectgroup-item flex-fill">
+                            <input type="radio" name="ubicacion" value="0" class="form-selectgroup-input" checked>
+                            <div class="form-selectgroup-label d-flex align-items-center p-3">
+                                <div class="me-3">
+                                    <span class="form-selectgroup-check"></span>
+                                </div>
+                                <div class="cert_ubicacion izquierda"></div>
+                                <div>QR en izquierda</div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-selectgroup-item flex-fill">
+                            <input type="radio" name="ubicacion" value="1" class="form-selectgroup-input">
+                            <div class="form-selectgroup-label d-flex align-items-center p-3">
+                                <div class="me-3">
+                                    <span class="form-selectgroup-check"></span>
+                                </div>
+                                <div class="cert_ubicacion derecha"></div>
+                                <div>QR en derecha</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>            
             <div class="form-group form-required mb-3">
                 <label class="form-label">Archivo</label> 
                 <input id="input_subir" name="archivos[]" type="file" class="form-control" multiple="multiple" accept=".pdf,.PDF">
