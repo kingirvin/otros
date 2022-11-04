@@ -144,9 +144,9 @@
             <img src="/img/escudo_unamad.png" alt="" width="70">
         </div>
         <div class="celda">
-            <div class="subtitulo t-left">UNIVERSIDAD NACIONAL DE MADRE DE DIOS</div>
-            <div class="normal t-left">JR. CUSCO N° 350 - PUERTO MALDONADO</div>
-            <div class="normal t-left mb-0">“AÑO DEL BICENTENARIO DEL PERÚ: 200 AÑOS DE INDEPENDENCIA”</div>                    
+            <div class="subtitulo t-left">UNIVERSIDAD NACIONAL AMAZÓNICA DE MADRE DE DIOS</div>
+            <div class="normal t-left">AV. JORGE CHÁVEZ N° 1160 - CIUDAD UNIVERSITARIA - PUERTO MALDONADO</div>
+            <div class="normal t-left mb-0">“AÑO DEL FORTALECIMIENTO DE LA SOBERANÍA NACIONAL”</div>                    
         </div>        
     </div>
     <div class="tabla mb-15">
