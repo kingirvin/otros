@@ -29,7 +29,7 @@ $( document ).ready(function() {
             { "data": "users_count", "searchable": false, className: "w-1",
                 render: function ( data, type, full ) {                      
                     return data;
-                }        
+                }
             },  
             { "data": "privilegios_count", "searchable": false, className: "w-1",
                 render: function ( data, type, full ) {       
