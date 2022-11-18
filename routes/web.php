@@ -45,15 +45,17 @@ Route::get('/status', function () {
 
 Route::get('/validar', function () { return redirect('consultas/firmas'); });
 Route::get('/constancias', function () { return redirect('consultas/constancias'); });
+Route::get('/mesa-de-partes', [App\Http\Controllers\ConsultaController::class, 'mesa_partes']);
 
 Route::prefix('consultas')->group(function () {
     Route::get('/', [App\Http\Controllers\ConsultaController::class, 'index']);
     Route::get('firmas', [App\Http\Controllers\ConsultaController::class, 'firmas']);
     Route::post('firmas/validar', [App\Http\Controllers\ConsultaController::class, 'firmas_post']);  
     Route::get('constancias', [App\Http\Controllers\ConsultaController::class, 'constancias']);
-    Route::post('constancias/validar', [App\Http\Controllers\ConsultaController::class, 'constancias_post']);    
+    Route::post('constancias/validar', [App\Http\Controllers\ConsultaController::class, 'constancias_post']);
+    Route::get('tramites', [App\Http\Controllers\ConsultaController::class, 'tramites']);
+    Route::post('tramites/seguimiento', [App\Http\Controllers\ConsultaController::class, 'seguimiento']);
 });
-
 
 
 Route::prefix('admin')->middleware(['auth'])->group(function () {
@@ -97,11 +99,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('externo/tramite', [App\Http\Controllers\ExternoController::class, 'ingresar'])->middleware('submodulo:MESADEPARTES');
     Route::post('externo/tramite', [App\Http\Controllers\ExternoController::class, 'ingresar_post'])->middleware('submodulo:MESADEPARTES');
     Route::get('externo/tramite/seguimiento/{codigo}', [App\Http\Controllers\ExternoController::class, 'seguimiento_tramite'])->middleware('submodulo:MESADEPARTES');
-    Route::get('externo/consulta', [App\Http\Controllers\ExternoController::class, 'consulta'])->middleware('submodulo:SEGUIMIENTO');
-    Route::post('externo/seguimiento', [App\Http\Controllers\ExternoController::class, 'seguimiento']);
-    Route::get('externo/validar', [App\Http\Controllers\ExternoController::class, 'validar'])->middleware('submodulo:VALIDAR');  
-    Route::post('externo/validar', [App\Http\Controllers\ExternoController::class, 'validar_post'])->middleware('submodulo:VALIDAR');  
-    
+    Route::get('externo/consulta', [App\Http\Controllers\ExternoController::class, 'consulta'])->middleware('submodulo:MESADEPARTES');
+       
     //CERTIFICADOS
     Route::get('certificado', [App\Http\Controllers\CertificadoController::class, 'index'])->middleware('modulo:CERTIFICADO');
     Route::get('certificado/administrar', [App\Http\Controllers\CertificadoController::class, 'administrar'])->middleware('submodulo:CERTADMIN');

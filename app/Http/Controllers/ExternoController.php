@@ -270,55 +270,9 @@ class ExternoController extends Controller
 
     public function consulta()
     { 
-        return view('admin.externo.consulta');
-    }
-
-    public function seguimiento(Request $request)
-    {
-        //validamos campos
-        $validator = Validator::make($request->all(), [             
-            'cut' => 'required|min:8',
-            'fecha' => 'required|date_format:d/m/Y'
-        ]);
-
-        if($validator->fails()) {
-            return back()->withErrors($validator);
-        }
-
-        //validamos recaptcha
-        $client = new Client;
-        $response = $client->post(
-            'https://www.google.com/recaptcha/api/siteverify',
-            [
-                'form_params' =>
-                [
-                    'secret' => $this->privado,
-                    'response' => $request->get('g-recaptcha-response')
-                ]
-            ]
-        );
-
-        $body = json_decode((string)$response->getBody());
-
-        if(!$body->success) {
-            return back()->with('error', 'Captcha incorrecto.');    
-        }
-
-        //validamos tramite
-        $fecha_formato = Carbon::createFromFormat('d/m/Y', $request->fecha)->format('Y-m-d');        
-        $tramite = Tramite::with(['user','o_dependencia','procedimiento'])
-                    ->where('codigo', $request->cut)
-                    ->whereDate('created_at', $fecha_formato)
-                    ->first();
-        
-        if($tramite == null)
-            return back()->with('error', 'No se pudo encontrar el trámite con los datos proporcionados.');  
-        
-        $documentos = Documento::with(['documento_tipo','archivo','anexos'])->where('tramite_id', $tramite->id)->orderBy('id', 'desc')->get();
-        $movimientos = Movimiento::with(['documento','accion','o_user','d_user','f_user','d_dependencia.sede','d_persona','observaciones.user'])->where('tramite_id', $tramite->id)->get();
-        $ordenado = $this->ordenar($movimientos, null);
-        $back = 'admin/externo/consulta';
-        return view('admin.externo.seguimiento', compact('tramite','documentos','ordenado','back'));
+        $user = Auth::user();
+        $tramites = Tramite::with(['primero_documento.documento_tipo','procedimiento'])->where('o_user_id',$user->id)->orderBy('id','desc')->paginate(50);
+        return view('admin.externo.consulta',compact('tramites'));
     }
 
     public function seguimiento_tramite(Request $request, $codigo)
@@ -337,12 +291,7 @@ class ExternoController extends Controller
         $ordenado = $this->ordenar($movimientos, null);
         $back = 'admin/externo';
         return view('admin.externo.seguimiento', compact('tramite','documentos','ordenado','back'));
-    }
-
-    public function validar()
-    { 
-        return view('admin.externo.validar');
-    }
+    }    
 
     public function validar_post(Request $request)
     {
