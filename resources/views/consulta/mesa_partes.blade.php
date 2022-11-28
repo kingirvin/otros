@@ -22,7 +22,7 @@
                 La Universidad Nacional Amazónica de Madre de Dios en el marco del proceso de Transformación Digital en las Entidades de la Administración Pública, pone a disposicion de sus estudiantes y público en general una Mesa de Partes Virtual para el trámite de sus documentos de manera digital.
             </p>
             <p class="text-justify">
-                La Mesa de Partes Virtual se encuentra habilitado las 24 horas del día, pero el <b>horario de atención de los documentos es de LUN-VIE 09:30am a 03:30pm</b>, los documentos presentados después de dicho horario serán recepcionados con fecha del día hábil siguiente.
+                La Mesa de Partes Virtual se encuentra habilitado las 24 horas del día, pero el <b>horario de atención de los documentos es de LUN-VIE 09:00am a 03:00pm</b>, los documentos presentados después de dicho horario serán recepcionados con fecha del día hábil siguiente.
             </p>
             <p class="text-justify">
                Si presentaste un documento a trámite de <b>manera presencial</b> puedes consultar el estado de tu trámite a traves del siguiente <a href="{{ url('consultas/tramites') }}" target="_blank">ENLACE</a>, para lo cual necesitaras el <b>Codigo Único de Trámite</b> y la <b>fecha en que fue presentado</b> tu trámite.
