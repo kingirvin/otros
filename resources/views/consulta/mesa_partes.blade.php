@@ -18,14 +18,11 @@
     </div>
     <div class="row justify-content-center align-items-center">
         <div class="col-md-4 px-3">
-            <div class="alert alert-info alert-important" role="alert">
-                La Mes de Partes Virtual entrará en funcionamiento a partir del 28 de noviembre de 2022.
-            </div>
             <p class="text-justify">
                 La Universidad Nacional Amazónica de Madre de Dios en el marco del proceso de Transformación Digital en las Entidades de la Administración Pública, pone a disposicion de sus estudiantes y público en general una Mesa de Partes Virtual para el trámite de sus documentos de manera digital.
             </p>
             <p class="text-justify">
-               Si presentaste un documento a trámite de <b>manera presencial</b> puedes consulta el estado de tu trámite a traves del siguiente <a href="{{ url('consultas/tramites') }}" target="_blank">ENLACE</a>, para lo cual necesitaras el <b>Codigo Único de Trámite</b> y la <b>fecha en que fue presentado</b> tu trámite.
+               Si presentaste un documento a trámite de <b>manera presencial</b> puedes consultar el estado de tu trámite a traves del siguiente <a href="{{ url('consultas/tramites') }}" target="_blank">ENLACE</a>, para lo cual necesitaras el <b>Codigo Único de Trámite</b> y la <b>fecha en que fue presentado</b> tu trámite.
             </p>
         </div>
         <div class="col-md-4 p-3">
