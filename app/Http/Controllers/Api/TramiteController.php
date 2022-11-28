@@ -797,14 +797,10 @@ class TramiteController extends Controller
             'folios' => 'required', 
             'asunto' => 'required', 
             'tipo_persona' => 'required', 
-            'ruc' => 'required_if:tipo_persona,1',
             'razon_social' => 'required_if:tipo_persona,1',
-            'identidad_documento_id' => ['required'],
-            'nro_documento' => ['required','numeric','min:8'],
             'nombre' => ['required'],
             'apaterno' => ['required'],
             'amaterno' => ['required'],
-            'email' => ['required', 'email', 'max:255'],
             'd_dependencia_id' => 'required'
         ]);
     
@@ -831,7 +827,7 @@ class TramiteController extends Controller
                 $tramite->razon_social = $request->razon_social;
             }
 
-            $tramite->o_identidad_documento_id = $request->identidad_documento_id;
+            $tramite->o_identidad_documento_id = ($request->identidad_documento_id != 0 ? $request->identidad_documento_id : null);
             $tramite->o_nro_documento = $request->nro_documento;
             $tramite->o_nombre = $request->nombre;
             $tramite->o_apaterno = $request->apaterno;

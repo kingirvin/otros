@@ -155,16 +155,16 @@
                     <div class="card-body pb-2">
                         <div id="es_natural">
                             <div class="row">
-                                <div class="col-md-6 form-group form-required mb-3">
+                                <div class="col-md-6 form-group mb-3">
                                     <label class="form-label" for="identidad_documento_id">Tipo de documento</label>
-                                    <select name="identidad_documento_id" id="identidad_documento_id" class="form-select validar_select">
+                                    <select name="identidad_documento_id" id="identidad_documento_id" class="form-select">
                                         <option value="0">Seleccione...</option>
                                         @foreach ($identidad_tipos as $identidad_tipo)
                                         <option value="{{$identidad_tipo->id}}">{{$identidad_tipo->abreviatura}}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-6 form-group form-required mb-3">
+                                <div class="col-md-6 form-group mb-3">
                                     <label class="form-label" for="nro_documento">Número de documento</label>
                                     <input type="text" id="nro_documento" name="nro_documento" class="form-control validar_numero validar_minimo:8" placeholder="" autofocus>
                                 </div>
@@ -184,7 +184,7 @@
                                     <label class="form-label" for="amaterno">Segundo Apellido</label>
                                     <input type="text" id="amaterno" name="amaterno" class="form-control mayuscula" placeholder="">
                                 </div>
-                                <div class="col-md-6 form-group form-required mb-3">
+                                <div class="col-md-6 form-group mb-3">
                                     <label class="form-label" for="email">Correo electrónico</label>
                                     <input type="text" id="email" name="email" class="form-control validar_correo" placeholder="">                    
                                 </div>
