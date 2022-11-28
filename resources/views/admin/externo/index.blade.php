@@ -23,10 +23,10 @@
     <div class="container-xl">        
         <div class="row row-cards">
             <div class="col-md-6">                
-                <p class="text-muted text-justify">Bienvenido al módulo de <b>Ventanilla Virtual</b>, en este módulo podras presentar tus documentos a trámite, el cual ser atendido por la Unidad de Trámite Documentario de la Universidad Nacional Amazónica de Madre de Dios.</p>
-                <p class="text-muted text-justify">Desde este módulo solo podras hacer seguimiento a los documentos que presentaste de manera virtual, si presentaste un documento a trámite de <b>manera presencial</b> puedes consulta el estado de tu trámite a traves del siguiente <a href="{{ url('consultas/tramites') }}" target="_blank">ENLACE</a>, para lo cual necesitaras el <b>Codigo Único de Trámite</b> y la <b>fecha en que fue presentado</b> tu trámite.</p>
-                <p class="text-muted text-justify">Si tu documento no esta siendo atendido en su debido plazo comunicate con la Unidad de Trámite Documentario al correo <a href="mailto:tramite-documentario@unamad.edu.pe">tramite-documentario@unamad.edu.pe</a></p>
-                <p class="text-muted text-justify">Si presentas dificultades en el manejo de la Ventanilla Virtual o detectas algún error en la plataforma comunicate con la Oficina de Tecnologías de la Información al correo <a href="mailto:oti@unamad.edu.pe">oti@unamad.edu.pe</a>.</p>
+                <p class="text-muted text-justify">Bienvenido al módulo de <b>Ventanilla Virtual</b>, en este módulo podrás presentar tus documentos a trámite, el cual será atendido por la Unidad de Trámite Documentario de la Universidad Nacional Amazónica de Madre de Dios.</p>
+                <p class="text-muted text-justify">Desde este módulo solo podrás hacer seguimiento a los documentos que presentaste de manera virtual, si presentaste un documento a trámite de <b>manera presencial</b> puedes consultar el estado de tu trámite a través del siguiente <a href="{{ url('consultas/tramites') }}" target="_blank">ENLACE</a>, para lo cual necesitaras el <b>Código Único de Trámite</b> y la <b>fecha en que fue presentado</b> tu trámite.</p>
+                <p class="text-muted text-justify">Si tu documento no está siendo atendido en su debido plazo comunícate con la Unidad de Trámite Documentario al correo <a href="mailto:tramite-documentario@unamad.edu.pe">tramite-documentario@unamad.edu.pe</a></p>
+                <p class="text-muted text-justify">Si presentas dificultades en el manejo de la Ventanilla Virtual o detectas algún error en la plataforma comunícate con la Oficina de Tecnologías de la Información al correo <a href="mailto:oti@unamad.edu.pe">oti@unamad.edu.pe</a>.</p>
             </div>                                    
         </div>
     </div>

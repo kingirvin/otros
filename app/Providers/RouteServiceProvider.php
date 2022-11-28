@@ -52,8 +52,14 @@ class RouteServiceProvider extends ServiceProvider
         //->by($request->ip())
         //->by($request->input('email'))
 
-        RateLimiter::for('limite', function (Request $request) {            
+        RateLimiter::for('limite_email', function (Request $request) {            
             return Limit::perMinutes(30, 10)->by($request->input('email'))->response(function () {
+                return redirect('login')->withErrors(['Has alcanzado el limite máximo de intentos, vuelve a intentar luego de 30 minutos.'])->withInput();
+            });
+        });
+
+        RateLimiter::for('limite_ip', function (Request $request) {            
+            return Limit::perMinutes(30, 10)->by($request->ip())->response(function () {
                 return redirect('login')->withErrors(['Has alcanzado el limite máximo de intentos, vuelve a intentar luego de 30 minutos.'])->withInput();
             });
         });

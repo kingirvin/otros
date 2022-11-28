@@ -23,9 +23,9 @@ Route::get('/', function () {
 
 //ACCESO GENERAL
 Route::get('login', [App\Http\Controllers\UserController::class, 'ingreso'])->name('login');
-Route::post('login', [App\Http\Controllers\UserController::class, 'login'])->middleware('throttle:limite');
+Route::post('login', [App\Http\Controllers\UserController::class, 'login'])->middleware('throttle:limite_email');
 Route::post('logout', [App\Http\Controllers\UserController::class, 'logout']);
-Route::get('register', [App\Http\Controllers\UserController::class, 'registro'])->name('register');
+Route::get('register', [App\Http\Controllers\UserController::class, 'registro'])->name('register')->middleware('throttle:limite_ip');
 Route::post('register', [App\Http\Controllers\UserController::class, 'registro_post']);
 Route::get('verificar/{codigo}', [App\Http\Controllers\UserController::class, 'verificar']);
 Route::get('verificar', [App\Http\Controllers\UserController::class, 'reenviar_verificacion']);

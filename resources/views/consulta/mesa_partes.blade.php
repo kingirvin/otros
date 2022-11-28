@@ -30,7 +30,7 @@
         </div>
         <div class="col-md-4 p-3">
             <div class="mb-3">
-                <a class="card card-link card-link-pop">
+                <a href="{{ url('register') }}" class="card card-link card-link-pop">
                     <div class="card-status-start bg-pink"></div>
                     <div class="card-body">                        
                         <div class="row align-items-center">
@@ -54,8 +54,8 @@
                     </div>
                 </a>
             </div>
-            <div class="mb-3">
-                <a class="card card-link card-link-pop">
+            <div class="mb-4">
+                <a href="{{ url('login') }}" class="card card-link card-link-pop">
                     <div class="card-status-start bg-pink"></div>
                     <div class="card-body">
                         <div class="row align-items-center">
@@ -75,6 +75,25 @@
                                     Si ya posees una cuenta de usuario
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="text-center">
+                <a href="{{ asset('pdf/manual_mesa_de_partes.pdf') }}" class="d-inline-block" download>
+                    <div class="d-flex">
+                        <div class="pe-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-text" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                                <line x1="9" y1="9" x2="10" y2="9"></line>
+                                <line x1="9" y1="13" x2="15" y2="13"></line>
+                                <line x1="9" y1="17" x2="15" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div>
+                            Descargar Manual de Usuario
                         </div>
                     </div>
                 </a>
