@@ -17,6 +17,7 @@ use App\Models\Movimiento;
 use App\Models\Tramite;
 use App\Models\Documento;
 use App\Models\Accion;
+use App\Models\Persona;
 use App\Models\Movimiento_asignacion;
 use Carbon\Carbon;
 use stdClass;
@@ -489,6 +490,50 @@ class TramiteController extends Controller
         }
 
         return response()->download($ruta, $archivo->nombre, $headers);
+    }
+    /**
+     * FUT
+     */
+    public function nuevo_fut(Request $request)
+    {
+        $procedimientos = Procedimiento::where('tipo', 0)->where('estado', 1)->has('pasos')->get();
+        $user = Auth::user();
+        $ahora = Carbon::now();
+        //posee datos de persona
+        if($user->persona_id == null){
+            return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No posees datos de persona", 'mensaje' => "No tienes registrado datos de PERSONA, ponte en contacto con el administrador del sistema para su registro.", 'accion' => "back" )]);  
+        }
+        //dependencias a la cual pertenece el usuario
+        $origenes = Empleado::with('dependencia')->where('persona_id', $user->persona_id)->where('estado', 1)->orderBy('created_at', 'desc')->get();
+        $origen_actual = $request->has('origen') ? $request->origen : $origenes[0]->dependencia_id;        
+        if(!$origenes->contains('dependencia_id', $origen_actual)){//el origen actual esta dentro de los origenes
+            return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No perteneces a la dependencia", 'mensaje' => "El usuario actual no pertenece a la dependencia seleccionada.", 'accion' => "back" )]);  
+        }
+        //empleados de la dependencia actual
+        $empleados = Empleado::with(['persona.identidad_documento'])->where('estado', 1)->where('dependencia_id', '=', $origen_actual)->get();
+        $empleado_actual = null;
+        foreach ($empleados as $empleado) {
+            if($empleado->persona_id == $user->persona_id){
+                $empleado_actual = $empleado;
+                break;
+            }
+        }
+
+        if($empleado_actual == null){
+            return view('paginas.mensaje', ['datos' => array('tipo' => 0, 'titulo' => "No perteneces a la dependencia", 'mensaje' => "El usuario actual no pertenece a la dependencia seleccionada.", 'accion' => "back" )]);  
+        }
+
+        //sedes y dependencias
+        $sedes = Sede::where('estado', 1)->get();
+        if(count($sedes) > 0)
+            $dependencias = Dependencia::where('sede_id', $sedes[0]->id)->where('estado', 1)->orderBy('nombre', 'asc')->get();
+        else
+            $dependencias = collect();   
+        //tipo de documento (gestion e identidad)
+        $identidad_tipos = Identidad_documento::where('estado', 1)->get();
+        $documento_tipos = Documento_tipo::where('estado', 1)->get();
+        $persona=Persona::find($user->persona_id);
+        return view('admin.tramite.nuevo_fut',compact('procedimientos','origenes','origen_actual','empleados','empleado_actual','sedes','dependencias','identidad_tipos','documento_tipos','user','persona'));
     }
 
 }

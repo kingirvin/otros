@@ -115,7 +115,7 @@ class SistemaController extends Controller
 
     /**
      * PERSONAS
-     */
+     */ 
 
     public function personas(Request $request)
     {

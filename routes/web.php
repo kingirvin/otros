@@ -115,6 +115,9 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('archivos/stream/{codigo}', [App\Http\Controllers\TramiteController::class, 'vista_previa']);
     Route::get('archivos/download/{id}', [App\Http\Controllers\TramiteController::class, 'descargar']);
     
+    // llenar FUT
+    Route::get('tramite/fut', [App\Http\Controllers\TramiteController::class, 'nuevo_fut'])->middleware('modulo:TRAMITE');    
+
 
 
 });

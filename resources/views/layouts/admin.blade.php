@@ -262,6 +262,16 @@
                           Documentos recibidos
                         </span>
                       </a>
+                    </li>  
+                    <li class="nav-item {{ (request()->is('admin/tramite/fut*')) ? 'active' : '' }}">
+                      <a class="nav-link" href="{{ url('admin/tramite/fut') }}">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="4" y="4" width="16" height="16" rx="2" /><path d="M4 13h3l3 3h4l3 -3h3" /></svg>
+                        </span>
+                        <span class="nav-link-title">
+                          FUT
+                        </span>
+                      </a>
                     </li>                    
                     <li class="nav-item dropdown {{ (request()->is('admin/tramite/emision*')) ? 'active' : '' }}">
                       <a class="nav-link dropdown-toggle" href="#sistema" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="false">
@@ -276,6 +286,10 @@
                         <a class="dropdown-item text-success {{ (request()->is('admin/tramite/emision')) ? 'active' : '' }}" href="{{ url('admin/tramite/emision') }}">
                           <svg xmlns="http://www.w3.org/2000/svg" class="icon dropdown-item-icon text-success" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="12" y1="11" x2="12" y2="17" /><line x1="9" y1="14" x2="15" y2="14" /></svg>
                           Nuevo trámite
+                        </a>
+                        <a class="dropdown-item text-success {{ (request()->is('admin/tramite/fut')) ? 'active' : '' }}" href="{{ url('admin/tramite/fut') }}">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="icon dropdown-item-icon text-success" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><line x1="12" y1="11" x2="12" y2="17" /><line x1="9" y1="14" x2="15" y2="14" /></svg>
+                          Trámite FUT
                         </a>
                         <a class="dropdown-item {{ (request()->is('admin/tramite/emision/emitidos')) ? 'active' : '' }}" href="{{ url('admin/tramite/emision/emitidos') }}">
                           Documentos emitidos
